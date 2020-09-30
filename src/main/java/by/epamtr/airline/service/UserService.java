@@ -4,9 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import by.epamtr.airline.dao.FlightStatusDAO;
-import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.User;
+import by.epamtr.airline.entity.UserRole;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public interface UserService {
@@ -14,11 +13,15 @@ public interface UserService {
 
 	void signOut() throws ServiceException;
 
-	List<Flight> showFlights() throws ServiceException;
+	void addUser(User user) throws ServiceException;
 
-	List<Flight> showFlights(FlightStatusDAO flightStatus) throws ServiceException;
+	void deliteUser(int idUser) throws ServiceException;
 
-	// void showFlights(/* дата? */) throws DAOException;
+	void updateUser(int idUser) throws ServiceException;
 
-	List<User> showCrew(int idFlight) throws ServiceException;
+	List<User> getUsers(UserRole role) throws ServiceException;
+
+	List<User> getUsers(int idFlight) throws ServiceException;
+
+	User getUser(int idUser) throws  ServiceException;
 }

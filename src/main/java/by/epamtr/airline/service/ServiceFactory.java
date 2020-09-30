@@ -1,17 +1,15 @@
 package by.epamtr.airline.service;
 
-import by.epamtr.airline.service.impl.AdminServiceImpl;
-import by.epamtr.airline.service.impl.CrewServiceImpl;
-import by.epamtr.airline.service.impl.DispatcherServiceImpl;
+import by.epamtr.airline.service.impl.AircraftServiceImpl;
+import by.epamtr.airline.service.impl.FlightServiceImpl;
 import by.epamtr.airline.service.impl.UserServiceImpl;
 
 public class ServiceFactory {
 
 	private static final ServiceFactory instance = new ServiceFactory();
 
-	private final AdminService adminService = new AdminServiceImpl();
-	private final DispatcherService dispatcherService = new DispatcherServiceImpl();
-	private final CrewService crewService = new CrewServiceImpl();
+	private final AircraftService aircraftService = new AircraftServiceImpl();
+	private final FlightService flightService = new FlightServiceImpl();
 	private final UserService userService = new UserServiceImpl();
 
 	private ServiceFactory() {
@@ -21,22 +19,16 @@ public class ServiceFactory {
 		return instance;
 	}
 
-	public AdminService getAdminService() {
-		return adminService;
+	public AircraftService getAircraftService() {
+		return aircraftService;
 	}
 
-	public DispatcherService getDispatcherService() {
-		return dispatcherService;
-	}
-
-	public CrewService getCrewService() {
-		return crewService;
+	public FlightService getFlightService() {
+		return flightService;
 	}
 
 	public UserService getUserService() {
 		return userService;
 	}
-
-
 
 }

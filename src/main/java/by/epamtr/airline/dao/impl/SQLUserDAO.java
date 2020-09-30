@@ -9,13 +9,12 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import by.epamtr.airline.dao.FlightStatusDAO;
 import by.epamtr.airline.dao.UserDAO;
 import by.epamtr.airline.dao.connextion_pool.ConnectionPool;
 import by.epamtr.airline.dao.connextion_pool.impl.ConnectionPoolImpl;
 import by.epamtr.airline.dao.exception.DAOException;
-import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.User;
+import by.epamtr.airline.entity.UserRole;
 
 public class SQLUserDAO implements UserDAO {
 
@@ -29,7 +28,7 @@ public class SQLUserDAO implements UserDAO {
 		Connection connection = null;
 		Statement statement;
 		ResultSet rs;
-		
+
 		ConnectionPool connectionPool = ConnectionPoolImpl.getInstance();
 		try {
 			connection = connectionPool.getConnection();
@@ -54,28 +53,46 @@ public class SQLUserDAO implements UserDAO {
 	}
 
 	@Override
-	public List<Flight> showFlights() throws DAOException {
+	public void addUser(User user) throws DAOException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deliteUser(int idUser) throws DAOException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void updateUser(int idUser) throws DAOException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<User> getUsers(UserRole role) throws DAOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Flight> showFlights(FlightStatusDAO flightStatus) {
+	public List<User> getUsers(int idFlight) throws DAOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<User> showCrew(int idFlight) throws DAOException {
+	public User getUser(int idUser) throws DAOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	private void userIsExist(ResultSet resultSet, HttpServletRequest request, HttpServletResponse response)
 			throws DAOException {
-		String login = request.getParameter("username");
+		String login = request.getParameter("login");
 		String password = request.getParameter("pass");
-		
+
 		try {
 			while (resultSet.next()) {
 				String loginFromDB = resultSet.getString("login");
@@ -85,10 +102,9 @@ public class SQLUserDAO implements UserDAO {
 					int userRole = Integer.parseInt(resultSet.getString("user_role"));
 					resultSet.close();
 					sendCommandToController(userRole, request, response);
-				} else {
-					System.out.println("Fail");
 				}
 			}
+			// неверный логин и пароль
 		} catch (NumberFormatException | SQLException e) {
 			throw new DAOException("Error whole getting data from resultSet", e);
 		}
@@ -123,4 +139,5 @@ public class SQLUserDAO implements UserDAO {
 		}
 
 	}
+
 }
