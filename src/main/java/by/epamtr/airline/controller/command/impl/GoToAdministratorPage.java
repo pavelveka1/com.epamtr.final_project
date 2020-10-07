@@ -11,8 +11,12 @@ import by.epamtr.airline.controller.command.Command;
 public class GoToAdministratorPage implements Command {
 
 	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/jsp/administrator_page.jsp").forward(request, response);
+	public void execute(HttpServletRequest request, HttpServletResponse response)  {
+		try {
+			request.getRequestDispatcher("/WEB-INF/jsp/administrator_page.jsp").forward(request, response);
+		} catch (ServletException | IOException e) {
+			rootLogger.error(e);
+		}
 		
 	}
 

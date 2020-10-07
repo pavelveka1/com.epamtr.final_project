@@ -1,4 +1,4 @@
-package by.epamtr.airline.dao.connextion_pool.impl;
+package by.epamtr.airline.dao.connection_pool.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,8 +9,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import by.epamtr.airline.dao.connextion_pool.ConnectionPool;
-import by.epamtr.airline.dao.exception.DAOException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+import by.epamtr.airline.dao.connection_pool.ConnectionPool;
+import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
+
 
 public class ConnectionPoolImpl implements ConnectionPool {
 	private  final String url;
@@ -24,19 +28,20 @@ public class ConnectionPoolImpl implements ConnectionPool {
 	private static Properties dbProperties;
 
 	private static final ConnectionPool instance = new ConnectionPoolImpl();
+	private static final Logger rootLogger = LogManager.getRootLogger();
 
 	private ConnectionPoolImpl() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | ClassNotFoundException e1) {
-			e1.printStackTrace();
+			rootLogger.error(e1);
 		}
 		dbProperties = new Properties();
 		try(InputStream in = ConnectionPool.class.getClassLoader().getResourceAsStream("db_properties.properties")) {
 			dbProperties.load(in);
 		} catch (IOException e) {
-			e.printStackTrace();;
+			rootLogger.error(e);
 		}
 	
 		url=dbProperties.getProperty("db.url");
@@ -48,19 +53,19 @@ public class ConnectionPoolImpl implements ConnectionPool {
 		for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
 			try {
 				connectionPool.add(createConnection(url, user, password));
-			} catch (DAOException e) {
-				e.printStackTrace();
+			} catch (ConnectionPoolException e) {
+				rootLogger.error(e);
 			}
 		}
 	}
 
 	@Override
-	public Connection getConnection() throws DAOException {
+	public Connection getConnection() throws ConnectionPoolException  {
 		if (connectionPool.isEmpty()) {
 			if (usedConnections.size() < MAX_POOL_SIZE) {
 				connectionPool.add(createConnection(url, user, password));
 			} else {
-				throw new DAOException("Maximum pool size reached, no available connections!");
+				throw new ConnectionPoolException("Maximum pool size reached, no available connections!");
 			}
 		}
 
@@ -71,7 +76,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
 				connection = createConnection(url, user, password);
 			}
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			throw new ConnectionPoolException(e);
 		} 
 
 		usedConnections.add(connection);
@@ -85,11 +90,11 @@ public class ConnectionPoolImpl implements ConnectionPool {
 	}
 
 	private static Connection createConnection(String url, String user, String password)
-			throws DAOException {
+			throws ConnectionPoolException {
 		try {
 			return DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
-			throw new DAOException("Connection is not created", e);
+			throw new ConnectionPoolException("Connection is not created", e);
 		}
 	}
 
@@ -114,13 +119,13 @@ public class ConnectionPoolImpl implements ConnectionPool {
 	}
 
 	@Override
-	public void shutdown() throws DAOException {
+	public void shutdown() throws ConnectionPoolException {
 		usedConnections.forEach(this::releaseConnection);
 		for (Connection c : connectionPool) {
 			try {
 				c.close();
 			} catch (SQLException e) {
-				throw new DAOException("Connection is not closed", e);
+				throw new ConnectionPoolException("Connection is not closed", e);
 			}
 		}
 		connectionPool.clear();

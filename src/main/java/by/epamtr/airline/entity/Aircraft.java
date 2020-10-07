@@ -7,12 +7,14 @@ public class Aircraft implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private int idAircraft;
 	private AircraftType type;
 	private String registerNumber;
 	private String status;
 
-	public Aircraft(AircraftType type, String registerNumber, String status) {
+	public Aircraft(int idAircraft, AircraftType type, String registerNumber, String status) {
 		super();
+		this.idAircraft=idAircraft;
 		this.type = type;
 		this.registerNumber = registerNumber;
 		this.status = status;
@@ -20,6 +22,14 @@ public class Aircraft implements Serializable {
 
 	public Aircraft() {
 
+	}
+
+	public int getIdAircraft() {
+		return idAircraft;
+	}
+
+	public void setIdAircraft(int idAircraft) {
+		this.idAircraft = idAircraft;
 	}
 
 	public AircraftType getType() {
@@ -46,26 +56,11 @@ public class Aircraft implements Serializable {
 		this.status = status;
 	}
 
-	public int getRangeFlight() {
-		return type.getRangeFlight();
-	}
-
-	public void setRangeFlight(int rangeFlight) {
-		this.type.setRangeFlight(rangeFlight);
-	}
-
-	public int getNumberPassenger() {
-		return type.getNumberPassenger();
-	}
-
-	public void setNumberPassenger(int numberPassenger) {
-		this.type.setNumberPassenger(numberPassenger);
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + idAircraft;
 		result = prime * result + ((registerNumber == null) ? 0 : registerNumber.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
@@ -81,6 +76,8 @@ public class Aircraft implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Aircraft other = (Aircraft) obj;
+		if (idAircraft != other.idAircraft)
+			return false;
 		if (registerNumber == null) {
 			if (other.registerNumber != null)
 				return false;
@@ -101,9 +98,8 @@ public class Aircraft implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Aircraft [type=" + type.getAircraftType() + " rangeFlight = " + type.getRangeFlight()
-				+ " numberPassenger = " + type.getNumberPassenger() + ", registerNumber=" + registerNumber + ", status="
-				+ status + "]";
+		return "Aircraft [idAircraft=" + idAircraft + ", type=" + type + ", registerNumber=" + registerNumber
+				+ ", status=" + status + "]";
 	}
 
 }

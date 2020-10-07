@@ -11,13 +11,13 @@ import by.epamtr.airline.service.exception.ServiceException;
 public interface UserService {
 	void signIn(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
-	void signOut() throws ServiceException;
+	void signOut(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
-	void addUser(User user) throws ServiceException;
+	void addUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
-	void deliteUser(int idUser) throws ServiceException;
+	void deliteUser(String login) throws ServiceException;
 
-	void updateUser(int idUser) throws ServiceException;
+	void updateUser(String login) throws ServiceException;
 
 	List<User> getUsers(UserRole role) throws ServiceException;
 

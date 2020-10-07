@@ -2,12 +2,14 @@ package by.epamtr.airline.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Flight implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private int idFlight;
 	private String currentCity;
 	private String destinationCity;
 	private int flightRange;
@@ -16,11 +18,12 @@ public class Flight implements Serializable {
 	private String aircraftType;
 	private String aircraftNumber;
 	private String status;
-	private Crew crew;
-	
-	public Flight(String currentCity, String destinationCity, int flightRange, int flightTime,
-			LocalDateTime timeDeparture, String aircraftType, String aircraftNumber, String status, Crew crew) {
+	private List<Crew> crews;
+
+	public Flight(int idFlight, String currentCity, String destinationCity, int flightRange, int flightTime,
+			LocalDateTime timeDeparture, String aircraftType, String aircraftNumber, String status, List<Crew> crews) {
 		super();
+		this.idFlight = idFlight;
 		this.currentCity = currentCity;
 		this.destinationCity = destinationCity;
 		this.flightRange = flightRange;
@@ -29,7 +32,7 @@ public class Flight implements Serializable {
 		this.aircraftType = aircraftType;
 		this.aircraftNumber = aircraftNumber;
 		this.status = status;
-		this.crew = crew;
+		this.crews = crews;
 	}
 
 	public Flight() {
@@ -100,12 +103,20 @@ public class Flight implements Serializable {
 		this.status = status;
 	}
 
-	public Crew getCrews() {
-		return crew;
+	public int getIdFlight() {
+		return idFlight;
 	}
 
-	public void setCrews(Crew crew) {
-		this.crew = crew;
+	public void setIdFlight(int idFlight) {
+		this.idFlight = idFlight;
+	}
+
+	public List<Crew> getCrews() {
+		return crews;
+	}
+
+	public void setCrews(List<Crew> crews) {
+		this.crews = crews;
 	}
 
 	@Override
@@ -114,11 +125,12 @@ public class Flight implements Serializable {
 		int result = 1;
 		result = prime * result + ((aircraftNumber == null) ? 0 : aircraftNumber.hashCode());
 		result = prime * result + ((aircraftType == null) ? 0 : aircraftType.hashCode());
-		result = prime * result + ((crew == null) ? 0 : crew.hashCode());
+		result = prime * result + ((crews == null) ? 0 : crews.hashCode());
 		result = prime * result + ((currentCity == null) ? 0 : currentCity.hashCode());
 		result = prime * result + ((destinationCity == null) ? 0 : destinationCity.hashCode());
 		result = prime * result + flightRange;
 		result = prime * result + flightTime;
+		result = prime * result + idFlight;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((timeDeparture == null) ? 0 : timeDeparture.hashCode());
 		return result;
@@ -143,10 +155,10 @@ public class Flight implements Serializable {
 				return false;
 		} else if (!aircraftType.equals(other.aircraftType))
 			return false;
-		if (crew == null) {
-			if (other.crew != null)
+		if (crews == null) {
+			if (other.crews != null)
 				return false;
-		} else if (!crew.equals(other.crew))
+		} else if (!crews.equals(other.crews))
 			return false;
 		if (currentCity == null) {
 			if (other.currentCity != null)
@@ -161,6 +173,8 @@ public class Flight implements Serializable {
 		if (flightRange != other.flightRange)
 			return false;
 		if (flightTime != other.flightTime)
+			return false;
+		if (idFlight != other.idFlight)
 			return false;
 		if (status == null) {
 			if (other.status != null)
@@ -177,14 +191,10 @@ public class Flight implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Flight [currentCity=" + currentCity + ", destinationCity=" + destinationCity + ", flightRange="
-				+ flightRange + ", flightTime=" + flightTime + ", timeDeparture=" + timeDeparture + ", aircraftType="
-				+ aircraftType + ", aircraftNumber=" + aircraftNumber + ", status=" + status + ", crew=" + crew + "]";
+		return "Flight [idFlight=" + idFlight + ", currentCity=" + currentCity + ", destinationCity=" + destinationCity
+				+ ", flightRange=" + flightRange + ", flightTime=" + flightTime + ", timeDeparture=" + timeDeparture
+				+ ", aircraftType=" + aircraftType + ", aircraftNumber=" + aircraftNumber + ", status=" + status
+				+ ", crews=" + crews + "]";
 	}
-
-	
-	
-	
-	
 
 }

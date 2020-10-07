@@ -7,19 +7,21 @@ public class User implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+    private int idUser;
 	private String name;
 	private String surname;
 	private String patronimic;
+	private String email;
 	private UserRole role;
 
 
-	public User(String name, String surname, String patronimic, UserRole role) {
+	public User(int idUser, String name, String surname, String patronimic,String email, UserRole role) {
 		super();
-
+		this.idUser=idUser;
 		this.name = name;
 		this.surname = surname;
 		this.patronimic = patronimic;
+		this.email=email;
 		this.role=role;
 
 	}
@@ -59,11 +61,31 @@ public class User implements Serializable {
 	public void setRole(UserRole role) {
 		this.role = role;
 	}
+	
+	
+
+	public int getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + idUser;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((patronimic == null) ? 0 : patronimic.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
@@ -80,6 +102,13 @@ public class User implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (idUser != other.idUser)
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -102,8 +131,10 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", surname=" + surname + ", patronimic=" + patronimic + ", role=" + role + "]";
+		return "User [idUser=" + idUser + ", name=" + name + ", surname=" + surname + ", patronimic=" + patronimic
+				+ ", email=" + email + ", role=" + role + "]";
 	}
 
+	
 
 }

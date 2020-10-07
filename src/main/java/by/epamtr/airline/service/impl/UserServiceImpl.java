@@ -13,14 +13,12 @@ import by.epamtr.airline.service.exception.ServiceException;
 import by.epamtr.airline.service.validator.SignInDataValidator;
 
 public class UserServiceImpl implements UserService {
-
+	private UserDAO userDAO = DAOFactory.getInstance().getSqlUserImpl();
 	@Override
 	public void signIn(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 		if(!SignInDataValidator.validate(request)) {
 			// send command to MainController login data invalid? login again
 		}
-		DAOFactory daoFactory = DAOFactory.getInstance();
-		UserDAO userDAO = daoFactory.getSqlUserImpl();
 		try {
 			userDAO.signIn(request, response);
 		} catch (DAOException e) {
@@ -30,25 +28,37 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void signOut() throws ServiceException {
-		// TODO Auto-generated method stub
+	public void signOut(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+		try {
+			userDAO.signOut(request, response);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while signing out", e);
+		}
 
 	}
 
 	@Override
-	public void addUser(User user) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void addUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+		try {
+			userDAO.addUser(request, response);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while adding new user", e);
+		}
 		
 	}
 
 	@Override
-	public void deliteUser(int idUser) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void deliteUser(String login) throws ServiceException {
+		try {
+			userDAO.deliteUser(login);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while adding new user", e);
+		}
 		
 	}
 
 	@Override
-	public void updateUser(int idUser) throws ServiceException {
+	public void updateUser(String login) throws ServiceException {
 		// TODO Auto-generated method stub
 		
 	}

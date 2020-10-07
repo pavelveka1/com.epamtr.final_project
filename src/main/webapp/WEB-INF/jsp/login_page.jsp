@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Login V16</title>
+<title>Login page</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->
@@ -52,12 +52,12 @@
 <body>
 
 
-	<div class="container-login100" style="background-image: url("resources/images/bg-01.jpg");">
+	<div class="container-login100" style="background-image: url('bg-01.jpg');">
 
 		<div class="wrap-login100 p-t-30 p-b-50">
 			<div class="button-container">
 
-				<form class="button-container" action="Locale" method="POST">
+				<form class="button-container" action="Locale" method="POST" >
 					<input  type="hidden" name="local" value="ru"> 
 					<input  type="hidden" name="jsp" value="/WEB-INF/jsp/login_page.jsp">
 					<input  type="submit" value="${button_ru}" />
@@ -102,22 +102,7 @@
 
 	<div id="dropDownSelect1"></div>
 
-	<!--===============================================================================================-->
-	<script src="resources/vendor/jquery/jquery-3.2.1.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="resources/vendor/animsition/js/animsition.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="resources/vendor/bootstrap/js/popper.js"></script>
-	<script src="resources/vendor/bootstrap/js/bootstrap.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="resources/vendor/select2/select2.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="resources/vendor/daterangepicker/moment.min.js"></script>
-	<script src="resources/vendor/daterangepicker/daterangepicker.js"></script>
-	<!--===============================================================================================-->
-	<script src="resources/vendor/countdowntime/countdowntime.js"></script>
-	<!--===============================================================================================-->
-	<script src="resources/js/main.js"></script>
+
 
 </body>
 </html>

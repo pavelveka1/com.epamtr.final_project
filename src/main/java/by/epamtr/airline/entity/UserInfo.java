@@ -7,11 +7,13 @@ public class UserInfo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -5623520519697589263L;
+	private int idUserInfo;
 	private String login;
 	private String password;
 
-	public UserInfo(String login, String password) {
+	public UserInfo(int idUserInfo, String login, String password) {
 		super();
+		this.idUserInfo=idUserInfo;
 		this.login = login;
 		this.password = password;
 	}
@@ -36,10 +38,21 @@ public class UserInfo implements Serializable {
 		this.password = password;
 	}
 
+	
+	
+	public int getIdUserInfo() {
+		return idUserInfo;
+	}
+
+	public void setIdUserInfo(int idUserInfo) {
+		this.idUserInfo = idUserInfo;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + idUserInfo;
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		return result;
@@ -54,6 +67,8 @@ public class UserInfo implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		UserInfo other = (UserInfo) obj;
+		if (idUserInfo != other.idUserInfo)
+			return false;
 		if (login == null) {
 			if (other.login != null)
 				return false;
@@ -69,8 +84,9 @@ public class UserInfo implements Serializable {
 
 	@Override
 	public String toString() {
-		return "UserInfo [login=" + login + ", password=" + password + "]";
+		return "UserInfo [idUserInfo=" + idUserInfo + ", login=" + login + ", password=" + password + "]";
 	}
+
 	
 	
 }
