@@ -95,8 +95,8 @@ footer {
 			</form>
 			
 			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_USER"> <input
-					type="submit" value="add user" />
+				<input type="hidden" name="command" value="UPDATE_USER"> <input
+					type="submit" value="Update user" />
 			</form>
 			
 			<form action="Controller" method="POST">

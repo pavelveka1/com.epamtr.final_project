@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 public interface Command {
 	String FULL_FORM="fullForm";
 	String EMPTY_FORM="emptyForm";
-	Logger rootLogger = LogManager.getRootLogger();
+	Logger rootLogger = LogManager.getLogger(Command.class);
 	 void execute(HttpServletRequest request, HttpServletResponse response);
 
 

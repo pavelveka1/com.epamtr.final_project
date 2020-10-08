@@ -17,22 +17,26 @@ import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
 
 
 public class ConnectionPoolImpl implements ConnectionPool {
-	private  final String url;
-	private  final String user;
-	private  final String password;
+	private final String url;
+	private final String user;
+	private final String password;
 	private final List<Connection> connectionPool;
 	private final List<Connection> usedConnections = new ArrayList<>();
 	private static final int INITIAL_POOL_SIZE = 5;
 	private static final int MAX_POOL_SIZE = 10;
 	private static final int MAX_TIMEOUT = 5;
 	private static Properties dbProperties;
+	private static final String NAME_JDBC_DRIVER="com.mysql.cj.jdbc.Driver";
+	private static final String DB_USER="db.user";
+	private static final String DB_URL="db.url";
+	private static final String DB_PASSWORD="db.password";
 
 	private static final ConnectionPool instance = new ConnectionPoolImpl();
-	private static final Logger rootLogger = LogManager.getRootLogger();
+	private static final Logger rootLogger = LogManager.getLogger(ConnectionPoolImpl.class);
 
 	private ConnectionPoolImpl() {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+			Class.forName(NAME_JDBC_DRIVER).getDeclaredConstructor().newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | ClassNotFoundException e1) {
 			rootLogger.error(e1);
@@ -44,9 +48,9 @@ public class ConnectionPoolImpl implements ConnectionPool {
 			rootLogger.error(e);
 		}
 	
-		url=dbProperties.getProperty("db.url");
-		user=dbProperties.getProperty("db.user");
-		password=dbProperties.getProperty("db.password");
+		url=dbProperties.getProperty(DB_URL);
+		user=dbProperties.getProperty(DB_USER);
+		password=dbProperties.getProperty(DB_PASSWORD);
 		
 	
 		connectionPool = new ArrayList<>(INITIAL_POOL_SIZE);
@@ -120,7 +124,10 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
 	@Override
 	public void shutdown() throws ConnectionPoolException {
-		usedConnections.forEach(this::releaseConnection);
+		for(Connection c: usedConnections) {
+			this.releaseConnection(c);
+		}
+	//usedConnections.forEach(this::releaseConnection);
 		for (Connection c : connectionPool) {
 			try {
 				c.close();

@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import by.epamtr.airline.dao.exception.DAOException;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.entity.UserRole;
 import by.epamtr.airline.service.exception.ServiceException;
@@ -17,7 +19,9 @@ public interface UserService {
 
 	void deliteUser(String login) throws ServiceException;
 
-	void updateUser(String login) throws ServiceException;
+	void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
+	
+	void findUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
 	List<User> getUsers(UserRole role) throws ServiceException;
 

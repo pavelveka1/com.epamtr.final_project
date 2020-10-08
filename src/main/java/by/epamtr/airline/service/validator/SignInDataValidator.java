@@ -14,7 +14,7 @@ public class SignInDataValidator {
 	private static Matcher passwordMatcher;
 	public static boolean validate(HttpServletRequest request) {
 		String login=request.getParameter("login");
-		String password=request.getParameter("pass");
+		String password=request.getParameter("password");
 		
 		loginMatcher=loginPattern.matcher(login);
 		passwordMatcher=passwordPattern.matcher(password);

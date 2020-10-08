@@ -39,7 +39,6 @@ public class CharacterEncodingFilter implements Filter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 		req.setCharacterEncoding(DEFAULT_ENCODING);
 		resp.setCharacterEncoding(DEFAULT_ENCODING);
-		System.out.println("filter performed");
 		chain.doFilter(request, response);
 	}
 

@@ -11,6 +11,7 @@ import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class AddUserCommand implements Command {
+	private static final String PATH_TO_ADD_USER_PAGE="/WEB-INF/jsp/administrator_action/add_user.jsp";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)  {
@@ -26,7 +27,7 @@ public class AddUserCommand implements Command {
 			}
 		}else {
 			try {
-				request.getRequestDispatcher("/WEB-INF/jsp/administrator_action/add_user.jsp").forward(request, response);
+				request.getRequestDispatcher(PATH_TO_ADD_USER_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
 				rootLogger.error(e);
 			}

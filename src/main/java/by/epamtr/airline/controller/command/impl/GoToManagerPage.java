@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import by.epamtr.airline.controller.command.Command;
 
 public class GoToManagerPage implements Command {
-
+	private static final String PATH_TO_MANAGER_PAGE="/WEB-INF/jsp/manager_page.jsp";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)  {
 		try {
-			request.getRequestDispatcher("/WEB-INF/jsp/manager_page.jsp").forward(request, response);
+			request.getRequestDispatcher(PATH_TO_MANAGER_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
 			rootLogger.error(e);
 		}

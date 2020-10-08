@@ -7,6 +7,7 @@ import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.controller.command.CommandName;
 import by.epamtr.airline.controller.command.impl.AddUserCommand;
 import by.epamtr.airline.controller.command.impl.DeliteUserCommand;
+import by.epamtr.airline.controller.command.impl.GetUserByLoginCommand;
 import by.epamtr.airline.controller.command.impl.GetUserCommand;
 import by.epamtr.airline.controller.command.impl.GetUsersCommand;
 import by.epamtr.airline.controller.command.impl.GoToAdministratorPage;
@@ -39,6 +40,7 @@ public class CommandProvider {
 		commands.put(CommandName.UPDATE_USER, new UpdateUserCommand());
 		commands.put(CommandName.GET_USER, new GetUserCommand());
 		commands.put(CommandName.GET_USERS, new GetUsersCommand());
+		commands.put(CommandName.GET_USER_BY_LOGIN, new GetUserByLoginCommand());
 		
 	}
 

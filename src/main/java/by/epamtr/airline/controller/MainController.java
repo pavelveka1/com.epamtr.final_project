@@ -21,6 +21,7 @@ import by.epamtr.airline.dao.exception.DAOException;
 public class MainController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String COMMAND = "command";
+	private static final String PATH_TO_LOGIN_PAGE="/WEB-INF/jsp/login_page.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -40,7 +41,7 @@ public class MainController extends HttpServlet {
 		rootLogger.info("Root Logger: " + request.getParameter(COMMAND));
 		String commandName = request.getParameter(COMMAND);
 		if (commandName == null) {
-			request.getRequestDispatcher("/WEB-INF/jsp/login_page.jsp").forward(request, response);
+			request.getRequestDispatcher(PATH_TO_LOGIN_PAGE).forward(request, response);
 		} else {
 			CommandProvider commandProvider = CommandProvider.getInstance();
 			Command command = commandProvider.getCommand(commandName.toUpperCase());

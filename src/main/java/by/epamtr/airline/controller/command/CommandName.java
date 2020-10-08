@@ -15,6 +15,8 @@ public enum CommandName {
 	DELITE_USER,
 	UPDATE_USER,
 	GET_USERS,
-	GET_USER;
+	GET_USER,
+	GET_USER_BY_LOGIN;
+	
 
 }

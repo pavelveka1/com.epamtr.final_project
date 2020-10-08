@@ -58,8 +58,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateUser(String login) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+		try {
+			userDAO.updateUser( request, response);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while adding new user", e);
+		}
 		
 	}
 
@@ -79,6 +83,15 @@ public class UserServiceImpl implements UserService {
 	public User getUser(int idUser) throws ServiceException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void findUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+		try {
+			userDAO.findUser(request, response);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while adding new user", e);
+		}
 	}
 
 	
