@@ -1,15 +1,15 @@
 package by.epamtr.airline.service.impl;
 
 import java.util.List;
-
 import by.epamtr.airline.dao.FlightStatusDAO;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.service.FlightService;
+import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class FlightServiceImpl implements FlightService {
-
+	
 	@Override
 	public void addFlight(Flight flight) throws ServiceException {
 		// TODO Auto-generated method stub
@@ -48,7 +48,6 @@ public class FlightServiceImpl implements FlightService {
 
 	@Override
 	public List<Flight> getFlights(FlightStatusDAO flightStatus) throws ServiceException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

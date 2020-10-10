@@ -14,14 +14,14 @@ public class Flight implements Serializable {
 	private String destinationCity;
 	private int flightRange;
 	private int flightTime;
-	private LocalDateTime timeDeparture;
+	private String timeDeparture;
 	private String aircraftType;
 	private String aircraftNumber;
 	private String status;
 	private List<Crew> crews;
 
 	public Flight(int idFlight, String currentCity, String destinationCity, int flightRange, int flightTime,
-			LocalDateTime timeDeparture, String aircraftType, String aircraftNumber, String status, List<Crew> crews) {
+			String timeDeparture, String aircraftType, String aircraftNumber, String status) {
 		super();
 		this.idFlight = idFlight;
 		this.currentCity = currentCity;
@@ -32,7 +32,6 @@ public class Flight implements Serializable {
 		this.aircraftType = aircraftType;
 		this.aircraftNumber = aircraftNumber;
 		this.status = status;
-		this.crews = crews;
 	}
 
 	public Flight() {
@@ -71,11 +70,11 @@ public class Flight implements Serializable {
 		this.flightTime = flightTime;
 	}
 
-	public LocalDateTime getTimeDeparture() {
+	public String getTimeDeparture() {
 		return timeDeparture;
 	}
 
-	public void setTimeDeparture(LocalDateTime timeDeparture) {
+	public void setTimeDeparture(String timeDeparture) {
 		this.timeDeparture = timeDeparture;
 	}
 
@@ -197,4 +196,5 @@ public class Flight implements Serializable {
 				+ ", crews=" + crews + "]";
 	}
 
+	
 }

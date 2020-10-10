@@ -1,5 +1,8 @@
 package by.epamtr.airline.dao.impl;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import by.epamtr.airline.dao.AircraftDAO;
 import by.epamtr.airline.dao.AircraftStatusDAO;
 import by.epamtr.airline.dao.exception.DAOException;
@@ -9,7 +12,7 @@ import by.epamtr.airline.entity.AircraftType;
 public class SQLAircraftDAO implements AircraftDAO {
 
 	@Override
-	public void addAircraft(Aircraft aircraft) throws DAOException {
+	public void addAircraft(HttpServletRequest request, HttpServletResponse response) throws DAOException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -21,7 +24,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 	}
 
 	@Override
-	public void updateAircraft(int idAircraft) throws DAOException {
+	public void updateAircraft(HttpServletRequest request, HttpServletResponse response) throws DAOException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -33,7 +36,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 	}
 
 	@Override
-	public void addAircraftType(AircraftType aircraftType) throws DAOException {
+	public void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws DAOException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -43,5 +46,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 }

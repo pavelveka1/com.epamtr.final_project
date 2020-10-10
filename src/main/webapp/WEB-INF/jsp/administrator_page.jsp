@@ -87,36 +87,38 @@ footer {
 				<input type="hidden" name="command" value="ADD_USER"> 
 				<input
 					type="submit" value="add user" />
-			</form>
+			</form><br>
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="DELITE_USER"> <input
 					type="submit" value="delite user" />
-			</form>
+			</form><br>
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="UPDATE_USER"> <input
 					type="submit" value="Update user" />
-			</form>
+			</form><br>
 			
 			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_USER"> <input
-					type="submit" value="add user" />
-			</form>
+				<input type="hidden" name="command" value="GET_USERS_BY_ROLE"> 
+				<input
+					type="submit" value="Get users" />
+			</form><br>
+			
 			
 			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_USER"> <input
-					type="submit" value="add user" />
-			</form>
+				<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID"> <input
+					type="submit" value="Get users by flight" />
+			</form><br>
 			
 			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_USER"> <input
-					type="submit" value="add user" />
-			</form>
+				<input type="hidden" name="command" value="ADD_FLIGHT"> <input
+					type="submit" value="add new flight" />
+			</form><br>
 			
 			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_USER"> <input
-					type="submit" value="add user" />
+				<input type="hidden" name="command" value="ADD_AIRCRAFT_TYPE"> <input
+					type="submit" value="Add type of aircraft" />
 			</form>
 			
 			<form action="Controller" method="POST">

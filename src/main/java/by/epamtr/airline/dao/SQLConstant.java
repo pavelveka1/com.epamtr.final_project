@@ -22,6 +22,15 @@ public class SQLConstant {
 		
 		public static final String UPDATE_USER_INFO="UPDATE users_info SET login='%s', password='%s' WHERE user_id = %d;";
 		public static final String UPDATE_USER="UPDATE users SET name='%s', surname='%s', patronimic='%s',e_mail='%s', user_role = %d WHERE id_user = %d;";
+	
+		public static final String GET_USERS_BY_ROLE=" SELECT users.id_user, users.name, users.surname, users.patronimic, users.e_mail, user_roles.user_role  FROM users \r\n" + 
+				"       JOIN user_roles ON user_roles.id_user_role = users.user_role ;";
+	}
+	
+	public static class FlightConstant{
+		public static final String GET_FLIGHTS_BY_ROLE=" SELECT users.id_user, users.name, users.surname, users.patronimic, users.e_mail, user_roles.user_role  FROM users \r\n" + 
+				"       JOIN user_roles ON user_roles.id_user_role = users.user_role ;";
+		
 	}
 
 }

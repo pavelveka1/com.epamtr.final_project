@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -330,8 +331,48 @@ public class SQLUserDAO implements UserDAO {
 
 	@Override
 	public List<User> getUsers(UserRole role) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		List<User> users=new ArrayList<User>();
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection.prepareStatement(SQLConstant.UserConstant.GET_USERS_BY_ROLE);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					if(role==UserRole.valueOf(rs.getString("user_roles.user_role"))) {
+						users.add(createUser(rs));
+					}
+				
+				} 
+				
+			
+			} catch (SQLException e) {
+				throw new DAOException("error while getting users by UserRole", e);
+			}
+			
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing resultSet", e);
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
+
+		return users;
 	}
 
 	@Override

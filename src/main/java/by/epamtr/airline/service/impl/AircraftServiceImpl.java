@@ -1,15 +1,25 @@
 package by.epamtr.airline.service.impl;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import by.epamtr.airline.dao.AircraftDAO;
 import by.epamtr.airline.dao.AircraftStatusDAO;
+import by.epamtr.airline.dao.DAOFactory;
+import by.epamtr.airline.dao.UserDAO;
+import by.epamtr.airline.dao.exception.DAOException;
+import by.epamtr.airline.dao.impl.SQLAircraftDAO;
 import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.AircraftType;
 import by.epamtr.airline.service.AircraftService;
+import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class AircraftServiceImpl implements AircraftService{
+	private AircraftDAO aircraftDAO = DAOFactory.getInstance().getSqlAircraftImpl();
 
 	@Override
-	public void addAircraft(Aircraft aircraft) throws ServiceException {
+	public void addAircraft(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -21,7 +31,7 @@ public class AircraftServiceImpl implements AircraftService{
 	}
 
 	@Override
-	public void updateAircraft(int idAircraft) throws ServiceException {
+	public void updateAircraft(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -33,8 +43,12 @@ public class AircraftServiceImpl implements AircraftService{
 	}
 
 	@Override
-	public void addAircraftType(AircraftType aircraftType) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+		try {
+			aircraftDAO.addAircraftType(request, response);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while adding new type of aircraft",e);
+		}
 		
 	}
 
@@ -43,5 +57,7 @@ public class AircraftServiceImpl implements AircraftService{
 		// TODO Auto-generated method stub
 		
 	}
+
+
 
 }

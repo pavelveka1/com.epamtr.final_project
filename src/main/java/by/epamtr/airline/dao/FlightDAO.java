@@ -16,7 +16,7 @@ public interface FlightDAO {
 	void changeFlightStatus(int idFlight, FlightStatusDAO flightStatus) throws DAOException;
 
 	Flight getFlight(int idFlight) throws DAOException;
-
+	
 	List<Flight> getFlights() throws DAOException;
 
 	List<Flight> getFlights(FlightStatusDAO flightStatus) throws DAOException;

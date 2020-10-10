@@ -69,8 +69,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> getUsers(UserRole role) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+		return	userDAO.getUsers(role);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while getting users by role", e);
+		}	
 	}
 
 	@Override
