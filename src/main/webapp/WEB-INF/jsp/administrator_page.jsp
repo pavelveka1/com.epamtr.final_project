@@ -87,34 +87,34 @@ footer {
 				<input type="hidden" name="command" value="ADD_USER"> 
 				<input
 					type="submit" value="add user" />
-			</form><br>
+			</form>
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="DELITE_USER"> <input
 					type="submit" value="delite user" />
-			</form><br>
+			</form>
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="UPDATE_USER"> <input
 					type="submit" value="Update user" />
-			</form><br>
+			</form>
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="GET_USERS_BY_ROLE"> 
 				<input
 					type="submit" value="Get users" />
-			</form><br>
+			</form>
 			
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID"> <input
 					type="submit" value="Get users by flight" />
-			</form><br>
+			</form>
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="ADD_FLIGHT"> <input
 					type="submit" value="add new flight" />
-			</form><br>
+			</form>
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="ADD_AIRCRAFT_TYPE"> <input
@@ -127,15 +127,19 @@ footer {
 			</form>
 			
 			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_USER"> <input
-					type="submit" value="add user" />
+				<input type="hidden" name="command" value="ADD_AIRCRAFT"> <input
+					type="submit" value="add aircraft" />
 			</form>
 			
 			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_USER"> <input
-					type="submit" value="add user" />
+				<input type="hidden" name="command" value="DELETE_AIRCRAFT"> <input
+					type="submit" value="delete aircraft" />
 			</form>
 			
+			<form action="Controller" method="POST">
+				<input type="hidden" name="command" value="UPDATE_AIRCRAFT"> <input
+					type="submit" value="Update aircraft" />
+			</form>
 			
 		</nav>
 	</section>

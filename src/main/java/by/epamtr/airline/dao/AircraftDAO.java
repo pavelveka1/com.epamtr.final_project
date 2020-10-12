@@ -10,15 +10,16 @@ import by.epamtr.airline.entity.AircraftType;
 public interface AircraftDAO {
 	void addAircraft(HttpServletRequest request, HttpServletResponse response) throws DAOException;
 
-	void deliteAircraft(int idAircraft) throws DAOException;
+	void deleteAircraft(String registrationNumber) throws DAOException;
 
 	void updateAircraft(HttpServletRequest request, HttpServletResponse response) throws DAOException;
 
-	void changeAircraftStatus(int idAircraft, AircraftStatusDAO aircraftStatus) throws DAOException;
+	void changeAircraftStatus(String registrationNumber, AircraftStatusDAO aircraftStatus) throws DAOException;
 
 	void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws DAOException;
 
 	void deliteAircraftType(int idAircraftType) throws DAOException;
 	
 	List<AircraftType> getAircraftTypes() throws DAOException;
+	List<String> getRegisterNumbers() throws DAOException;
 }

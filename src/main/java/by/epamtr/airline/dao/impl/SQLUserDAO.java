@@ -262,11 +262,9 @@ public class SQLUserDAO implements UserDAO {
 		int role =defineRole(request.getParameter(ROLE_PARAM));
 		
 		Connection connection = null;
-		Statement statement=null;
 		PreparedStatement statementUser = null;
 		PreparedStatement statementUserInfo = null;
-		ResultSet rsUser = null;
-		ResultSet rsUserInfo = null;
+		
 		
 		try {
 			connection = connectionPool.getConnection();
@@ -286,20 +284,7 @@ public class SQLUserDAO implements UserDAO {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
 			connectionPool.releaseConnection(connection);
-			if (rsUser != null) {
-				try {
-					rsUser.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (rsUserInfo != null) {
-				try {
-					rsUserInfo.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
+			
 			if (statementUser != null) {
 				try {
 					statementUser.close();
@@ -314,19 +299,8 @@ public class SQLUserDAO implements UserDAO {
 					throw new DAOException("erroe while closing statement", e);
 				}
 			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			
 		}
-		
-		
-		
-		
-
 	}
 
 	@Override

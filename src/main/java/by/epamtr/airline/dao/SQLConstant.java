@@ -4,6 +4,8 @@ public class SQLConstant {
 	
 	public static final String CONSTRAINT_DISABLE="SET FOREIGN_KEY_CHECKS=0;";
 	public static final String CONSTRAINT_ENABLE="SET FOREIGN_KEY_CHECKS=1;";
+	public static final String SAFE_UPDATE_DISABLE="SET SQL_SAFE_UPDATES = 0;";
+	public static final String SAFE_UPDATE_ENABLE="SET SQL_SAFE_UPDATES = 1;";
 	 
 	public static class UserConstant{
 		public static final String SIGN_IN_GET_ID="SELECT user_id FROM users_info where (login ='%s') and (password = '%s');";
@@ -38,8 +40,10 @@ public class SQLConstant {
 		public static final String GET_AIRCRAFT_TYPES=" SELECT * FROM aircraft_types ;";
 		public static final String ADD_AIRCRAFT_TYPES=" INSERT INTO aircraft_types (`aircraft_type`, `range_flight`, `number_passengers`) VALUES (?,?,?) ;";
 		public static final String DELETE_AIRCRAFT_TYPE="DELETE FROM aircraft_types WHERE id_aircraft_type =%d AND id_aircraft_type NOT IN (SELECT type_aircraft FROM aircrafts);";
-		
-		
+		public static final String ADD_AIRCRAFT=" INSERT INTO aircrafts (`type_aircraft`, `registration_number`, `status`) VALUES (?,?,?) ;";
+		public static final String GET_REGISTER_NUMBERS=" SELECT registration_number FROM aircrafts ;";
+		public static final String DELETE_AIRCRAFT=" DELETE FROM aircrafts WHERE registration_number='%s' AND id_aircraft NOT IN (SELECT aircraft FROM flights);";
+		public static final String UPDATE_AIRCRAFT="UPDATE aircrafts SET aircrafts.registration_number='%s' WHERE id_aircraft = (select id_aircraft where aircrafts.registration_number = '%s');";
 		
 	}
 

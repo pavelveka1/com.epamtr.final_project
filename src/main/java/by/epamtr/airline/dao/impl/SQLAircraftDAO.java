@@ -16,7 +16,9 @@ import by.epamtr.airline.dao.connection_pool.ConnectionPool;
 import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
 import by.epamtr.airline.dao.connection_pool.impl.ConnectionPoolImpl;
 import by.epamtr.airline.dao.exception.DAOException;
+import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.AircraftType;
+import by.epamtr.airline.entity.User;
 
 public class SQLAircraftDAO implements AircraftDAO {
 	private ConnectionPool connectionPool = ConnectionPoolImpl.getInstance();
@@ -25,26 +27,125 @@ public class SQLAircraftDAO implements AircraftDAO {
 	private static final String RANGE_FLIGHT_COLUMN = "range_flight";
 	private static final String NUMBER_PASSENGER_COLUMN = "number_passengers";
 
+	private static final String REGISTER_NUMBER_COLUMN = "registration_number";
+	private static final String ID_AIRCRAFT_TYPE = "id_iarcraft_type";
+	private static final String REGISTER_NUMBER_PARAM = "register_number";
+	private static final String AIRCRAFT_STATUS_PARAM = "aircraft_status";
+	private static final String AIRCRAFT_TYPE_PARAM = "aircraft_type";
+
 	@Override
 	public void addAircraft(HttpServletRequest request, HttpServletResponse response) throws DAOException {
-		// TODO Auto-generated method stub
+		int idTypeAircraft = (Integer) request.getSession().getAttribute(ID_AIRCRAFT_TYPE);
+		String registerNumber = request.getParameter(REGISTER_NUMBER_PARAM);
+		String statusAircraft = request.getParameter(AIRCRAFT_STATUS_PARAM);
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection.prepareStatement(SQLConstant.AircraftConstant.ADD_AIRCRAFT);
+				statement.setInt(1, idTypeAircraft);
+				statement.setString(2, registerNumber);
+				statement.setString(3, statusAircraft);
+				statement.executeUpdate();
+
+			} catch (SQLException e) {
+				throw new DAOException("error while adding aircraft", e);
+			}
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing resultSet", e);
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
 
 	}
 
 	@Override
-	public void deliteAircraft(int idAircraft) throws DAOException {
-		// TODO Auto-generated method stub
+	public void deleteAircraft(String registrationNumber) throws DAOException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection.prepareStatement(
+						String.format(SQLConstant.AircraftConstant.DELETE_AIRCRAFT, registrationNumber));
+				statement.executeUpdate();
+
+			} catch (SQLException e) {
+				throw new DAOException("error while deletion aircraft", e);
+			}
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing resultSet", e);
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
 
 	}
 
 	@Override
 	public void updateAircraft(HttpServletRequest request, HttpServletResponse response) throws DAOException {
-		// TODO Auto-generated method stub
+		String registrationNumber = request.getParameter("aircraft_numbers");
+		String newRegistrationNumber = request.getParameter(REGISTER_NUMBER_PARAM);
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE).executeQuery();
+				statement = connection.prepareStatement(String.format(SQLConstant.AircraftConstant.UPDATE_AIRCRAFT, newRegistrationNumber, registrationNumber ));
+				statement.executeUpdate();
+				connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE).executeQuery();
+			} catch (SQLException e) {
+				throw new DAOException("error while updating user", e);
+			}
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
 
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
 	}
 
 	@Override
-	public void changeAircraftStatus(int idAircraft, AircraftStatusDAO aircraftStatus) throws DAOException {
+	public void changeAircraftStatus(String registrationNumber, AircraftStatusDAO aircraftStatus) throws DAOException {
 		// TODO Auto-generated method stub
 
 	}
@@ -100,7 +201,8 @@ public class SQLAircraftDAO implements AircraftDAO {
 			connection = connectionPool.getConnection();
 			try {
 				statement = connection.createStatement();
-				int a=statement.executeUpdate(String.format(SQLConstant.AircraftConstant.DELETE_AIRCRAFT_TYPE, idAircraftType));
+				int a = statement.executeUpdate(
+						String.format(SQLConstant.AircraftConstant.DELETE_AIRCRAFT_TYPE, idAircraftType));
 			} catch (SQLException e) {
 				throw new DAOException("Error during deletion aircraft types", e);
 			}
@@ -124,6 +226,46 @@ public class SQLAircraftDAO implements AircraftDAO {
 			}
 		}
 
+	}
+
+	@Override
+	public List<String> getRegisterNumbers() throws DAOException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		List<String> registerNumbers = new ArrayList<String>();
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection.prepareStatement(SQLConstant.AircraftConstant.GET_REGISTER_NUMBERS);
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					registerNumbers.add(rs.getString(REGISTER_NUMBER_COLUMN));
+				}
+
+			} catch (SQLException e) {
+				throw new DAOException("error while getting aircraft types", e);
+			}
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing resultSet", e);
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
+		return registerNumbers;
 	}
 
 	@Override
