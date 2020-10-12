@@ -23,7 +23,7 @@ public class AddAircraftTypeCommand implements Command {
 			String page=request.getParameter("aircraft_type");
 			if(page!=null) {
 				try {
-					aircraftService.addAircraftType(request, response);;
+					aircraftService.addAircraftType(request, response);
 				} catch (ServiceException e2) {
 				//	rootLogger.error(e2);
 					e2.printStackTrace();

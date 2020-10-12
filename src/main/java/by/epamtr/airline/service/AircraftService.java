@@ -1,9 +1,13 @@
 package by.epamtr.airline.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import by.epamtr.airline.dao.AircraftStatusDAO;
+import by.epamtr.airline.dao.exception.DAOException;
+import by.epamtr.airline.entity.AircraftType;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public interface AircraftService {
@@ -18,4 +22,6 @@ public interface AircraftService {
 	void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
 	void deliteAircraftType(int idAircraftType) throws ServiceException;
+	
+	List<AircraftType> getAircraftTypes() throws ServiceException;
 }

@@ -1,5 +1,7 @@
 package by.epamtr.airline.service.impl;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -54,7 +56,21 @@ public class AircraftServiceImpl implements AircraftService{
 
 	@Override
 	public void deliteAircraftType(int idAircraftType) throws ServiceException {
-		// TODO Auto-generated method stub
+		try {
+			aircraftDAO.deliteAircraftType(idAircraftType);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while deleting type of aircraft",e);
+		}
+		
+	}
+
+	@Override
+	public List<AircraftType> getAircraftTypes() throws ServiceException {
+		try {
+			return aircraftDAO.getAircraftTypes();
+		} catch (DAOException e) {
+			throw new ServiceException("Error while getting aircraft types from DB",e);
+		}
 		
 	}
 

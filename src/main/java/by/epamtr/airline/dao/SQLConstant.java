@@ -32,5 +32,15 @@ public class SQLConstant {
 				"       JOIN user_roles ON user_roles.id_user_role = users.user_role ;";
 		
 	}
+	
+	
+	public static class AircraftConstant{
+		public static final String GET_AIRCRAFT_TYPES=" SELECT * FROM aircraft_types ;";
+		public static final String ADD_AIRCRAFT_TYPES=" INSERT INTO aircraft_types (`aircraft_type`, `range_flight`, `number_passengers`) VALUES (?,?,?) ;";
+		public static final String DELETE_AIRCRAFT_TYPE="DELETE FROM aircraft_types WHERE id_aircraft_type =%d AND id_aircraft_type NOT IN (SELECT type_aircraft FROM aircrafts);";
+		
+		
+		
+	}
 
 }

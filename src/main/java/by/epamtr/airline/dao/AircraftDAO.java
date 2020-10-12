@@ -1,10 +1,10 @@
 package by.epamtr.airline.dao;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import by.epamtr.airline.dao.exception.DAOException;
-import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.AircraftType;
 
 public interface AircraftDAO {
@@ -19,4 +19,6 @@ public interface AircraftDAO {
 	void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws DAOException;
 
 	void deliteAircraftType(int idAircraftType) throws DAOException;
+	
+	List<AircraftType> getAircraftTypes() throws DAOException;
 }

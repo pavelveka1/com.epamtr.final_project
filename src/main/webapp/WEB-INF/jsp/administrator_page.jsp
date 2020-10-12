@@ -122,8 +122,8 @@ footer {
 			</form>
 			
 			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_USER"> <input
-					type="submit" value="add user" />
+				<input type="hidden" name="command" value="DELETE_AIRCRAFT_TYPE"> <input
+					type="submit" value="Delete aircraft type" />
 			</form>
 			
 			<form action="Controller" method="POST">
