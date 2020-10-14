@@ -1,6 +1,6 @@
-package by.epamtr.airline.dao;
+package by.epamtr.airline.entity;
 
-public enum FlightStatusDAO {
+public enum FlightStatus {
 	STAFF_RECRUITMENT("STAFF RECRUITMENT"),
 	CREATED("CREATED"),
 	COMPLETED("COMPLETED");
@@ -9,7 +9,7 @@ public enum FlightStatusDAO {
 	
 	private String status;
 	
-	FlightStatusDAO(String status){
+	FlightStatus(String status){
 		this.status=status;
 	}
 

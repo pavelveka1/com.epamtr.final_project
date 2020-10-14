@@ -168,7 +168,7 @@ public class SQLUserDAO implements UserDAO {
 				statement.setString(2, request.getParameter(SURNAME_COLUMN));
 				statement.setString(3, request.getParameter(PATRONIMIC_COLUMN));
 				statement.setString(4, request.getParameter(EMAIL_PARAM));
-				statement.setInt(5, defineRole(request.getParameter(ROLE_COLUMN)));
+				statement.setInt(5, defineRole(request.getParameter(ROLE_PARAM)));
 				statement.executeUpdate();
 
 				statement = connection.prepareStatement(SQLConstant.UserConstant.ADD_USER_INSERT_IN_USERS_INFO);
@@ -178,7 +178,6 @@ public class SQLUserDAO implements UserDAO {
 				statement.setString(3, criptPassword(request.getParameter(PASSWORD_COLUMN)));
 				statement.executeUpdate();
 				statement = connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE);
-				statement.executeQuery();
 				connection.commit();
 				connection.setAutoCommit(true);
 

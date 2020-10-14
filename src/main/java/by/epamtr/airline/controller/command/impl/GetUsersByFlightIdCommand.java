@@ -6,8 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import by.epamtr.airline.controller.command.Command;
-import by.epamtr.airline.dao.FlightStatusDAO;
 import by.epamtr.airline.entity.Flight;
+import by.epamtr.airline.entity.FlightStatus;
 import by.epamtr.airline.service.FlightService;
 import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
@@ -31,7 +31,7 @@ public class GetUsersByFlightIdCommand implements Command {
 				ServiceFactory serviceFactory = ServiceFactory.getInstance();
 				FlightService flightService = serviceFactory.getFlightService();
 				try {
-					flights = flightService.getFlights(FlightStatusDAO.valueOf(request.getParameter("flight_status")));
+					flights = flightService.getFlights(FlightStatus.valueOf(request.getParameter("flight_status")));
 					request.getSession().setAttribute("flights", flights);
 					try {
 						request.getRequestDispatcher(PATH_TO_GET_USERS_BY_FLIGHT).forward(request, response);

@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import by.epamtr.airline.controller.command.Command;
+import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.service.AircraftService;
 import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
@@ -15,9 +16,10 @@ import by.epamtr.airline.service.exception.ServiceException;
 public class DeleteAircraftCommand implements Command {
 	private static final String PATH_TO_DELETE_AIRCRAFT = "/WEB-INF/jsp/administrator_action/delete_aircraft.jsp";
 	private static final String AIRCRAFT_NUMBER_PARAM="aircraft_numbers";
-	ServiceFactory serviceFactory = ServiceFactory.getInstance();
-	AircraftService aircraftService = serviceFactory.getAircraftService();
-	List<String> registerNumbers = new ArrayList<String>();
+	private static final String AIRCRAFTS_ATTR = "aircrafts";
+	private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
+	private final AircraftService aircraftService = serviceFactory.getAircraftService();
+	 private List<Aircraft> aircrafts = new ArrayList<Aircraft>();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -25,8 +27,8 @@ public class DeleteAircraftCommand implements Command {
 		String aircraftsParameter = request.getParameter(AIRCRAFT_NUMBER_PARAM);
 		if (aircraftsParameter == null) {
 			try {
-				registerNumbers = aircraftService.getRegisterNumbers();
-				request.setAttribute("registration_numbers", registerNumbers);
+				aircrafts = aircraftService.getAircraftrs();
+				request.setAttribute(AIRCRAFTS_ATTR, aircrafts);
 				request.getRequestDispatcher(PATH_TO_DELETE_AIRCRAFT).forward(request, response);
 			} catch (ServletException | IOException | ServiceException e) {
 				// rootLogger.error(e);
@@ -35,8 +37,8 @@ public class DeleteAircraftCommand implements Command {
 		} else {
 			try {
 				aircraftService.deleteAircraft(request.getParameter(AIRCRAFT_NUMBER_PARAM));
-				registerNumbers = aircraftService.getRegisterNumbers();
-				request.setAttribute("registration_numbers", registerNumbers);
+				aircrafts = aircraftService.getAircraftrs();
+				request.setAttribute(AIRCRAFTS_ATTR, aircrafts);
 				request.getRequestDispatcher(PATH_TO_DELETE_AIRCRAFT).forward(request, response);
 			} catch (ServletException | IOException | ServiceException e) {
 				// rootLogger.error(e);

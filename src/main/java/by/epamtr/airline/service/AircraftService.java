@@ -18,7 +18,7 @@ public interface AircraftService {
 
 	void updateAircraft(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
-	void changeAircraftStatus(String registrationNumber, AircraftStatusDAO aircraftStatus) throws ServiceException;
+	void changeAircraftStatus(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
 	void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
@@ -26,5 +26,5 @@ public interface AircraftService {
 	
 	List<AircraftType> getAircraftTypes() throws ServiceException;
 	
-	List<String> getRegisterNumbers() throws ServiceException;
+	List<Aircraft> getAircraftrs() throws ServiceException;
 }

@@ -10,9 +10,9 @@
 	<form action="Controller" method="POST">
 		<input type="hidden" name="command" value="UPDATE_AIRCRAFT"> <label>Choose
 			aircraft </label> <select name="aircraft_numbers">
-			<c:forEach var="type_item" items="${registration_numbers}}">
+			<c:forEach var="type_item" items="${aircrafts}}">
 				<option>
-					<c:out value="${type_item}" />
+					<c:out value="${type_item.registrationNumber}" />
 				</option>
 			</c:forEach>
 			</select>

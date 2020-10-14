@@ -34,6 +34,18 @@ public class Flight implements Serializable {
 		this.status = status;
 	}
 
+	public Flight(String currentCity, String destinationCity, int flightRange, int flightTime,
+			String timeDeparture,  String aircraftNumber, String status) {
+		super();
+		this.currentCity = currentCity;
+		this.destinationCity = destinationCity;
+		this.flightRange = flightRange;
+		this.flightTime = flightTime;
+		this.timeDeparture = timeDeparture;
+		this.aircraftNumber = aircraftNumber;
+		this.status = status;
+	}
+	
 	public Flight() {
 
 	}

@@ -1,18 +1,30 @@
 package by.epamtr.airline.service.impl;
 
 import java.util.List;
-import by.epamtr.airline.dao.FlightStatusDAO;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import by.epamtr.airline.dao.AircraftDAO;
+import by.epamtr.airline.dao.DAOFactory;
+import by.epamtr.airline.dao.FlightDAO;
+import by.epamtr.airline.dao.exception.DAOException;
 import by.epamtr.airline.entity.Flight;
+import by.epamtr.airline.entity.FlightStatus;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.service.FlightService;
-import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class FlightServiceImpl implements FlightService {
+	private FlightDAO flightDAO = DAOFactory.getInstance().getSqlFlightImpl();
 	
 	@Override
-	public void addFlight(Flight flight) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void addFlight(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+		try {
+			flightDAO.addFlight(request, response);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while adding new flight",e);
+		}
 		
 	}
 
@@ -29,7 +41,7 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
-	public void changeFlightStatus(int idFlight, FlightStatusDAO flightStatus) throws ServiceException {
+	public void changeFlightStatus(int idFlight, FlightStatus flightStatus) throws ServiceException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -47,7 +59,7 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
-	public List<Flight> getFlights(FlightStatusDAO flightStatus) throws ServiceException {
+	public List<Flight> getFlights(FlightStatus flightStatus) throws ServiceException {
 		return null;
 	}
 

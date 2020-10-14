@@ -46,8 +46,12 @@ public class AircraftServiceImpl implements AircraftService{
 	}
 
 	@Override
-	public void changeAircraftStatus(String registrationNumber, AircraftStatusDAO aircraftStatus) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void changeAircraftStatus(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+		try {
+			aircraftDAO.changeAircraftStatus(request, response);;
+		} catch (DAOException e) {
+			throw new ServiceException("Error while changing status of aircraft",e);
+		}
 		
 	}
 
@@ -82,9 +86,9 @@ public class AircraftServiceImpl implements AircraftService{
 	}
 
 	@Override
-	public List<String> getRegisterNumbers() throws ServiceException {
+	public List<Aircraft> getAircraftrs() throws ServiceException {
 		try {
-			return aircraftDAO.getRegisterNumbers();
+			return aircraftDAO.getAircrafts();
 		} catch (DAOException e) {
 			throw new ServiceException("Error while getting aircrafts from DB",e);
 		}

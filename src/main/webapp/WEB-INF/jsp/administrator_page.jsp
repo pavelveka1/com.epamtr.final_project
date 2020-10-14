@@ -138,12 +138,46 @@ footer {
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="UPDATE_AIRCRAFT"> <input
-					type="submit" value="Update aircraft" />
+					type="submit" value="Update aircraft number" />
 			</form>
+			
+			<form action="Controller" method="POST">
+				<input type="hidden" name="command" value="CHANGE_STATUS_AIRCRAFT"> <input
+					type="submit" value="Update aircraft status" />
+			</form>
+			
+			<form action="Controller" method="POST">
+				<input type="hidden" name="command" value="ADD_FLIGHT"> <input
+					type="submit" value="Add flight" />
+			</form>
+			
+			<form action="Controller" method="POST">
+				<input type="hidden" name="command" value="DELETE_FLIGHT"> <input
+					type="submit" value="Delete flight" />
+			</form>
+			
+			<form action="Controller" method="POST">
+				<input type="hidden" name="command" value="UPDATE_FLIGHT"> <input
+					type="submit" value="Updare flight" />
+			</form>
+			
+			<form action="Controller" method="POST">
+				<input type="hidden" name="command" value="GET_FLIGHTS_BY_STATUS"> <input
+					type="submit" value="Flights by status" />
+			</form>
+			
+			<form action="Controller" method="POST">
+				<input type="hidden" name="command" value="GET_FLIGHTS_BY_USER"> <input
+					type="submit" value="Flights by user" />
+			</form>
+			
+			
 			
 		</nav>
 	</section>
-	<main></main>
+	<main class="col-xs-12 col-sm-8 col-md-9 col-lg-10"> 
+				<jsp:include page="${currentPage}" /> 
+			</main>
 	<footer>
 		<p>Footer</p>
 	</footer>

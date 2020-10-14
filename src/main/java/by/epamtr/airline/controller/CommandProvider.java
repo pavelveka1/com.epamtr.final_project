@@ -15,6 +15,7 @@ import by.epamtr.airline.controller.command.impl.DeleteAircraftTypeCommand;
 import by.epamtr.airline.controller.command.impl.DeleteFlightCommand;
 import by.epamtr.airline.controller.command.impl.DeliteUserCommand;
 import by.epamtr.airline.controller.command.impl.GetFlightsByStatusCommand;
+import by.epamtr.airline.controller.command.impl.GetFlightsByUser;
 import by.epamtr.airline.controller.command.impl.GetUserByLoginCommand;
 import by.epamtr.airline.controller.command.impl.GetUserCommand;
 import by.epamtr.airline.controller.command.impl.GetUsersByFlightIdCommand;
@@ -60,6 +61,7 @@ public class CommandProvider {
 		commands.put(CommandName.DELETE_FLIGHT, new DeleteFlightCommand());
 		commands.put(CommandName.UPDATE_FLIGHT, new UpdateFlightCommand());
 		commands.put(CommandName.GET_FLIGHTS_BY_STATUS, new GetFlightsByStatusCommand());
+		commands.put(CommandName.GET_FLIGHTS_BY_USER, new GetFlightsByUser());
 		
 		commands.put(CommandName.ADD_AIRCRAFT, new AddAircraftCommand());
 		commands.put(CommandName.DELETE_AIRCRAFT, new DeleteAircraftCommand());
@@ -67,6 +69,7 @@ public class CommandProvider {
 		commands.put(CommandName.CHANGE_STATUS_AIRCRAFT, new ChangeAircraftStatusCommand());
 		commands.put(CommandName.ADD_AIRCRAFT_TYPE, new AddAircraftTypeCommand());
 		commands.put(CommandName.DELETE_AIRCRAFT_TYPE, new DeleteAircraftTypeCommand());
+		
 		
 		
 	}
