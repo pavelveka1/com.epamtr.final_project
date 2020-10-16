@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import by.epamtr.airline.dao.DAOFactory;
 import by.epamtr.airline.dao.UserDAO;
 import by.epamtr.airline.dao.exception.DAOException;
+import by.epamtr.airline.entity.Crew;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.entity.UserRole;
 import by.epamtr.airline.service.UserService;
@@ -77,9 +78,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> getUsers(int idFlight) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Crew> getUsers(int idFlight) throws ServiceException {
+		List<Crew> crew;
+		try {
+			crew=userDAO.getUsers(idFlight);
+			} catch (DAOException e) {
+				throw new ServiceException("Error while getting users by role", e);
+			}	
+		return crew;
 	}
 
 	@Override
@@ -95,6 +101,22 @@ public class UserServiceImpl implements UserService {
 		} catch (DAOException e) {
 			throw new ServiceException("Error while adding new user", e);
 		}
+	}
+
+	@Override
+	public void deliteCrewFromFlight(int flightId, int userId) throws ServiceException {
+		try {
+			userDAO.deliteCrewFromFlight(flightId, userId);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while deletion crew from flight", e);
+		}
+		
+	}
+
+	@Override
+	public void addCrewToFlight(int flightId, int userId) throws ServiceException {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

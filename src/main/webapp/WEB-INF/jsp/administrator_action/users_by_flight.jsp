@@ -9,37 +9,49 @@
 <body>
 	<form action="Controller" method="POST">
 		<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">
-		<label> Choose flight status</label>
-		 <select name="flight_status">
-			<option>STAFF RECRUITMENT</option>
+		<label> Choose flight status</label> <select name="flight_status" value="${flight_status}">
+			<option>RECRUITMENT</option>
 			<option>CREATED</option>
-			<option>COMPLETED</option>
-		</select> 
-		<input type="submit" value="Find" />
+			<option>COMPLITED</option>
+		</select> <input type="submit" value="Find" />
 
 	</form>
 	<br>
 	<br>
 	<form action="Controller" method="POST">
 		<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">
-		<select name="flights">
-			<c:forEach var="flight_item" items="${flights}">
-				<option>
-					<c:out value="${flight_item}" />
-					<c:set var="id_flight" scope="session"
-						value="${flight_item.idFlight }" />
-				</option>
-			</c:forEach>
-		</select> <input type="submit" value="Find" />
-	</form>
-	<br>
-	<br>
-	<table>
-		<c:forEach var="user_item" items="${users_by_flight}">
+
+
+
+		<table border="1">
 			<tr>
-				<td><c:out value="${user_item}" /></td>
+				<th>Current city</th>
+				<th>Destination city</th>
+				<th>Flight range</th>
+				<th>Flight time</th>
+				<th>Date</th>
+				<th>Aircraft</th>
+				<th>Registr. number</th>
+				<th>Status</th>
+				<th>Choose</th>
 			</tr>
+			<c:forEach var="flight_item" items="${flights}">
+				<tr>
+					<td><c:out value="${flight_item.currentCity}" /></td>
+					<td><c:out value="${flight_item.destinationCity}" /> </td>
+					<td><c:out value="${flight_item.flightRange}" /> </td>
+					<td><c:out value="${flight_item.flightTime}"/> </td>
+					<td><c:out value="${flight_item.timeDeparture}" /> </td>
+					<td><c:out value="${flight_item.aircraftType}" /> </td>
+					<td><c:out value="${flight_item.aircraftNumber}" /> </td>
+					<td><c:out value="${flight_item.status}" /></td>
+					<td><input type=radio name="radio_id_flight" value="${flight_item.idFlight}"  >    </td>
+				</tr>
 		</c:forEach>
-	</table>
+		</table>
+
+		<input type="submit" value="Find users" />
+	</form>
+	
 </body>
 </html>

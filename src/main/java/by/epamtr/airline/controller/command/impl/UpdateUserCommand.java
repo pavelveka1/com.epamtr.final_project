@@ -19,19 +19,21 @@ public class UpdateUserCommand implements Command {
 			try {
 				request.getRequestDispatcher(PATH_TO_UPDATE_USER_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
-				// rootLogger.error(e2);
+				// rootLogger.error(e);
 				e.printStackTrace();
 			}
 		}else {
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			UserService userService = serviceFactory.getUserService();
 
-			try {
-				userService.updateUser(request, response);
-			} catch (ServiceException e) {
-				// rootLogger.error(e2);
-				e.printStackTrace();
-			}
+				try {
+					userService.updateUser(request, response);
+					request.getRequestDispatcher(PATH_TO_UPDATE_USER_PAGE).forward(request, response);
+				} catch (ServletException | IOException | ServiceException e) {
+					// rootLogger.error(e);
+					e.printStackTrace();
+				}
+		
 		}
 		
 		

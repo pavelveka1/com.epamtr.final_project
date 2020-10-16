@@ -7,11 +7,13 @@ import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.controller.command.CommandName;
 import by.epamtr.airline.controller.command.impl.AddAircraftCommand;
 import by.epamtr.airline.controller.command.impl.AddAircraftTypeCommand;
+import by.epamtr.airline.controller.command.impl.AddCrewToFlightCommand;
 import by.epamtr.airline.controller.command.impl.AddFlightCommand;
 import by.epamtr.airline.controller.command.impl.AddUserCommand;
 import by.epamtr.airline.controller.command.impl.ChangeAircraftStatusCommand;
 import by.epamtr.airline.controller.command.impl.DeleteAircraftCommand;
 import by.epamtr.airline.controller.command.impl.DeleteAircraftTypeCommand;
+import by.epamtr.airline.controller.command.impl.DeleteCrewFromFlightCommand;
 import by.epamtr.airline.controller.command.impl.DeleteFlightCommand;
 import by.epamtr.airline.controller.command.impl.DeliteUserCommand;
 import by.epamtr.airline.controller.command.impl.GetFlightsByStatusCommand;
@@ -56,6 +58,8 @@ public class CommandProvider {
 		commands.put(CommandName.GET_USER_BY_LOGIN, new GetUserByLoginCommand());
 		commands.put(CommandName.GET_USERS_BY_ROLE, new GetUsersByRoleCommand());
 		commands.put(CommandName.GET_USERS_BY_FLIGHT_ID, new GetUsersByFlightIdCommand());
+		commands.put(CommandName.ADD_CREW_TO_FLIGHT, new AddCrewToFlightCommand());
+		commands.put(CommandName.DELETE_CREW_FROM_FLIGHT, new DeleteCrewFromFlightCommand());
 		
 		commands.put(CommandName.ADD_FLIGHT, new AddFlightCommand());
 		commands.put(CommandName.DELETE_FLIGHT, new DeleteFlightCommand());

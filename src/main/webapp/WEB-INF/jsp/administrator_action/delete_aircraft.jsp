@@ -13,9 +13,9 @@
 			 <label>Choose aircraft  </label>
 			 
 			  <select name="aircraft_numbers">
-			<c:forEach var="type_item" items="${aircrafts}}">
+			<c:forEach var="type_item" items="${aircrafts}">
 				<option>
-					<c:out value="${type_item.registrationNumber}" />
+					<c:out value="${type_item.registerNumber}" />
 				</option>
 			</c:forEach>
 		</select> 

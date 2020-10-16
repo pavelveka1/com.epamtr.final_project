@@ -27,12 +27,24 @@ public class SQLConstant {
 
 		public static final String GET_USERS_BY_ROLE = " SELECT users.id_user, users.name, users.surname, users.patronimic, users.e_mail, user_roles.user_role  FROM users \r\n"
 				+ "       JOIN user_roles ON user_roles.id_user_role = users.user_role ;";
+		
+		public static final String GET_USERS_BY_FLIGHT_ID=" SELECT users.id_user, users.name, users.surname, users.patronimic, users.e_mail, user_roles.user_role, crews.flight_id, crew_positions.crew_position  FROM users \r\n"
+				+ "       JOIN user_roles ON user_roles.id_user_role = users.user_role"
+				+ "       JOIN crews ON crews.crew_user_id = users.id_user"
+				+ "       JOIN crew_positions ON crew_positions.id_crew_position = crews.crew_position"
+				+ "       WHERE crews.flight_id = %d;";
+		
+		public static final String DELETE_CREW_FROM_FLIGHT="DELETE FROM crews WHERE flight_id ='%s' and crew_user_id = '%s';";
 	}
 
 	public static class FlightConstant {
 		public static final String ADD_FLIGHT = " INSERT INTO flights (`current_city`, `destination_city`, `flight_range`, `flight_time`, `day_and_time_departure`, `aircraft`, `flight_status`) VALUES (?,?,?,?,?,?,?) ;";
-		public static final String ADD_AIRCRAFT = " INSERT INTO aircrafts (`type_aircraft`, `registration_number`, `status`) VALUES (?,?,?) ;";
-
+		public static final String GET_FLIGHTS_BY_STATUS = "SELECT id_flight, current_city, destination_city, flight_range, flight_time, day_and_time_departure, aircraft_types.aircraft_type, aircrafts.registration_number, flight_status FROM flights\r\n"
+				+ "   JOIN aircrafts ON aircrafts.id_aircraft = flights.aircraft\r\n"
+				+ "   JOIN aircraft_types ON aircraft_types.id_aircraft_type = aircrafts.type_aircraft;";
+public static final String GET_FLIGHTS_BY_ID = "SELECT id_flight, current_city, destination_city, flight_range, flight_time, day_and_time_departure, aircraft_types.aircraft_type, aircrafts.registration_number, flight_status FROM flights\r\n"
+		+ "   JOIN aircrafts ON aircrafts.id_aircraft = flights.aircraft\r\n"
+		+ "   JOIN aircraft_types ON aircraft_types.id_aircraft_type = aircrafts.type_aircraft WHERE id_flight= %d ;";
 		public static final String GET_USERS_BY_ROLE = " SELECT users.id_user, users.name, users.surname, users.patronimic, users.e_mail, user_roles.user_role  FROM users \r\n"
 				+ "       JOIN user_roles ON user_roles.id_user_role = users.user_role ;";
 

@@ -20,6 +20,7 @@ import by.epamtr.airline.dao.connection_pool.ConnectionPool;
 import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
 import by.epamtr.airline.dao.connection_pool.impl.ConnectionPoolImpl;
 import by.epamtr.airline.dao.exception.DAOException;
+import by.epamtr.airline.entity.Crew;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.entity.UserInfo;
 import by.epamtr.airline.entity.UserRole;
@@ -47,6 +48,8 @@ public class SQLUserDAO implements UserDAO {
 	private final String ROLE_COLUMN = "user_role";
 	private final String USER_ID_COLUMN = "user_id";
 	private final String ID_USER_COLUMN = "id_user";
+	private final String FLIGHT_ID_COLUMN = "flight_id";
+	private final String CREW_POSITION_COLUMN = "crew_position";
 
 	private final String USER_ATTRIBUTE = "user";
 	private final String USER_INFO_ATTRIBUTE = "user_info";
@@ -250,28 +253,29 @@ public class SQLUserDAO implements UserDAO {
 
 	@Override
 	public void updateUser(HttpServletRequest request, HttpServletResponse response) throws DAOException {
-		User user=(User)request.getSession().getAttribute("user");
+		User user = (User) request.getSession().getAttribute("user");
 		int id = user.getIdUser();
 		String name = request.getParameter(NAME_PARAM);
 		String surname = request.getParameter(SURNAME_PARAM);
 		String patronimic = request.getParameter(PATRONIMIC_PARAM);
 		String email = request.getParameter(EMAIL_PARAM);
-		String login=request.getParameter(LOGIN_PARAM);
-		String password=request.getParameter(PASSWORD_PARAM);
-		int role =defineRole(request.getParameter(ROLE_PARAM));
-		
+		String login = request.getParameter(LOGIN_PARAM);
+		String password = request.getParameter(PASSWORD_PARAM);
+		int role = defineRole(request.getParameter(ROLE_PARAM));
+
 		Connection connection = null;
 		PreparedStatement statementUser = null;
 		PreparedStatement statementUserInfo = null;
-		
-		
+
 		try {
 			connection = connectionPool.getConnection();
 			try {
 				connection.setAutoCommit(false);
-				statementUser = connection.prepareStatement(String.format(SQLConstant.UserConstant.UPDATE_USER, name,surname,patronimic,email, role,id));
+				statementUser = connection.prepareStatement(String.format(SQLConstant.UserConstant.UPDATE_USER, name,
+						surname, patronimic, email, role, id));
 				statementUser.executeUpdate();
-				statementUserInfo = connection.prepareStatement(String.format(SQLConstant.UserConstant.UPDATE_USER_INFO, login,password, id));
+				statementUserInfo = connection.prepareStatement(
+						String.format(SQLConstant.UserConstant.UPDATE_USER_INFO, login, password, id));
 				statementUserInfo.executeUpdate();
 				connection.commit();
 				connection.setAutoCommit(true);
@@ -283,7 +287,7 @@ public class SQLUserDAO implements UserDAO {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
 			connectionPool.releaseConnection(connection);
-			
+
 			if (statementUser != null) {
 				try {
 					statementUser.close();
@@ -298,7 +302,7 @@ public class SQLUserDAO implements UserDAO {
 					throw new DAOException("erroe while closing statement", e);
 				}
 			}
-			
+
 		}
 	}
 
@@ -307,24 +311,23 @@ public class SQLUserDAO implements UserDAO {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		List<User> users=new ArrayList<User>();
+		List<User> users = new ArrayList<User>();
 		try {
 			connection = connectionPool.getConnection();
 			try {
 				statement = connection.prepareStatement(SQLConstant.UserConstant.GET_USERS_BY_ROLE);
 				rs = statement.executeQuery();
 				while (rs.next()) {
-					if(role==UserRole.valueOf(rs.getString("user_roles.user_role"))) {
+					if (role == UserRole.valueOf(rs.getString("user_roles.user_role"))) {
 						users.add(createUser(rs));
 					}
-				
-				} 
-				
-			
+
+				}
+
 			} catch (SQLException e) {
 				throw new DAOException("error while getting users by UserRole", e);
 			}
-			
+
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
@@ -349,9 +352,44 @@ public class SQLUserDAO implements UserDAO {
 	}
 
 	@Override
-	public List<User> getUsers(int idFlight) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Crew> getUsers(int idFlight) throws DAOException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		List<Crew> team = new ArrayList<Crew>();
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection.prepareStatement(String.format(SQLConstant.UserConstant.GET_USERS_BY_FLIGHT_ID, idFlight));
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					team.add(createCrew(rs));
+				}
+
+			} catch (SQLException e) {
+				throw new DAOException("error while getting users by UserRole", e);
+			}
+
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing resultSet", e);
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
+		return team;
 	}
 
 	@Override
@@ -439,6 +477,54 @@ public class SQLUserDAO implements UserDAO {
 		}
 
 	}
+	
+	@Override
+	public void deliteCrewFromFlight(int flightId, int userId) throws DAOException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection
+						.prepareStatement(String.format(SQLConstant.UserConstant.DELETE_CREW_FROM_FLIGHT, flightId, userId));
+				//connection.setAutoCommit(false);
+				statement.executeUpdate();
+	/*
+				statement.executeUpdate(SQLConstant.CONSTRAINT_ENABLE);
+				connection.commit();
+				connection.setAutoCommit(true);
+*/
+			} catch (SQLException e) {
+				throw new DAOException("erroe while deliting user", e);
+			}
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing resultSet", e);
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
+		
+	}
+	
+	@Override
+	public void addCrewToFlight(int flightId, int userId) throws DAOException {
+		// TODO Auto-generated method stub
+		
+	}
 
 	private void sendCommandToController(UserRole userRole, HttpServletRequest request, HttpServletResponse response)
 			throws DAOException {
@@ -473,6 +559,14 @@ public class SQLUserDAO implements UserDAO {
 		String email = resultSet.getString(EMAIL_COLUMN);
 		UserRole userRole = UserRole.valueOf(resultSet.getString("user_roles.user_role"));
 		return new User(idUser, name, surname, patronimic, email, userRole);
+	}
+
+	private Crew createCrew(ResultSet resultSet) throws SQLException {
+		int idFlight = resultSet.getInt(FLIGHT_ID_COLUMN);
+		User user = createUser(resultSet);
+		String crewPosition = resultSet.getString(CREW_POSITION_COLUMN);
+		Crew crew = new Crew(idFlight, user, crewPosition);
+		return crew;
 	}
 
 	private int defineRole(String role) {
@@ -525,7 +619,7 @@ public class SQLUserDAO implements UserDAO {
 			surname = resultSet.getString(SURNAME_COLUMN);
 			patronimic = resultSet.getString(PATRONIMIC_COLUMN);
 			email = resultSet.getString(EMAIL_COLUMN);
-			int roleNumber=resultSet.getInt(ROLE_COLUMN);
+			int roleNumber = resultSet.getInt(ROLE_COLUMN);
 			role = convertNumberToUserRole(roleNumber);
 
 		} catch (SQLException e) {
@@ -533,8 +627,9 @@ public class SQLUserDAO implements UserDAO {
 		}
 		return new User(id, name, surname, patronimic, email, role);
 	}
+
 	private UserRole convertNumberToUserRole(int roleNumber) {
-		switch(roleNumber) {
+		switch (roleNumber) {
 		case 1:
 			return UserRole.MANAGER;
 		case 2:
@@ -550,4 +645,9 @@ public class SQLUserDAO implements UserDAO {
 		}
 		return UserRole.MANAGER;
 	}
+
+	
+
+	
+
 }

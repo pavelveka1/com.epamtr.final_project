@@ -21,7 +21,8 @@ public class AddUserCommand implements Command {
 		if(page!=null) {
 			try {
 				userService.addUser(request, response);
-			} catch (ServiceException e2) {
+				request.getRequestDispatcher(PATH_TO_ADD_USER_PAGE).forward(request, response);
+			} catch (ServiceException | ServletException | IOException e2) {
 			//	rootLogger.error(e2);
 				e2.printStackTrace();
 			}

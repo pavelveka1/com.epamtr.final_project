@@ -48,6 +48,12 @@ section:after {
 	height: 80%;
 }
 
+form {
+    margin: 2px; /* Отступы вокруг элемента */
+    
+    padding: 10px; /* Поля вокруг текста */
+   } 
+
 /* Style the footer */
 footer {
 	background-color: #777;
@@ -75,15 +81,13 @@ footer {
 			<c:out value="${user.name}" />
 			<c:out value="${user.patronimic}" />
 		</h5>
-		<form action="Controller" method="POST">
+		<form  action="Controller" method="POST">
 				<input type="hidden" name="command" value="SIGN_OUT"> <input
 					type="submit" value="Sign out" />
 			</form>
 	</header>
-
-	<section>
-		<nav>
-			<form action="Controller" method="POST">
+<main>
+<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="ADD_USER"> 
 				<input
 					type="submit" value="add user" />
@@ -102,7 +106,7 @@ footer {
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="GET_USERS_BY_ROLE"> 
 				<input
-					type="submit" value="Get users" />
+					type="submit" value="Get users by role" />
 			</form>
 			
 			
@@ -111,10 +115,6 @@ footer {
 					type="submit" value="Get users by flight" />
 			</form>
 			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_FLIGHT"> <input
-					type="submit" value="add new flight" />
-			</form>
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="ADD_AIRCRAFT_TYPE"> <input
@@ -148,7 +148,7 @@ footer {
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="ADD_FLIGHT"> <input
-					type="submit" value="Add flight" />
+					type="submit" value="Add new flight" />
 			</form>
 			
 			<form action="Controller" method="POST">
@@ -158,7 +158,7 @@ footer {
 			
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="UPDATE_FLIGHT"> <input
-					type="submit" value="Updare flight" />
+					type="submit" value="Update flight" />
 			</form>
 			
 			<form action="Controller" method="POST">
@@ -170,14 +170,9 @@ footer {
 				<input type="hidden" name="command" value="GET_FLIGHTS_BY_USER"> <input
 					type="submit" value="Flights by user" />
 			</form>
-			
-			
-			
-		</nav>
-	</section>
-	<main class="col-xs-12 col-sm-8 col-md-9 col-lg-10"> 
-				<jsp:include page="${currentPage}" /> 
-			</main>
+
+</main>
+	
 	<footer>
 		<p>Footer</p>
 	</footer>

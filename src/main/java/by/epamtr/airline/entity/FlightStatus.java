@@ -1,9 +1,9 @@
 package by.epamtr.airline.entity;
 
 public enum FlightStatus {
-	STAFF_RECRUITMENT("STAFF RECRUITMENT"),
+	RECRUITMENT("RECRUITMENT"),
 	CREATED("CREATED"),
-	COMPLETED("COMPLETED");
+	COMPLITED("COMPLITED");
 	
 	
 	

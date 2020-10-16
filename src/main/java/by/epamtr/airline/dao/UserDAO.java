@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import by.epamtr.airline.dao.exception.DAOException;
+import by.epamtr.airline.entity.Crew;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.entity.UserRole;
 
@@ -24,7 +25,11 @@ public interface UserDAO {
 	
 	List<User> getUsers(UserRole role) throws DAOException;
 
-	List<User> getUsers(int idFlight) throws DAOException;
+	List<Crew> getUsers(int idFlight) throws DAOException;
 
 	User getUser(int idUser) throws DAOException;
+	
+	void deliteCrewFromFlight(int flightId, int userId) throws DAOException;
+	
+	void addCrewToFlight(int flightId, int userId) throws DAOException;
 }

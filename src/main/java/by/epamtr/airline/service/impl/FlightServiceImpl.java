@@ -48,19 +48,30 @@ public class FlightServiceImpl implements FlightService {
 
 	@Override
 	public Flight getFlight(int idFlight) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		Flight flight;
+		try {
+			flight=flightDAO.getFlight(idFlight);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while adding new flight",e);
+		}
+		return flight;
 	}
 
 	@Override
 	public List<Flight> getFlights() throws ServiceException {
-		// TODO Auto-generated method stub
 		return null;
+		
 	}
 
 	@Override
 	public List<Flight> getFlights(FlightStatus flightStatus) throws ServiceException {
-		return null;
+		List<Flight> flightsByStatus;
+		try {
+			flightsByStatus=flightDAO.getFlights(flightStatus);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while adding new flight",e);
+		}
+		return flightsByStatus;
 	}
 
 	@Override
