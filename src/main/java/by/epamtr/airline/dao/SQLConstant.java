@@ -27,14 +27,18 @@ public class SQLConstant {
 
 		public static final String GET_USERS_BY_ROLE = " SELECT users.id_user, users.name, users.surname, users.patronimic, users.e_mail, user_roles.user_role  FROM users \r\n"
 				+ "       JOIN user_roles ON user_roles.id_user_role = users.user_role ;";
-		
-		public static final String GET_USERS_BY_FLIGHT_ID=" SELECT users.id_user, users.name, users.surname, users.patronimic, users.e_mail, user_roles.user_role, crews.flight_id, crew_positions.crew_position  FROM users \r\n"
+
+		public static final String GET_USERS_BY_FLIGHT_ID = " SELECT users.id_user, users.name, users.surname, users.patronimic, users.e_mail, user_roles.user_role, crews.flight_id, crew_positions.crew_position  FROM users \r\n"
 				+ "       JOIN user_roles ON user_roles.id_user_role = users.user_role"
 				+ "       JOIN crews ON crews.crew_user_id = users.id_user"
 				+ "       JOIN crew_positions ON crew_positions.id_crew_position = crews.crew_position"
 				+ "       WHERE crews.flight_id = %d;";
+		public static final String GET_USERS_BY_USER_ID = " SELECT users.id_user, users.name, users.surname, users.patronimic, users.e_mail, user_roles.user_role  FROM users \r\n" + 
+				"				      JOIN user_roles ON user_roles.id_user_role = users.user_role\r\n" + 
+				"				      WHERE users.id_user = %d;";
 		
-		public static final String DELETE_CREW_FROM_FLIGHT="DELETE FROM crews WHERE flight_id ='%s' and crew_user_id = '%s';";
+
+		public static final String DELETE_CREW_FROM_FLIGHT = "DELETE FROM crews WHERE flight_id ='%s' and crew_user_id = '%s';";
 	}
 
 	public static class FlightConstant {
@@ -42,11 +46,19 @@ public class SQLConstant {
 		public static final String GET_FLIGHTS_BY_STATUS = "SELECT id_flight, current_city, destination_city, flight_range, flight_time, day_and_time_departure, aircraft_types.aircraft_type, aircrafts.registration_number, flight_status FROM flights\r\n"
 				+ "   JOIN aircrafts ON aircrafts.id_aircraft = flights.aircraft\r\n"
 				+ "   JOIN aircraft_types ON aircraft_types.id_aircraft_type = aircrafts.type_aircraft;";
-public static final String GET_FLIGHTS_BY_ID = "SELECT id_flight, current_city, destination_city, flight_range, flight_time, day_and_time_departure, aircraft_types.aircraft_type, aircrafts.registration_number, flight_status FROM flights\r\n"
-		+ "   JOIN aircrafts ON aircrafts.id_aircraft = flights.aircraft\r\n"
-		+ "   JOIN aircraft_types ON aircraft_types.id_aircraft_type = aircrafts.type_aircraft WHERE id_flight= %d ;";
+		public static final String GET_FLIGHTS_BY_ID = "SELECT id_flight, current_city, destination_city, flight_range, flight_time, day_and_time_departure, aircraft_types.aircraft_type, aircrafts.registration_number, flight_status FROM flights\r\n"
+				+ "   JOIN aircrafts ON aircrafts.id_aircraft = flights.aircraft\r\n"
+				+ "   JOIN aircraft_types ON aircraft_types.id_aircraft_type = aircrafts.type_aircraft WHERE id_flight= %d ;";
 		public static final String GET_USERS_BY_ROLE = " SELECT users.id_user, users.name, users.surname, users.patronimic, users.e_mail, user_roles.user_role  FROM users \r\n"
 				+ "       JOIN user_roles ON user_roles.id_user_role = users.user_role ;";
+		public static final String DELETE_FLIGHT=" DELETE FROM flights WHERE id_flight= %d ;";
+		public static final String DELETE_CREW=" DELETE FROM crews WHERE flight_id= %d ;";
+		public static final String UPDATE_FLIGHT = "UPDATE flights SET current_city='%s', destination_city='%s',flight_range=%d, flight_time=%d, day_and_time_departure='%s', aircraft=(SELECT id_aircraft FROM aircrafts WHERE registration_number='%s'), flight_status='%s' WHERE id_flight = %d;";
+		public static final String GET_FLIGHTS_BY_USER_ID = "SELECT id_flight, current_city, destination_city, flight_range, flight_time, day_and_time_departure, aircraft_types.aircraft_type, aircrafts.registration_number, flight_status FROM flights\r\n" + 
+				"				   JOIN aircrafts ON aircrafts.id_aircraft = flights.aircraft\r\n" + 
+				"				   JOIN aircraft_types ON aircraft_types.id_aircraft_type = aircrafts.type_aircraft\r\n" + 
+				"				WHERE id_flight IN (SELECT flight_id FROM crews WHERE crew_user_id= %d);";
+		
 
 	}
 

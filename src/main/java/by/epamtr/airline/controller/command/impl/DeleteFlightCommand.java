@@ -1,16 +1,85 @@
 package by.epamtr.airline.controller.command.impl;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import by.epamtr.airline.controller.command.Command;
+import by.epamtr.airline.entity.Aircraft;
+import by.epamtr.airline.entity.Crew;
+import by.epamtr.airline.entity.Flight;
+import by.epamtr.airline.entity.FlightStatus;
+import by.epamtr.airline.service.AircraftService;
+import by.epamtr.airline.service.FlightService;
+import by.epamtr.airline.service.ServiceFactory;
+import by.epamtr.airline.service.UserService;
+import by.epamtr.airline.service.exception.ServiceException;
 
 public class DeleteFlightCommand implements Command {
 
+	private static final String PATH_TO_DELETE_FLIGHT = "/WEB-INF/jsp/administrator_action/delete_flight.jsp";
+	private static final String FLIGHT_STATUS_PARAM = "flight_status";
+	private static final String FLIGHT_STATUS_ATTR = "flight_status_attr";
+	private static final String ID_FLIGHT_PARAM = "radio_id_flight";
+	private static final String SELECTED_FLIGHT_ATTR="selected_flight";
+	private static final String FLIGHTS_ATTR = "flights";
+	private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
+	private final FlightService flightService = serviceFactory.getFlightService();
+	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
+		
+		List<Flight> flights;
+		String flightStatus = request.getParameter(FLIGHT_STATUS_PARAM);
+		String selectedFlight=request.getParameter(ID_FLIGHT_PARAM);
+		
+		if(selectedFlight==null) {
+			if (flightStatus != null) {
+				
+				try {
+					flights = flightService.getFlights(FlightStatus.valueOf(request.getParameter(FLIGHT_STATUS_PARAM)));
+					request.getSession().setAttribute(FLIGHTS_ATTR, flights);
+					request.getSession().setAttribute(FLIGHT_STATUS_ATTR, flightStatus);
+					try {
+						request.getRequestDispatcher(PATH_TO_DELETE_FLIGHT).forward(request, response);
+					} catch (ServletException | IOException e) {
+						rootLogger.error(e);
+					}
+				} catch (ServiceException e2) {
+					// rootLogger.error(e2);
+					e2.printStackTrace();
+				}
+
+			} else {
+				try {
+					request.getRequestDispatcher(PATH_TO_DELETE_FLIGHT).forward(request, response);
+				} catch (ServletException | IOException e) {
+					rootLogger.error(e);
+				}
+			}
+		}else {
+			int idSelectedFlight=Integer.parseInt(selectedFlight);
+			try {
+				flightService.deliteFlight(idSelectedFlight);
+				flights = flightService.getFlights(FlightStatus.valueOf((String)request.getSession().getAttribute(FLIGHT_STATUS_ATTR)));
+				request.getSession().removeAttribute(FLIGHT_STATUS_ATTR);
+				request.getSession().setAttribute(FLIGHTS_ATTR, flights);
+				
+				request.getRequestDispatcher(PATH_TO_DELETE_FLIGHT).forward(request, response);
+			} catch (ServiceException | ServletException | IOException e) {
+				// rootLogger.error(e2);
+				e.printStackTrace();
+			}
+		}
+		
+		
+	
 		
 	}
+
 
 }

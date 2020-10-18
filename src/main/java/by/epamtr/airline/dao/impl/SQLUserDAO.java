@@ -360,7 +360,8 @@ public class SQLUserDAO implements UserDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				statement = connection.prepareStatement(String.format(SQLConstant.UserConstant.GET_USERS_BY_FLIGHT_ID, idFlight));
+				statement = connection
+						.prepareStatement(String.format(SQLConstant.UserConstant.GET_USERS_BY_FLIGHT_ID, idFlight));
 				rs = statement.executeQuery();
 				while (rs.next()) {
 					team.add(createCrew(rs));
@@ -394,8 +395,43 @@ public class SQLUserDAO implements UserDAO {
 
 	@Override
 	public User getUser(int idUser) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		User user;
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection
+						.prepareStatement(String.format(SQLConstant.UserConstant.GET_USERS_BY_USER_ID, idUser));
+				rs = statement.executeQuery();
+				rs.next();
+				user = createUser(rs);
+			} catch (SQLException e) {
+				throw new DAOException("error while getting users by UserRole", e);
+			}
+
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing resultSet", e);
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
+
+		return user;
 	}
 
 	@Override
@@ -477,7 +513,7 @@ public class SQLUserDAO implements UserDAO {
 		}
 
 	}
-	
+
 	@Override
 	public void deliteCrewFromFlight(int flightId, int userId) throws DAOException {
 		Connection connection = null;
@@ -486,15 +522,14 @@ public class SQLUserDAO implements UserDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				statement = connection
-						.prepareStatement(String.format(SQLConstant.UserConstant.DELETE_CREW_FROM_FLIGHT, flightId, userId));
-				//connection.setAutoCommit(false);
+				statement = connection.prepareStatement(
+						String.format(SQLConstant.UserConstant.DELETE_CREW_FROM_FLIGHT, flightId, userId));
+				// connection.setAutoCommit(false);
 				statement.executeUpdate();
-	/*
-				statement.executeUpdate(SQLConstant.CONSTRAINT_ENABLE);
-				connection.commit();
-				connection.setAutoCommit(true);
-*/
+				/*
+				 * statement.executeUpdate(SQLConstant.CONSTRAINT_ENABLE); connection.commit();
+				 * connection.setAutoCommit(true);
+				 */
 			} catch (SQLException e) {
 				throw new DAOException("erroe while deliting user", e);
 			}
@@ -517,13 +552,13 @@ public class SQLUserDAO implements UserDAO {
 				}
 			}
 		}
-		
+
 	}
-	
+
 	@Override
 	public void addCrewToFlight(int flightId, int userId) throws DAOException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private void sendCommandToController(UserRole userRole, HttpServletRequest request, HttpServletResponse response)
@@ -645,9 +680,5 @@ public class SQLUserDAO implements UserDAO {
 		}
 		return UserRole.MANAGER;
 	}
-
-	
-
-	
 
 }

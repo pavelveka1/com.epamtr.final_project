@@ -34,9 +34,6 @@ public class UpdateUserCommand implements Command {
 					e.printStackTrace();
 				}
 		
-		}
-		
-		
+		}	
 	}
-
 }

@@ -15,7 +15,7 @@ public interface FlightService {
 
 	void deliteFlight(int idFlight) throws ServiceException;
 
-	void updateFlight(int idFlight) throws ServiceException;
+	Flight updateFlight(int idFlight, HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
 	void changeFlightStatus(int idFlight, FlightStatus flightStatus) throws ServiceException;
 
@@ -25,7 +25,7 @@ public interface FlightService {
 
 	List<Flight> getFlights(FlightStatus flightStatus) throws ServiceException;
 
-	List<Flight> getFlights(User user) throws ServiceException;
+	List<Flight> getFlights(int idUser) throws ServiceException;
 
 	void addCrewToFlight(User user) throws ServiceException;
 

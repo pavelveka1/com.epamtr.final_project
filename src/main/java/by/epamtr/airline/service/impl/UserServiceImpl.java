@@ -90,8 +90,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getUser(int idUser) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		User user;
+		try {
+			user=userDAO.getUser(idUser);
+			} catch (DAOException e) {
+				throw new ServiceException("Error while getting user by id from DB", e);
+			}	
+		return user;
 	}
 
 	@Override

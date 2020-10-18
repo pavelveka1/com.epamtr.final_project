@@ -30,14 +30,21 @@ public class FlightServiceImpl implements FlightService {
 
 	@Override
 	public void deliteFlight(int idFlight) throws ServiceException {
-		// TODO Auto-generated method stub
+		try {
+			flightDAO.deliteFlight(idFlight);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while deletion flight",e);
+		}
 		
 	}
 
 	@Override
-	public void updateFlight(int idFlight) throws ServiceException {
-		// TODO Auto-generated method stub
-		
+	public Flight updateFlight(int idFlight, HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+		try {
+		return	flightDAO.updateFlight(idFlight, request, response);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while updation flight",e);
+		}
 	}
 
 	@Override
@@ -69,15 +76,20 @@ public class FlightServiceImpl implements FlightService {
 		try {
 			flightsByStatus=flightDAO.getFlights(flightStatus);
 		} catch (DAOException e) {
-			throw new ServiceException("Error while adding new flight",e);
+			throw new ServiceException("Error while getting flights from DB",e);
 		}
 		return flightsByStatus;
 	}
 
 	@Override
-	public List<Flight> getFlights(User user) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Flight> getFlights(int idUser) throws ServiceException {
+		List<Flight> flightsByUserId;
+		try {
+			flightsByUserId=flightDAO.getFlights(idUser);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while getting flights from DB",e);
+		}
+		return flightsByUserId;
 	}
 
 	@Override

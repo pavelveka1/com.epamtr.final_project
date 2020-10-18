@@ -95,14 +95,113 @@ public class SQLFlightDAO implements FlightDAO {
 
 	@Override
 	public void deliteFlight(int idFlight) throws DAOException {
-		// TODO Auto-generated method stub
+		Connection connection = null;
+		PreparedStatement statementDeleteFlight = null;
+		PreparedStatement statementDeleteCrews = null;
+		ResultSet rs = null;
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statementDeleteFlight = connection.prepareStatement(
+						String.format(String.format(SQLConstant.FlightConstant.DELETE_FLIGHT, idFlight)));
+				statementDeleteFlight.executeUpdate();
+				statementDeleteCrews = connection
+						.prepareStatement(String.format(SQLConstant.FlightConstant.DELETE_CREW, idFlight));
+				statementDeleteCrews.executeUpdate();
+
+			} catch (SQLException e) {
+				throw new DAOException("error while deletion aircraft", e);
+			}
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing resultSet", e);
+				}
+			}
+			if (statementDeleteFlight != null) {
+				try {
+					statementDeleteFlight.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+			if (statementDeleteCrews != null) {
+				try {
+					statementDeleteCrews.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
 
 	}
 
 	@Override
-	public void updateFlight(int idFlight) throws DAOException {
-		// TODO Auto-generated method stub
+	public Flight updateFlight(int idFlight, HttpServletRequest request, HttpServletResponse response)
+			throws DAOException {
+		String currentCity = request.getParameter(CURRENT_CITY_PARAM);
+		String destinationCity = request.getParameter(DESTINATION_CITY_PARAM);
+		int flightRange = Integer.parseInt(request.getParameter(FLIGHT_RANGE_PARAM));
+		int flightTime = Integer.parseInt(request.getParameter(FLIGHT_TIME_PARAM));
+		String aircraftNumber = request.getParameter(REGISTRATION_NUMBER_AIRCRAFT_PARAM);
+		String timeDeparture = request.getParameter(TIME_DEPARTURE_PARAM);
+		String flightStatus = request.getParameter(STATUS_PARAM);
+		Flight flight;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		PreparedStatement updatedFlightStatement = null;
+		ResultSet rs = null;
 
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				// connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE).executeQuery();
+				statement = connection.prepareStatement(
+						String.format(SQLConstant.FlightConstant.UPDATE_FLIGHT, currentCity, destinationCity,
+								flightRange, flightTime, timeDeparture, aircraftNumber, flightStatus, idFlight));
+				statement.executeUpdate();
+				updatedFlightStatement = connection
+						.prepareStatement(String.format(SQLConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
+				rs = updatedFlightStatement.executeQuery();
+				rs.next();
+				flight = createFlight(rs);
+				// connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE).executeQuery();
+			} catch (SQLException e) {
+				throw new DAOException("error while updating user", e);
+			}
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+			if (updatedFlightStatement != null) {
+				try {
+					updatedFlightStatement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing ResultSet", e);
+				}
+			}
+		}
+		return flight;
 	}
 
 	@Override
@@ -120,10 +219,11 @@ public class SQLFlightDAO implements FlightDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				statement = connection.prepareStatement(String.format(SQLConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
+				statement = connection
+						.prepareStatement(String.format(SQLConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
 				rs = statement.executeQuery();
 				rs.next();
-				flight=createFlight(rs);
+				flight = createFlight(rs);
 			} catch (SQLException e) {
 				throw new DAOException("error while getting flight by id", e);
 			}
@@ -158,9 +258,46 @@ public class SQLFlightDAO implements FlightDAO {
 	}
 
 	@Override
-	public List<Flight> getFlights(User user) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Flight> getFlights(int idUser) throws DAOException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		List<Flight> flights = new ArrayList<Flight>();
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection
+						.prepareStatement(String.format(SQLConstant.FlightConstant.GET_FLIGHTS_BY_USER_ID, idUser));
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					flights.add(createFlight(rs));
+				}
+
+			} catch (SQLException e) {
+				throw new DAOException("error while getting flights by id user", e);
+			}
+
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing resultSet", e);
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
+
+		return flights;
 	}
 
 	@Override
@@ -236,4 +373,5 @@ public class SQLFlightDAO implements FlightDAO {
 		return flight;
 
 	}
+
 }

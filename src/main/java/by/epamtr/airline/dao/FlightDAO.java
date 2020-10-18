@@ -15,7 +15,7 @@ public interface FlightDAO {
 
 	void deliteFlight(int idFlight) throws DAOException;
 
-	void updateFlight(int idFlight) throws DAOException;
+	Flight updateFlight(int idFlight, HttpServletRequest request, HttpServletResponse response) throws DAOException;
 
 	void changeFlightStatus(int idFlight, FlightStatus flightStatus) throws DAOException;
 
@@ -25,7 +25,7 @@ public interface FlightDAO {
 
 	List<Flight> getFlights(FlightStatus flightStatus) throws DAOException;
 
-	List<Flight> getFlights(User user) throws DAOException;
+	List<Flight> getFlights(int idUser) throws DAOException;
 
 	void addCrewToFlight(User user) throws DAOException;
 
