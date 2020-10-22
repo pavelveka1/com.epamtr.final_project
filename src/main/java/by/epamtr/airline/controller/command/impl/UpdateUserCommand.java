@@ -13,6 +13,8 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class UpdateUserCommand implements Command {
 	private static final String PATH_TO_UPDATE_USER_PAGE="/WEB-INF/jsp/administrator_action/update_user.jsp";
+	private static final String USER_ATTRIBUTE = "user";
+	private static final String USER_INFO_ATTRIBUTE = "user_info";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)  {
 		if(request.getSession().getAttribute("user")==null) {
@@ -28,6 +30,8 @@ public class UpdateUserCommand implements Command {
 
 				try {
 					userService.updateUser(request, response);
+					request.getSession().removeAttribute(USER_ATTRIBUTE);
+					request.getSession().removeAttribute(USER_INFO_ATTRIBUTE);
 					request.getRequestDispatcher(PATH_TO_UPDATE_USER_PAGE).forward(request, response);
 				} catch (ServletException | IOException | ServiceException e) {
 					// rootLogger.error(e);

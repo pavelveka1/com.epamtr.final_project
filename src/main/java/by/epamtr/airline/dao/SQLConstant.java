@@ -39,6 +39,13 @@ public class SQLConstant {
 		
 
 		public static final String DELETE_CREW_FROM_FLIGHT = "DELETE FROM crews WHERE flight_id ='%s' and crew_user_id = '%s';";
+	
+		public static final String GET_FREE_USERS_BY_POSITION = "SELECT id_user, name, surname, patronimic, e_mail, user_roles.user_role FROM users JOIN user_roles ON users.user_role=user_roles.id_user_role\r\n" + 
+				" WHERE id_user NOT IN (SELECT crews.crew_user_id FROM crews WHERE crews.flight_id= %d)\r\n" + 
+				"  AND users.user_role IN (SELECT user_roles_id_user_role FROM jt_crew_positions_user_roles\r\n" + 
+				"            WHERE crew_position_id_crew_position = (SELECT id_crew_position FROM crew_positions WHERE crew_position ='%s'));";
+	
+	public static final String ADD_USER_TO_CREW_BY_FLIGHT_ID="INSERT INTO crews (`crew_position`,`flight_id`,`crew_user_id` ) VALUES (?,?,?)";
 	}
 
 	public static class FlightConstant {
@@ -58,7 +65,7 @@ public class SQLConstant {
 				"				   JOIN aircrafts ON aircrafts.id_aircraft = flights.aircraft\r\n" + 
 				"				   JOIN aircraft_types ON aircraft_types.id_aircraft_type = aircrafts.type_aircraft\r\n" + 
 				"				WHERE id_flight IN (SELECT flight_id FROM crews WHERE crew_user_id= %d);";
-		
+		public static final String GET_FREE_POSITIONS_BY_FLIGHT_ID="select * from crew_positions where id_crew_position NOT IN (SELECT crew_position FROM crews WHERE flight_id = %d);";
 
 	}
 

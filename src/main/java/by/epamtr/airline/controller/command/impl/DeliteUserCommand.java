@@ -12,13 +12,14 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class DeliteUserCommand implements Command {
 	private static final String PATH_TO_DELITE_USER_PAGE = "/WEB-INF/jsp/administrator_action/delite_user.jsp";
+	private static final String LOGIN_PARAM="login";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		UserService userService = serviceFactory.getUserService();
 		int idUser = 0;
-		String login = request.getParameter("login");
+		String login = request.getParameter(LOGIN_PARAM);
 		if (login != null) {
 			try {
 				userService.deliteUser(login);
@@ -34,6 +35,12 @@ public class DeliteUserCommand implements Command {
 				rootLogger.error(e);
 			}
 
+		}else {
+			try {
+				request.getRequestDispatcher(PATH_TO_DELITE_USER_PAGE).forward(request, response);
+			} catch (ServletException | IOException e) {
+				rootLogger.error(e);
+			}
 		}
 
 	}

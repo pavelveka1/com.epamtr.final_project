@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import by.epamtr.airline.entity.CrewPosition;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
 import by.epamtr.airline.entity.User;
@@ -30,4 +31,6 @@ public interface FlightService {
 	void addCrewToFlight(User user) throws ServiceException;
 
 	void updateFlightCrew(int idFlight) throws ServiceException;
+	
+	List<CrewPosition> getFreeCrewPositions(int flightId) throws ServiceException;
 }

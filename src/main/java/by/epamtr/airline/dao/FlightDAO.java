@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import by.epamtr.airline.dao.exception.DAOException;
+import by.epamtr.airline.entity.CrewPosition;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
 import by.epamtr.airline.entity.User;
@@ -30,4 +31,6 @@ public interface FlightDAO {
 	void addCrewToFlight(User user) throws DAOException;
 
 	void updateFlightCrew(int idFlight) throws DAOException;
+	
+	List<CrewPosition> getFreeCrewPositions(int flightId) throws DAOException;
 }

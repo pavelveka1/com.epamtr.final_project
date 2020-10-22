@@ -8,19 +8,17 @@
 </head>
 <body>
 	<form action="Controller" method="POST">
-		<input type="hidden" name="command" value="GET_USERS_BY_ROLE">
+		<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">
 		<input type="hidden" name="form" value="filled"> <label>
 			Choose role</label> <select name="role">
-			<option>MANAGER</option>
-			<option>ADMINISTRATOR</option>
-			<option>DISPATCHER</option>
 			<option>PILOT</option>
-			<option>FLIGHT ATTENDANT</option>
+			<option>ATTENDANT</option>
 			<option>ENGINEER</option>
 		</select> <input type="submit" value="Find" /> <br>
 		<br>
-		<label>Current role: <c:out value="${current_role.role}" /></label>
 		<br>
+		<form action="Controller" method="POST">
+		<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">
 		<table border="1">
 			<tr>
 				<th>Name</th>
@@ -28,6 +26,8 @@
 				<th>Patronimic</th>
 				<th>Email</th>
 				<th>Role</th>
+				<th> Position </th>
+				<th>Choose</th>
 			</tr>
 			<c:forEach var="user_item" items="${users_by_role}">
 				<tr>
@@ -36,9 +36,18 @@
 					<td><c:out value="${user_item.patronimic}" /></td>
 					<td><c:out value="${user_item.email}" /></td>
 					<td><c:out value="${user_item.role}" /></td>
+					<td> <select name="role">
+			<c:forEach var="position" items="${positions}">
+				<option>
+					<c:out value="${position.crewPosition}" />
+				</option>
+			</c:forEach>
+		</select></td>
+					<td><input type=radio name="radio_id_user" value="${user_item.idUser}"  > </td>
 				</tr>
 			</c:forEach>
 		</table>
-		
+		</select> <input type="submit" value="Apply" /> <br>
+		</form>
 </body>
 </html>

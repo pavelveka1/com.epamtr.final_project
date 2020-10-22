@@ -17,6 +17,12 @@
 		</tr>
 	</table>
 	<br>
+	<table>
+		<tr>
+			<th><label>Selected role: </label></th>
+			<th><c:out value="${selected_role}" /></th>
+		</tr>
+	</table>
 	<br>
 
 

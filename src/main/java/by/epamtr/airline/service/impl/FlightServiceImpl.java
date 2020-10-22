@@ -9,6 +9,7 @@ import by.epamtr.airline.dao.AircraftDAO;
 import by.epamtr.airline.dao.DAOFactory;
 import by.epamtr.airline.dao.FlightDAO;
 import by.epamtr.airline.dao.exception.DAOException;
+import by.epamtr.airline.entity.CrewPosition;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
 import by.epamtr.airline.entity.User;
@@ -102,6 +103,17 @@ public class FlightServiceImpl implements FlightService {
 	public void updateFlightCrew(int idFlight) throws ServiceException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<CrewPosition> getFreeCrewPositions(int flightId) throws ServiceException {
+		List<CrewPosition> freeCrewPosition;
+		try {
+			freeCrewPosition=flightDAO.getFreeCrewPositions(flightId);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while getting free crew positions for flight id from DB",e);
+		}
+		return freeCrewPosition;
 	}
 
 }

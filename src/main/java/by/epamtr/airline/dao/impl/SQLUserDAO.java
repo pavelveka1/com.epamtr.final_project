@@ -32,6 +32,7 @@ public class SQLUserDAO implements UserDAO {
 	private final String GO_TO_ADMINISTRATOR_PAGE_COMMAND = "/Controller?command=GO_TO_ADMINISTRATOR_PAGE";
 	private final String GO_TO_CREW_PAGE_COMMAND = "/Controller?command=GO_TO_CREW_PAGE";
 
+
 	private final String ADMINISTRATOR = "ADMINISTRATOR";
 	private final String DISPATCHER = "DISPATCHER";
 	private final String MANAGER = "MANAGER";
@@ -273,9 +274,9 @@ public class SQLUserDAO implements UserDAO {
 				connection.setAutoCommit(false);
 				statementUser = connection.prepareStatement(String.format(SQLConstant.UserConstant.UPDATE_USER, name,
 						surname, patronimic, email, role, id));
-				statementUser.executeUpdate();
+				int row=statementUser.executeUpdate();
 				statementUserInfo = connection.prepareStatement(
-						String.format(SQLConstant.UserConstant.UPDATE_USER_INFO, login, password, id));
+						String.format(SQLConstant.UserConstant.UPDATE_USER_INFO, login, criptPassword(password), id));
 				statementUserInfo.executeUpdate();
 				connection.commit();
 				connection.setAutoCommit(true);
@@ -556,9 +557,79 @@ public class SQLUserDAO implements UserDAO {
 	}
 
 	@Override
-	public void addCrewToFlight(int flightId, int userId) throws DAOException {
-		// TODO Auto-generated method stub
+	public void addCrewToFlight(int idCrewPosition, int flightId, int userId) throws DAOException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE);
+				statement.executeQuery();
+				statement = connection.prepareStatement(SQLConstant.UserConstant.ADD_USER_TO_CREW_BY_FLIGHT_ID);
+				statement.setInt(1, idCrewPosition);
+				statement.setInt(2, flightId);
+				statement.setInt(3, userId);
+				int i= statement.executeUpdate();
+				 statement = connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE);
+				 statement.executeQuery();
+				
+			} catch (SQLException e) {
+				throw new DAOException("error while adding user to crew", e);
+			}
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public List<User> getFreeUsers(int flightId, String selectedPosition) throws DAOException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		List<User> users = new ArrayList<User>();
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection.prepareStatement(String.format(SQLConstant.UserConstant.GET_FREE_USERS_BY_POSITION, flightId, selectedPosition));
+				rs = statement.executeQuery();
+				while (rs.next()) {
+						users.add(createUser(rs));
+				}
 
+			} catch (SQLException e) {
+				throw new DAOException("error while getting free users by crew position", e);
+			}
+
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing resultSet", e);
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
+
+		return users;
 	}
 
 	private void sendCommandToController(UserRole userRole, HttpServletRequest request, HttpServletResponse response)
@@ -680,5 +751,7 @@ public class SQLUserDAO implements UserDAO {
 		}
 		return UserRole.MANAGER;
 	}
+
+	
 
 }

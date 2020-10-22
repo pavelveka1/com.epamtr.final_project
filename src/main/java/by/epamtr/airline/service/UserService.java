@@ -32,5 +32,7 @@ public interface UserService {
 	
 	void deliteCrewFromFlight(int flightId, int userId) throws ServiceException;
 	
-	void addCrewToFlight(int flightId, int userId) throws ServiceException;
+	void addCrewToFlight(int idCrewPosition, int flightId, int userId) throws ServiceException;
+	
+	List<User> getFreeUsers(int flightId, String selectedPosition) throws ServiceException;
 }

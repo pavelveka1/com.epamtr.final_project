@@ -119,11 +119,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void addCrewToFlight(int flightId, int userId) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void addCrewToFlight(int idCrewPosition, int flightId, int userId) throws ServiceException {
+		try {
+			userDAO.addCrewToFlight(idCrewPosition, flightId, userId);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while adding user to crew", e);
+		}
 		
 	}
-
 	
-
+	@Override
+	public List<User> getFreeUsers(int flightId, String selectedPosition) throws ServiceException {
+		List<User> freeUsersByPosition;
+		try {
+			freeUsersByPosition=userDAO.getFreeUsers(flightId, selectedPosition);
+			} catch (DAOException e) {
+				throw new ServiceException("Error while getting free users by position", e);
+			}	
+		return freeUsersByPosition;
+	}
 }

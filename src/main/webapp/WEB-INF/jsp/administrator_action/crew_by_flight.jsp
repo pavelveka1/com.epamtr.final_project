@@ -51,6 +51,7 @@
 	<br>
 	<form action="Controller" method="POST">
 	<input type="hidden" name="command" value="ADD_CREW_TO_FLIGHT"> 
+	<input type="hidden" name="add_crew" value="add_crew_to_flight">
 	<input type="hidden" name="flight_id" value="${selected_flight.idFlight}">
 		<input type="submit" value="Add crew item" />
 	</form>

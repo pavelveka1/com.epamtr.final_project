@@ -17,6 +17,12 @@
 
 	</form>
 	<br>
+	<table>
+		<tr>
+			<th><label>Selected status: </label></th>
+			<th><c:out value="${selected_status}" /></th>
+		</tr>
+	</table>
 	<br>
 	<form action="Controller" method="POST">
 		<input type="hidden" name="command" value="GET_FLIGHTS_BY_STATUS">

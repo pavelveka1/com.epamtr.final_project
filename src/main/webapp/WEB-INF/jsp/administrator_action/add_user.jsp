@@ -9,20 +9,51 @@
 <body>
 	<form action="Controller" method="POST">
 		<input type="hidden" name="command" value="ADD_USER"> <input
-			type="hidden" name="page" value="FULL_FORM"> <input
-			type="text" name="name" placeholder="name"> <input
-			type="text" name="surname" placeholder="surname"> <input
-			type="text" name="patronimic" placeholder="patronimic"> <input
-			type="text" name="email" placeholder="email"> <br><br> <label>Role<label>
-				<select name="role">
+			type="hidden" name="page" value="FULL_FORM"> 
+			<table>
+			<tr>
+			<td><label>Name </label></td>
+			<td><input
+			type="text" name="name" placeholder="name"></td>
+			</tr>
+			<tr>
+			<td> <label>Surname </label>    </td>
+			<td>  <input
+			type="text" name="surname" placeholder="surname">    </td>
+			</tr>
+			<tr>
+			<td> <label>Patronimic </label>    </td>
+			<td>   <input
+			type="text" name="patronimic" placeholder="patronimic">   </td>
+			</tr>
+			<tr>
+			<td> <label>Email </label>    </td>
+			<td>  <input
+			type="text" name="email" placeholder="email">   </td>
+			</tr>
+			<tr>
+			<td>  <label>Role<label>   </td>
+			<td>   <select name="role">
 					<option>ADMINISTRATOR</option>
 					<option>DISPATCHER</option>
 					<option>MANAGER</option>
 					<option>PILOT</option>
 					<option>FLIGHT ATTENDANT</option>
 					<option>ENGINEER</option>
-			</select> <input type="text" name="login" placeholder="login"> <input
-				type="text" name="password" placeholder="password"> <input
+			</select>  </td>
+			</tr>
+			<tr>
+			<td>  <label>Login </label>   </td>
+			<td> <input type="text" name="login" placeholder="login">    </td>
+			</tr>
+			<tr> 
+			<td> <label>Password </label>  </td>
+			<td><input
+				type="text" name="password" placeholder="password">  </td>
+			</tr>
+			</table>
+			
+			<br>  <input
 				type="submit" value="add user" />
 	</form>
 </body>

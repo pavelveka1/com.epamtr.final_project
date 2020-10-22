@@ -25,6 +25,7 @@ public class GetFlightsByUser implements Command {
 
 	private static final String USERS_BY_ROLE_ATTR="users_by_role";
 	private static final String SELECTED_USER_ATTR = "selected_user";
+	private static final String SELECTED_ROLE_ATTR="selected_role";
 	private static final String FOUND_FLIGHTS_ATTR = "flights";
 	ServiceFactory serviceFactory = ServiceFactory.getInstance();
 
@@ -60,6 +61,7 @@ public class GetFlightsByUser implements Command {
 				}
 			}else {
 				try {
+					request.setAttribute(SELECTED_ROLE_ATTR, userRole);
 					request.getRequestDispatcher(PATH_TO_USERS_BY_ROLE).forward(request, response);
 				} catch (ServletException | IOException e) {
 					// rootLogger.error(e);

@@ -21,6 +21,7 @@ public class GetFlightsByStatusCommand implements Command {
 	private static final String FLIGHT_STATUS_PARAM = "flight_status";
 	private static final String ID_FLIGHT_PARAM = "radio_id_flight";
 	private static final String SELECTED_FLIGHT_ATTR="selected_flight";
+	private static final String SELECTED_STATUS_ATTR="selected_status";
 	private static final String TEAM_BY_FLIGHT_ATTR="flight_team";
 
 	@Override
@@ -37,6 +38,7 @@ public class GetFlightsByStatusCommand implements Command {
 				try {
 					flights = flightService.getFlights(FlightStatus.valueOf(request.getParameter(FLIGHT_STATUS_PARAM)));
 					request.getSession().setAttribute("flights", flights);
+					request.setAttribute(SELECTED_STATUS_ATTR, flightStatus);
 					try {
 						request.getRequestDispatcher(PATH_FLIGHTS_BY_STATUS).forward(request, response);
 					} catch (ServletException | IOException e) {

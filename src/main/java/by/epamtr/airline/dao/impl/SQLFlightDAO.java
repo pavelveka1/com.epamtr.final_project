@@ -16,6 +16,7 @@ import by.epamtr.airline.dao.connection_pool.ConnectionPool;
 import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
 import by.epamtr.airline.dao.connection_pool.impl.ConnectionPoolImpl;
 import by.epamtr.airline.dao.exception.DAOException;
+import by.epamtr.airline.entity.CrewPosition;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
 import by.epamtr.airline.entity.User;
@@ -40,6 +41,8 @@ public class SQLFlightDAO implements FlightDAO {
 	private static final String AIRCRAFT_TYPE_COLUMN = "aircraft_type";
 	private static final String REGISTRATION_NUMBER_COLUMN = "registration_number";
 	private static final String FLIGHT_STATUS_COLUMN = "flight_status";
+	private static final String ID_CREW_POSITION_COLUMN = "id_crew_position";
+	private static final String CREW_POSITION_COLUMN = "crew_position";
 
 	private static final String ID_AIRCRAFT_ATTR = "id_iarcraft";
 
@@ -357,6 +360,48 @@ public class SQLFlightDAO implements FlightDAO {
 		return flights;
 	}
 
+	@Override
+	public List<CrewPosition> getFreeCrewPositions(int flightId) throws DAOException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		List<CrewPosition> freeCrewPositions = new ArrayList<CrewPosition>();
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection.prepareStatement(
+						String.format(SQLConstant.FlightConstant.GET_FREE_POSITIONS_BY_FLIGHT_ID, flightId));
+				rs = statement.executeQuery();
+				while (rs.next()) {
+					freeCrewPositions.add(createCrewPosition(rs));
+				}
+
+			} catch (SQLException e) {
+				throw new DAOException("error while getting free crew positions", e);
+			}
+
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			connectionPool.releaseConnection(connection);
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing resultSet", e);
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
+		return freeCrewPositions;
+	}
+
 	private Flight createFlight(ResultSet resultSet) throws SQLException {
 		int idFlight = resultSet.getInt(ID_FLIGHT_COLUMN);
 		String currentCity = resultSet.getString(CURRENT_CITY_COLUMN);
@@ -372,6 +417,13 @@ public class SQLFlightDAO implements FlightDAO {
 				aircraftType, aircraftNumber, flightStatus);
 		return flight;
 
+	}
+
+	private CrewPosition createCrewPosition(ResultSet resultSet) throws SQLException {
+		int idCrewPosition = resultSet.getInt(ID_CREW_POSITION_COLUMN);
+		String crewPositionName = resultSet.getString(CREW_POSITION_COLUMN);
+		CrewPosition crewPosition = new CrewPosition(idCrewPosition, crewPositionName);
+		return crewPosition;
 	}
 
 }

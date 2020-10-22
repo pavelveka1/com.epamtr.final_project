@@ -31,5 +31,7 @@ public interface UserDAO {
 	
 	void deliteCrewFromFlight(int flightId, int userId) throws DAOException;
 	
-	void addCrewToFlight(int flightId, int userId) throws DAOException;
+	void addCrewToFlight(int idCrewPosition, int flightId, int userId) throws DAOException;
+	
+	List<User> getFreeUsers( int flightId, String selectedPosition) throws DAOException;
 }
