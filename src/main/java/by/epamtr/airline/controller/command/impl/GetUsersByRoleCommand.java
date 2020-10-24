@@ -20,10 +20,13 @@ public class GetUsersByRoleCommand implements Command {
 	private static final String ROLE_PARAM = "role";
 	private static final String USER_BY_ROLE_ATTR="users_by_role";
 	private static final String CURRENT_ROLE_ATTR="current_role";
+	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String CURRENT_PAGE="current_page";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		String form = request.getParameter(FORM_PARAM);
+		request.setAttribute(CURRENT_PAGE, PATH_TO_GET_USERS_BY_ROLE);
 		if (form != null) {
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			UserService userService = serviceFactory.getUserService();
@@ -33,7 +36,7 @@ public class GetUsersByRoleCommand implements Command {
 				request.setAttribute(USER_BY_ROLE_ATTR, users);
 				request.setAttribute(CURRENT_ROLE_ATTR, role);
 				try {
-					request.getRequestDispatcher(PATH_TO_GET_USERS_BY_ROLE).forward(request, response);
+					request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 				} catch (ServletException | IOException e) {
 					rootLogger.error(e);
 				}
@@ -43,7 +46,7 @@ public class GetUsersByRoleCommand implements Command {
 			}
 		} else {
 			try {
-				request.getRequestDispatcher(PATH_TO_GET_USERS_BY_ROLE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
 				rootLogger.error(e);
 			}

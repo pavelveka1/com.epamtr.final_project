@@ -9,7 +9,8 @@
 <body>
 	<form action="Controller" method="POST">
 		<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">
-		<label> Choose flight status</label> <select name="flight_status" value="${flight_status}">
+		<label> Choose flight status</label> <select name="flight_status"
+			value="${flight_status}">
 			<option>RECRUITMENT</option>
 			<option>CREATED</option>
 			<option>COMPLITED</option>
@@ -18,40 +19,46 @@
 	</form>
 	<br>
 	<br>
-	<form action="Controller" method="POST">
-		<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">
+
+	<c:choose>
+		<c:when test="${flights!=null}">
+			<form action="Controller" method="POST">
+				<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">
+
+				<table border="1">
+					<tr>
+						<th>Current city</th>
+						<th>Destination city</th>
+						<th>Flight range</th>
+						<th>Flight time</th>
+						<th>Date</th>
+						<th>Aircraft</th>
+						<th>Registr. number</th>
+						<th>Status</th>
+						<th>Choose</th>
+					</tr>
+					<c:forEach var="flight_item" items="${flights}">
+						<tr>
+							<td><c:out value="${flight_item.currentCity}" /></td>
+							<td><c:out value="${flight_item.destinationCity}" /></td>
+							<td><c:out value="${flight_item.flightRange}" /></td>
+							<td><c:out value="${flight_item.flightTime}" /></td>
+							<td><c:out value="${flight_item.timeDeparture}" /></td>
+							<td><c:out value="${flight_item.aircraftType}" /></td>
+							<td><c:out value="${flight_item.aircraftNumber}" /></td>
+							<td><c:out value="${flight_item.status}" /></td>
+							<td><input type=radio name="radio_id_flight"
+								value="${flight_item.idFlight}"></td>
+						</tr>
+					</c:forEach>
+				</table>
+
+				<input type="submit" value="Find users" />
+			</form>
+
+		</c:when>
+	</c:choose>
 
 
-
-		<table border="1">
-			<tr>
-				<th>Current city</th>
-				<th>Destination city</th>
-				<th>Flight range</th>
-				<th>Flight time</th>
-				<th>Date</th>
-				<th>Aircraft</th>
-				<th>Registr. number</th>
-				<th>Status</th>
-				<th>Choose</th>
-			</tr>
-			<c:forEach var="flight_item" items="${flights}">
-				<tr>
-					<td><c:out value="${flight_item.currentCity}" /></td>
-					<td><c:out value="${flight_item.destinationCity}" /> </td>
-					<td><c:out value="${flight_item.flightRange}" /> </td>
-					<td><c:out value="${flight_item.flightTime}"/> </td>
-					<td><c:out value="${flight_item.timeDeparture}" /> </td>
-					<td><c:out value="${flight_item.aircraftType}" /> </td>
-					<td><c:out value="${flight_item.aircraftNumber}" /> </td>
-					<td><c:out value="${flight_item.status}" /></td>
-					<td><input type=radio name="radio_id_flight" value="${flight_item.idFlight}"  >    </td>
-				</tr>
-		</c:forEach>
-		</table>
-
-		<input type="submit" value="Find users" />
-	</form>
-	
 </body>
 </html>

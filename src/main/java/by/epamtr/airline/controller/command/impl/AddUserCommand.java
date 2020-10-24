@@ -12,23 +12,26 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class AddUserCommand implements Command {
 	private static final String PATH_TO_ADD_USER_PAGE="/WEB-INF/jsp/administrator_action/add_user.jsp";
+	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String CURRENT_PAGE="current_page";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)  {
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		UserService userService = serviceFactory.getUserService();
+	request.getSession().setAttribute(CURRENT_PAGE, PATH_TO_ADD_USER_PAGE);
 		String page=request.getParameter("page");
 		if(page!=null) {
 			try {
 				userService.addUser(request, response);
-				request.getRequestDispatcher(PATH_TO_ADD_USER_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 			} catch (ServiceException | ServletException | IOException e2) {
 			//	rootLogger.error(e2);
 				e2.printStackTrace();
 			}
 		}else {
 			try {
-				request.getRequestDispatcher(PATH_TO_ADD_USER_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
 				rootLogger.error(e);
 			}

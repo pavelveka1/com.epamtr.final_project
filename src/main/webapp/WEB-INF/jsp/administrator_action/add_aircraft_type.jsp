@@ -32,7 +32,7 @@
 			<br>
 			 
 			 <input
-				type="submit" value="add user" />
+				type="submit" value="Apply" />
 	</form>
 </body>
 </html>

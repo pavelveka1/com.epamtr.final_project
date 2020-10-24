@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 public class SignInDataValidator {
-	private static final String LOGIN_PATTERN="([^$#№%,?&!] {3,20})";
-	private static final String PASSWORD_PATTERN="([^$#№%,?&!\\.\\s] {5,15})";
+	private static final String LOGIN_PATTERN="[^$#№%,?&!\\s]{3,20}";
+	private static final String PASSWORD_PATTERN="([^$#№%,?&!\\.\\s]{5,15})";
 	private static Pattern loginPattern=Pattern.compile(LOGIN_PATTERN);
 	private static Pattern passwordPattern=Pattern.compile(PASSWORD_PATTERN);
 	private static Matcher loginMatcher;

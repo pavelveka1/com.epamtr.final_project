@@ -19,6 +19,9 @@
 			<option>ENGINEER</option>
 		</select> <input type="submit" value="Find" /> <br>
 		<br>
+		<c:choose>
+		<c:when test="${current_role!=null}">
+		
 		<label>Current role: <c:out value="${current_role.role}" /></label>
 		<br>
 		<table border="1">
@@ -39,6 +42,9 @@
 				</tr>
 			</c:forEach>
 		</table>
+		</c:when>
+	</c:choose>
+		
 		
 </body>
 </html>

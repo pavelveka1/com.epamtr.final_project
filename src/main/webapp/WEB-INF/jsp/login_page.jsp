@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,31 +46,38 @@
 <fmt:message bundle="${loc}" key="button.name.en" var="button_en" />
 <fmt:message bundle="${loc}" key="button.login" var="button_login" />
 <fmt:message bundle="${loc}" key="text.airline" var="text_airline" />
-
+<fmt:message bundle="${loc}" key="user.sign_in.fail" var="sign_in_fail" />
+<style>
+strong {
+	color: red;
+}
+</style>
 </head>
 
 <body>
 
 
-	<div class="container-login100" style="background-image: url('bg-01.jpg');">
+	<div class="container-login100"
+		style="background-image: url('bg-01.jpg');">
 
 		<div class="wrap-login100 p-t-30 p-b-50">
 			<div class="button-container">
 
-				<form class="button-container" action="Locale" method="POST" >
-					<input  type="hidden" name="local" value="ru"> 
-					<input  type="hidden" name="jsp" value="/WEB-INF/jsp/login_page.jsp">
-					<input  type="submit" value="${button_ru}" />
+				<form class="button-container" action="Locale" method="POST">
+					<input type="hidden" name="local" value="ru"> <input
+						type="hidden" name="jsp" value="/WEB-INF/jsp/login_page.jsp">
+					<input type="submit" value="${button_ru}" />
 				</form>
 
 				<form action="Locale" method="POST">
-					<input type="hidden" name="local" value="en">
-					<input type="hidden" name="jsp" value="/WEB-INF/jsp/login_page.jsp">
-					 <input type="submit" value="${button_en}" />
+					<input type="hidden" name="local" value="en"> <input
+						type="hidden" name="jsp" value="/WEB-INF/jsp/login_page.jsp">
+					<input type="submit" value="${button_en}" />
 				</form>
 
 			</div>
-			<span class="login100-form-title p-b-41"><c:out value="${text_airline}"/> </span>
+			<span class="login100-form-title p-b-41"><c:out
+					value="${text_airline}" /> </span>
 			<form class="login100-form validate-form p-b-33 p-t-5"
 				action="Controller" method="POST">
 				<input type="hidden" name="command" value="sign_in">
@@ -90,11 +97,24 @@
 
 				<div class="container-login100-form-btn m-t-32">
 
-					<button class="login100-form-btn"><c:out value="${button_login}"/></button>
+					<button class="login100-form-btn">
+						<c:out value="${button_login}" />
+					</button>
 
 				</div>
 
 			</form>
+			<br>
+			<div>
+				<strong> <c:choose>
+						<c:when test="${sign_in_fail_attr=='sign_in_fail'}">
+							<c:out value="${sign_in_fail}" />
+						</c:when>
+					</c:choose>
+				</strong>
+
+			</div>
+
 		</div>
 	</div>
 	</div>

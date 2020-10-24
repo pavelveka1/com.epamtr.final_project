@@ -23,12 +23,15 @@ public class GetFlightsByStatusCommand implements Command {
 	private static final String SELECTED_FLIGHT_ATTR="selected_flight";
 	private static final String SELECTED_STATUS_ATTR="selected_status";
 	private static final String TEAM_BY_FLIGHT_ATTR="flight_team";
+	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String CURRENT_PAGE="current_page";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		FlightService flightService = serviceFactory.getFlightService();
 		List<Flight> flights;
+		request.getSession().setAttribute(CURRENT_PAGE, PATH_FLIGHTS_BY_STATUS);
 		String flightStatus = request.getParameter(FLIGHT_STATUS_PARAM);
 		String selectedFlight=request.getParameter(ID_FLIGHT_PARAM);
 		
@@ -40,7 +43,7 @@ public class GetFlightsByStatusCommand implements Command {
 					request.getSession().setAttribute("flights", flights);
 					request.setAttribute(SELECTED_STATUS_ATTR, flightStatus);
 					try {
-						request.getRequestDispatcher(PATH_FLIGHTS_BY_STATUS).forward(request, response);
+						request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 					} catch (ServletException | IOException e) {
 						rootLogger.error(e);
 					}
@@ -51,7 +54,7 @@ public class GetFlightsByStatusCommand implements Command {
 
 			} else {
 				try {
-					request.getRequestDispatcher(PATH_FLIGHTS_BY_STATUS).forward(request, response);
+					request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 				} catch (ServletException | IOException e) {
 					rootLogger.error(e);
 				}
@@ -64,7 +67,8 @@ public class GetFlightsByStatusCommand implements Command {
 				request.setAttribute(SELECTED_FLIGHT_ATTR, flight);
 				List<Crew> team=userService.getUsers(idSelectedFlight);
 				request.setAttribute(TEAM_BY_FLIGHT_ATTR, team);
-				request.getRequestDispatcher(PATH_TO_GET_CREW_BY_FLIGHT).forward(request, response);
+				request.getSession().setAttribute(CURRENT_PAGE, PATH_TO_GET_CREW_BY_FLIGHT);
+				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 			} catch (ServiceException | ServletException | IOException e) {
 				// rootLogger.error(e2);
 				e.printStackTrace();

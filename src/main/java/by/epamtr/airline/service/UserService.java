@@ -18,7 +18,7 @@ public interface UserService {
 
 	void addUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
-	void deliteUser(String login) throws ServiceException;
+	boolean deliteUser(String login) throws ServiceException;
 
 	void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 	

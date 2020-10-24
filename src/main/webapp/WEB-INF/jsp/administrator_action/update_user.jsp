@@ -16,6 +16,8 @@
 			</form>
 			<br><br>
 		
+		
+		
 		<form action="Controller" method="POST">
 		<input type="hidden" name="command" value="UPDATE_USER">	
 		<input type="hidden" name="changes" value="made">
@@ -23,26 +25,26 @@
 			<tr>
 			<td><label>Name </label></td>
 			<td><input
-			type="text" name="name" value="${user.name}"></td>
+			type="text" name="name" value="${selected_user.name}"></td>
 			</tr>
 			<tr>
 			<td> <label>Surname </label>    </td>
 			<td>  <input
-			type="text" name="surname" value="${user.surname}">    </td>
+			type="text" name="surname" value="${selected_user.surname}">    </td>
 			</tr>
 			<tr>
 			<td> <label>Patronimic </label>    </td>
 			<td>   <input
-			type="text" name="patronimic" value="${user.patronimic}">   </td>
+			type="text" name="patronimic" value="${selected_user.patronimic}">   </td>
 			</tr>
 			<tr>
 			<td> <label>Email </label>    </td>
 			<td>  <input
-			type="text" name="email" value="${user.email}">   </td>
+			type="text" name="email" value="${selected_user.email}">   </td>
 			</tr>
 			<tr>
 			<td>  <label>Current user role </label>   </td>
-			<td> <c:out value="${user.role}" />    </td>
+			<td> <c:out value="${selected_user.role}" />    </td>
 			</tr>
 			<tr>
 			<td>  <label>Choose role<label>   </td>

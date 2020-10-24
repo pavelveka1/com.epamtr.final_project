@@ -1,6 +1,9 @@
 package by.epamtr.airline.service.impl;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import by.epamtr.airline.dao.DAOFactory;
@@ -14,18 +17,27 @@ import by.epamtr.airline.service.exception.ServiceException;
 import by.epamtr.airline.service.validator.SignInDataValidator;
 
 public class UserServiceImpl implements UserService {
+	private final String SIGN_IN_FAIL_ATTR="sign_in_fail_attr";
+	private final String SIGN_IN_FAIL="sign_in_fail";
+	private final String PATH_TO_CONTROLLER = "/Controller?command=GO_TO_LOGIN_PAGE";
+	
 	private UserDAO userDAO = DAOFactory.getInstance().getSqlUserImpl();
 	@Override
 	public void signIn(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 		if(!SignInDataValidator.validate(request)) {
-			// send command to MainController login data invalid? login again
+			request.setAttribute(SIGN_IN_FAIL_ATTR, SIGN_IN_FAIL);
+			try {
+				request.getRequestDispatcher(PATH_TO_CONTROLLER).forward(request, response);
+			} catch (ServletException | IOException e) {
+				throw new ServiceException(e);
+			}
+		}else {
+			try {
+				userDAO.signIn(request, response);
+			} catch (DAOException e) {
+				throw new ServiceException("Error while signing in", e);
+			}
 		}
-		try {
-			userDAO.signIn(request, response);
-		} catch (DAOException e) {
-			throw new ServiceException("Error while signing in", e);
-		}
-
 	}
 
 	@Override
@@ -49,11 +61,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deliteUser(String login) throws ServiceException {
+	public boolean deliteUser(String login) throws ServiceException {
 		try {
-			userDAO.deliteUser(login);
+			return userDAO.deliteUser(login);
 		} catch (DAOException e) {
-			throw new ServiceException("Error while adding new user", e);
+			throw new ServiceException("Error while deletion user", e);
 		}
 		
 	}

@@ -79,7 +79,7 @@ public class SQLConstant {
 		public static final String UPDATE_AIRCRAFT = "UPDATE aircrafts SET aircrafts.registration_number='%s' WHERE id_aircraft = (select id_aircraft where aircrafts.registration_number = '%s');";
 		public static final String CHANGE_STATUS_AIRCRAFT = "UPDATE aircrafts SET status='%s' WHERE id_aircraft = (select id_aircraft where aircrafts.registration_number = '%s');";
 		public static final String GET_AIRCRAFTS = "SELECT id_aircraft, registration_number, status, id_aircraft_type, aircraft_type, range_flight, number_passengers FROM aircrafts\r\n"
-				+ "     JOIN aircraft_types ON aircraft_types.id_aircraft_type = aircrafts.id_aircraft;";
+				+ "     JOIN aircraft_types ON aircraft_types.id_aircraft_type = aircrafts.type_aircraft;";
 	}
 
 }

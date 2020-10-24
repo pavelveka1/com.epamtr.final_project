@@ -13,13 +13,17 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class UpdateUserCommand implements Command {
 	private static final String PATH_TO_UPDATE_USER_PAGE="/WEB-INF/jsp/administrator_action/update_user.jsp";
-	private static final String USER_ATTRIBUTE = "user";
+	private static final String USER_ATTRIBUTE = "selected_user";
 	private static final String USER_INFO_ATTRIBUTE = "user_info";
+	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String CURRENT_PAGE="current_page";
+	private static final String USER_ATTR="selected_user";
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)  {
-		if(request.getSession().getAttribute("user")==null) {
+		request.setAttribute(CURRENT_PAGE, PATH_TO_UPDATE_USER_PAGE);
+		if(request.getAttribute(USER_ATTR)==null) {
 			try {
-				request.getRequestDispatcher(PATH_TO_UPDATE_USER_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
 				// rootLogger.error(e);
 				e.printStackTrace();
@@ -30,9 +34,9 @@ public class UpdateUserCommand implements Command {
 
 				try {
 					userService.updateUser(request, response);
-					request.getSession().removeAttribute(USER_ATTRIBUTE);
-					request.getSession().removeAttribute(USER_INFO_ATTRIBUTE);
-					request.getRequestDispatcher(PATH_TO_UPDATE_USER_PAGE).forward(request, response);
+					//request.getSession().removeAttribute(USER_ATTRIBUTE);
+					//request.getSession().removeAttribute(USER_INFO_ATTRIBUTE);
+					request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 				} catch (ServletException | IOException | ServiceException e) {
 					// rootLogger.error(e);
 					e.printStackTrace();

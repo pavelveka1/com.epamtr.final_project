@@ -13,17 +13,10 @@
 
 body {
 	font-family: Arial, Helvetica, sans-serif;
+	backgroung-image: url(bg-01.jpg);
 }
 
 /* Style the header */
-header {
-	height: 10%;
-	padding: 10px;
-	text-align: center;
-	font-size: 35px;
-	color: white;
-	background-color: #666;
-}
 
 /* Create two columns/boxes that floats next to each other */
 nav {
@@ -49,19 +42,29 @@ section:after {
 }
 
 form {
-    margin: 2px; /* Отступы вокруг элемента */
-    
-    padding: 10px; /* Поля вокруг текста */
-   } 
+	margin: 2px; /* Отступы вокруг элемента */
+	padding: 10px; /* Поля вокруг текста */
+}
 
 /* Style the footer */
 footer {
+position: fixed; /* Фиксированное положение */
+    left: 0; bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    width: 100%; /* Ширина слоя */
 	background-color: #777;
-	padding: 10px;
-	width: 100%;
 	text-align: center;
 	color: white;
 }
+
+ #footer {
+    position: fixed; /* Фиксированное положение */
+    left: 0; bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    background: #39b54a; /* Цвет фона */
+    color: #fff; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+   }
 
 /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
 @media ( max-width : 600px) {
@@ -70,109 +73,29 @@ footer {
 		height: auto;
 	}
 }
+
+aside {
+	background: #B0C4DE;
+	padding: 2px;
+	width: 180px;
+	float: left;
+}
 </style>
 </head>
 <body>
-	<header>
-		<h5>
-			<c:out value="${user.role}" />
-			:
-			<c:out value="${user.surname}" />
-			<c:out value="${user.name}" />
-			<c:out value="${user.patronimic}" />
-		</h5>
-		<form  action="Controller" method="POST">
-				<input type="hidden" name="command" value="SIGN_OUT"> <input
-					type="submit" value="Sign out" />
-			</form>
-	</header>
-<main>
-<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_USER"> 
-				<input
-					type="submit" value="add user" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="DELITE_USER"> <input
-					type="submit" value="delite user" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="UPDATE_USER"> <input
-					type="submit" value="Update user" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="GET_USERS_BY_ROLE"> 
-				<input
-					type="submit" value="Get users by role" />
-			</form>
-			
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID"> <input
-					type="submit" value="Get users by flight" />
-			</form>
-			
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_AIRCRAFT_TYPE"> <input
-					type="submit" value="Add type of aircraft" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="DELETE_AIRCRAFT_TYPE"> <input
-					type="submit" value="Delete aircraft type" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_AIRCRAFT"> <input
-					type="submit" value="add aircraft" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="DELETE_AIRCRAFT"> <input
-					type="submit" value="delete aircraft" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="UPDATE_AIRCRAFT"> <input
-					type="submit" value="Update aircraft number" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="CHANGE_STATUS_AIRCRAFT"> <input
-					type="submit" value="Update aircraft status" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="ADD_FLIGHT"> <input
-					type="submit" value="Add new flight" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="DELETE_FLIGHT"> <input
-					type="submit" value="Delete flight" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="UPDATE_FLIGHT"> <input
-					type="submit" value="Update flight" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="GET_FLIGHTS_BY_STATUS"> <input
-					type="submit" value="Flights by status" />
-			</form>
-			
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="GET_FLIGHTS_BY_USER"> <input
-					type="submit" value="Flights by user" />
-			</form>
 
-</main>
-	
+	<header>
+		<jsp:include page="fragment/header.jsp" />
+	</header>
+
+	<aside>
+		<jsp:include page="fragment/aside.jsp" />
+	</aside>
+
+	<main>
+		<jsp:include page="${current_page}" />
+	</main>
+
 	<footer>
 		<p>Footer</p>
 	</footer>

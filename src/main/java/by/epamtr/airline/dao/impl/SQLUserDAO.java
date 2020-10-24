@@ -31,7 +31,8 @@ public class SQLUserDAO implements UserDAO {
 	private final String GO_TO_DISPATCHER_PAGE_COMMAND = "/Controller?command=GO_TO_DISPATCHER_PAGE";
 	private final String GO_TO_ADMINISTRATOR_PAGE_COMMAND = "/Controller?command=GO_TO_ADMINISTRATOR_PAGE";
 	private final String GO_TO_CREW_PAGE_COMMAND = "/Controller?command=GO_TO_CREW_PAGE";
-
+	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String PATH_TO_UPDATE_USER="/WEB-INF/jsp/administrator_action/update_user.jsp";
 
 	private final String ADMINISTRATOR = "ADMINISTRATOR";
 	private final String DISPATCHER = "DISPATCHER";
@@ -51,8 +52,10 @@ public class SQLUserDAO implements UserDAO {
 	private final String ID_USER_COLUMN = "id_user";
 	private final String FLIGHT_ID_COLUMN = "flight_id";
 	private final String CREW_POSITION_COLUMN = "crew_position";
+	
 
-	private final String USER_ATTRIBUTE = "user";
+	private final String USER_ATTRIBUTE = "selected_user";
+	private final String SIGNED_IN_USER_ATTRIBUTE = "user";
 	private final String USER_INFO_ATTRIBUTE = "user_info";
 
 	private final String PASSWORD_PARAM = "password";
@@ -62,6 +65,17 @@ public class SQLUserDAO implements UserDAO {
 	private final String SURNAME_PARAM = "surname";
 	private final String PATRONIMIC_PARAM = "patronimic";
 	private final String ROLE_PARAM = "role";
+
+	private final String RESULT_ATTR = "result_attr";
+	private final String SUCCESSFUL_OPERATION = "added";
+	private final String FAILED_OPERATION = "not_added";
+	private final String SIGN_IN_FAIL_ATTR="sign_in_fail_attr";
+	private final String SIGN_IN_FAIL="sign_in_fail";
+	private final int ZERO_USER_OPERATION = 0;
+	
+	private final String CURRENT_PAGE="current_page";
+	
+	private final String FLIGHTS_BY_STATUS_PAGE="/WEB-INF/jsp/user_action/get_flights_by_status.jsp";
 
 	private final String PATH_TO_CONTROLLER = "/Controller?command=GO_TO_LOGIN_PAGE";
 	private final String PATH_TO_ADD_USER_PAGE = "/WEB-INF/jsp/administrator_action/add_user.jsp";
@@ -88,20 +102,21 @@ public class SQLUserDAO implements UserDAO {
 				password = null;
 				if (rs.next()) {
 					idUser = rs.getInt(USER_ID_COLUMN);
+					rs.close();
+					rs = statement.executeQuery(String.format(SQLConstant.UserConstant.SIGN_IN_GET_USER, idUser));
+					rs.next();
+					User user = createUser(rs);
+					request.getSession().setAttribute(SIGNED_IN_USER_ATTRIBUTE, user);
+					request.getSession().setAttribute(CURRENT_PAGE, FLIGHTS_BY_STATUS_PAGE);
+					sendCommandToController(user.getRole(), request, response);
 				} else {
 					try {
+						request.setAttribute(SIGN_IN_FAIL_ATTR, SIGN_IN_FAIL);
 						request.getRequestDispatcher(PATH_TO_CONTROLLER).forward(request, response);
 					} catch (ServletException | IOException e) {
 						throw new DAOException("error while forward to mapping /Controller", e);
 					}
 				}
-				rs.close();
-				rs = statement.executeQuery(String.format(SQLConstant.UserConstant.SIGN_IN_GET_USER, idUser));
-				rs.next();
-				User user = createUser(rs);
-				request.setAttribute(USER_ATTRIBUTE, user);
-				sendCommandToController(user.getRole(), request, response);
-
 			} catch (SQLException e) {
 				throw new DAOException("Error while getting data from DB", e);
 			}
@@ -130,6 +145,7 @@ public class SQLUserDAO implements UserDAO {
 	@Override
 	public void signOut(HttpServletRequest request, HttpServletResponse response) throws DAOException {
 		try {
+			request.getSession().invalidate();
 			request.getRequestDispatcher(PATH_TO_CONTROLLER).forward(request, response);
 		} catch (ServletException | IOException e) {
 			throw new DAOException("error while going to mapping /Controller in signOut method", e);
@@ -149,41 +165,47 @@ public class SQLUserDAO implements UserDAO {
 				rs = statement.executeQuery();
 				if (rs.next()) {
 					try {
+						request.getSession().setAttribute(RESULT_ATTR, FAILED_OPERATION);
 						request.getRequestDispatcher(PATH_TO_ADD_USER_PAGE).forward(request, response);
+						statement.close();
+						rs.close();
 					} catch (ServletException | IOException e) {
 						throw new DAOException("Error while going to add_user.js");
 					}
 				} else {
+					statement = connection.prepareStatement(SQLConstant.UserConstant.ADD_USER_GET_MAX_ID);
+					rs = statement.executeQuery();
+					rs.next();
+					int maxIdUser = rs.getInt(ID_USER_COLUMN);
+					statement.close();
+					rs.close();
+					connection.setAutoCommit(false);
+					statement = connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE);
+					statement.executeQuery();
 
+					statement = connection.prepareStatement(SQLConstant.UserConstant.ADD_USER_INSERT_IN_USERS);
+					statement.setString(1, request.getParameter(NAME_COLUMN));
+					statement.setString(2, request.getParameter(SURNAME_COLUMN));
+					statement.setString(3, request.getParameter(PATRONIMIC_COLUMN));
+					statement.setString(4, request.getParameter(EMAIL_PARAM));
+					statement.setInt(5, defineRole(request.getParameter(ROLE_PARAM)));
+					int addedUsers = statement.executeUpdate();
+
+					statement = connection.prepareStatement(SQLConstant.UserConstant.ADD_USER_INSERT_IN_USERS_INFO);
+					statement.setInt(1, ++maxIdUser);
+					statement.setString(2, request.getParameter(LOGIN_COLUMN));
+
+					statement.setString(3, criptPassword(request.getParameter(PASSWORD_COLUMN)));
+					int addedInfo = statement.executeUpdate();
+					statement = connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE);
+					connection.commit();
+					connection.setAutoCommit(true);
+					if (addedInfo != ZERO_USER_OPERATION && addedUsers != ZERO_USER_OPERATION) {
+						request.setAttribute(RESULT_ATTR, SUCCESSFUL_OPERATION);
+					} else {
+						request.setAttribute(RESULT_ATTR, FAILED_OPERATION);
+					}
 				}
-				statement.close();
-				rs.close();
-				statement = connection.prepareStatement(SQLConstant.UserConstant.ADD_USER_GET_MAX_ID);
-				rs = statement.executeQuery();
-				rs.next();
-				int maxIdUser = rs.getInt(ID_USER_COLUMN);
-				statement.close();
-				connection.setAutoCommit(false);
-				statement = connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE);
-				statement.executeQuery();
-
-				statement = connection.prepareStatement(SQLConstant.UserConstant.ADD_USER_INSERT_IN_USERS);
-				statement.setString(1, request.getParameter(NAME_COLUMN));
-				statement.setString(2, request.getParameter(SURNAME_COLUMN));
-				statement.setString(3, request.getParameter(PATRONIMIC_COLUMN));
-				statement.setString(4, request.getParameter(EMAIL_PARAM));
-				statement.setInt(5, defineRole(request.getParameter(ROLE_PARAM)));
-				statement.executeUpdate();
-
-				statement = connection.prepareStatement(SQLConstant.UserConstant.ADD_USER_INSERT_IN_USERS_INFO);
-				statement.setInt(1, ++maxIdUser);
-				statement.setString(2, request.getParameter(LOGIN_COLUMN));
-
-				statement.setString(3, criptPassword(request.getParameter(PASSWORD_COLUMN)));
-				statement.executeUpdate();
-				statement = connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE);
-				connection.commit();
-				connection.setAutoCommit(true);
 
 			} catch (SQLException e) {
 				throw new DAOException("error while adding user", e);
@@ -211,7 +233,7 @@ public class SQLUserDAO implements UserDAO {
 	}
 
 	@Override
-	public void deliteUser(String login) throws DAOException {
+	public boolean deliteUser(String login) throws DAOException {
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet rs = null;
@@ -221,12 +243,17 @@ public class SQLUserDAO implements UserDAO {
 				statement = connection.createStatement();
 				connection.setAutoCommit(false);
 				statement.executeUpdate(SQLConstant.CONSTRAINT_DISABLE);
-				statement.executeUpdate(String.format(SQLConstant.UserConstant.DELETE_USER_FROM_USERS_INFO, login));
-				statement.executeUpdate(String.format(SQLConstant.UserConstant.DELETE_USER_FROM_USERS, login));
+				int deletedUsers = statement
+						.executeUpdate(String.format(SQLConstant.UserConstant.DELETE_USER_FROM_USERS_INFO, login));
+				int deletedInfo = statement
+						.executeUpdate(String.format(SQLConstant.UserConstant.DELETE_USER_FROM_USERS, login));
 				statement.executeUpdate(SQLConstant.CONSTRAINT_ENABLE);
 				connection.commit();
 				connection.setAutoCommit(true);
-
+				if (deletedUsers != ZERO_USER_OPERATION && deletedInfo != ZERO_USER_OPERATION) {
+					return true;
+				}
+				return false;
 			} catch (SQLException e) {
 				throw new DAOException("erroe while deliting user", e);
 			}
@@ -274,7 +301,7 @@ public class SQLUserDAO implements UserDAO {
 				connection.setAutoCommit(false);
 				statementUser = connection.prepareStatement(String.format(SQLConstant.UserConstant.UPDATE_USER, name,
 						surname, patronimic, email, role, id));
-				int row=statementUser.executeUpdate();
+				int row = statementUser.executeUpdate();
 				statementUserInfo = connection.prepareStatement(
 						String.format(SQLConstant.UserConstant.UPDATE_USER_INFO, login, criptPassword(password), id));
 				statementUserInfo.executeUpdate();
@@ -445,6 +472,7 @@ public class SQLUserDAO implements UserDAO {
 		ResultSet rsUserInfo = null;
 		UserInfo userInfo;
 		User user;
+		request.setAttribute(CURRENT_PAGE, PATH_TO_UPDATE_USER);
 		try {
 			connection = connectionPool.getConnection();
 			try {
@@ -453,16 +481,17 @@ public class SQLUserDAO implements UserDAO {
 				rsUserInfo = statementUserInfo.executeQuery();
 				if (rsUserInfo.next()) {
 					userInfo = makeUserInfo(rsUserInfo);
-					request.getSession().setAttribute(USER_INFO_ATTRIBUTE, userInfo);
+					request.setAttribute(USER_INFO_ATTRIBUTE, userInfo);
 
 					statementUser = connection.prepareStatement(
 							String.format(SQLConstant.UserConstant.FIND_USER_BY_ID, userInfo.getIdUserInfo()));
 					rsUser = statementUser.executeQuery();
 					if (rsUser.next()) {
 						user = makeUser(rsUser);
-						request.getSession().setAttribute(USER_ATTRIBUTE, user);
+						request.setAttribute(USER_ATTRIBUTE, user);
 						try {
-							request.getRequestDispatcher(PATH_TO_UPDATE_USER_PAGE).forward(request, response);
+							
+							request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 						} catch (ServletException | IOException e) {
 							throw new DAOException("Error while going to update_user.jsp", e);
 						}
@@ -470,7 +499,7 @@ public class SQLUserDAO implements UserDAO {
 
 				} else {
 					try {
-						request.getRequestDispatcher(PATH_TO_UPDATE_USER_PAGE).forward(request, response);
+						request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 					} catch (ServletException | IOException e) {
 						throw new DAOException("Error while going to update_user.jsp", e);
 					}
@@ -569,10 +598,10 @@ public class SQLUserDAO implements UserDAO {
 				statement.setInt(1, idCrewPosition);
 				statement.setInt(2, flightId);
 				statement.setInt(3, userId);
-				int i= statement.executeUpdate();
-				 statement = connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE);
-				 statement.executeQuery();
-				
+				int i = statement.executeUpdate();
+				statement = connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE);
+				statement.executeQuery();
+
 			} catch (SQLException e) {
 				throw new DAOException("error while adding user to crew", e);
 			}
@@ -589,7 +618,7 @@ public class SQLUserDAO implements UserDAO {
 			}
 		}
 	}
-	
+
 	@Override
 	public List<User> getFreeUsers(int flightId, String selectedPosition) throws DAOException {
 		Connection connection = null;
@@ -599,10 +628,11 @@ public class SQLUserDAO implements UserDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				statement = connection.prepareStatement(String.format(SQLConstant.UserConstant.GET_FREE_USERS_BY_POSITION, flightId, selectedPosition));
+				statement = connection.prepareStatement(
+						String.format(SQLConstant.UserConstant.GET_FREE_USERS_BY_POSITION, flightId, selectedPosition));
 				rs = statement.executeQuery();
 				while (rs.next()) {
-						users.add(createUser(rs));
+					users.add(createUser(rs));
 				}
 
 			} catch (SQLException e) {
@@ -751,7 +781,5 @@ public class SQLUserDAO implements UserDAO {
 		}
 		return UserRole.MANAGER;
 	}
-
-	
 
 }

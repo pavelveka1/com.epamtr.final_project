@@ -17,7 +17,7 @@ public interface UserDAO {
 
 	void addUser(HttpServletRequest request, HttpServletResponse response) throws DAOException;
 
-	void deliteUser(String login) throws DAOException;
+	boolean deliteUser(String login) throws DAOException;
 
 	void updateUser(HttpServletRequest request, HttpServletResponse response) throws DAOException;
 	
