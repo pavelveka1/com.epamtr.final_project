@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import by.epamtr.airline.dao.exception.DAOException;
 import by.epamtr.airline.entity.Crew;
 import by.epamtr.airline.entity.User;
+import by.epamtr.airline.entity.UserInfo;
 import by.epamtr.airline.entity.UserRole;
 import by.epamtr.airline.service.exception.ServiceException;
 
@@ -18,7 +19,7 @@ public interface UserService {
 
 	void addUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
-	boolean deliteUser(String login) throws ServiceException;
+	boolean deliteUser(int idUser) throws ServiceException;
 
 	void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 	
@@ -29,6 +30,8 @@ public interface UserService {
 	List<Crew> getUsers(int idFlight) throws ServiceException;
 
 	User getUser(int idUser) throws  ServiceException;
+	
+	UserInfo getUserInfo(int idUser) throws ServiceException;
 	
 	void deliteCrewFromFlight(int flightId, int userId) throws ServiceException;
 	

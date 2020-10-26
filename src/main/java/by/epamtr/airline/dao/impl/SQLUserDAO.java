@@ -67,8 +67,8 @@ public class SQLUserDAO implements UserDAO {
 	private final String ROLE_PARAM = "role";
 
 	private final String RESULT_ATTR = "result_attr";
-	private final String SUCCESSFUL_OPERATION = "added";
-	private final String FAILED_OPERATION = "not_added";
+	private final String SUCCESSFUL_OPERATION = "success";
+	private final String FAILED_OPERATION = "fail";
 	private final String SIGN_IN_FAIL_ATTR="sign_in_fail_attr";
 	private final String SIGN_IN_FAIL="sign_in_fail";
 	private final int ZERO_USER_OPERATION = 0;
@@ -123,23 +123,8 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
-
 	}
 
 	@Override
@@ -206,34 +191,19 @@ public class SQLUserDAO implements UserDAO {
 						request.setAttribute(RESULT_ATTR, FAILED_OPERATION);
 					}
 				}
-
 			} catch (SQLException e) {
 				throw new DAOException("error while adding user", e);
 			}
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
 
 	}
 
 	@Override
-	public boolean deliteUser(String login) throws DAOException {
+	public boolean deliteUser(int idUser) throws DAOException {
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet rs = null;
@@ -244,9 +214,9 @@ public class SQLUserDAO implements UserDAO {
 				connection.setAutoCommit(false);
 				statement.executeUpdate(SQLConstant.CONSTRAINT_DISABLE);
 				int deletedUsers = statement
-						.executeUpdate(String.format(SQLConstant.UserConstant.DELETE_USER_FROM_USERS_INFO, login));
+						.executeUpdate(String.format(SQLConstant.UserConstant.DELETE_USER_FROM_USERS_INFO, idUser));
 				int deletedInfo = statement
-						.executeUpdate(String.format(SQLConstant.UserConstant.DELETE_USER_FROM_USERS, login));
+						.executeUpdate(String.format(SQLConstant.UserConstant.DELETE_USER_FROM_USERS, idUser));
 				statement.executeUpdate(SQLConstant.CONSTRAINT_ENABLE);
 				connection.commit();
 				connection.setAutoCommit(true);
@@ -260,28 +230,13 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
-
 	}
 
 	@Override
 	public void updateUser(HttpServletRequest request, HttpServletResponse response) throws DAOException {
-		User user = (User) request.getSession().getAttribute("user");
+		User user = (User) request.getSession().getAttribute(USER_ATTRIBUTE);
 		int id = user.getIdUser();
 		String name = request.getParameter(NAME_PARAM);
 		String surname = request.getParameter(SURNAME_PARAM);
@@ -297,23 +252,30 @@ public class SQLUserDAO implements UserDAO {
 
 		try {
 			connection = connectionPool.getConnection();
+			
 			try {
 				connection.setAutoCommit(false);
 				statementUser = connection.prepareStatement(String.format(SQLConstant.UserConstant.UPDATE_USER, name,
 						surname, patronimic, email, role, id));
-				int row = statementUser.executeUpdate();
+				int userRows = statementUser.executeUpdate();
 				statementUserInfo = connection.prepareStatement(
 						String.format(SQLConstant.UserConstant.UPDATE_USER_INFO, login, criptPassword(password), id));
-				statementUserInfo.executeUpdate();
+				int userInfoRows=statementUserInfo.executeUpdate();
 				connection.commit();
 				connection.setAutoCommit(true);
-
+				if (userRows != ZERO_USER_OPERATION && userInfoRows != ZERO_USER_OPERATION) {
+					request.setAttribute(RESULT_ATTR, SUCCESSFUL_OPERATION);
+				} else {
+					request.setAttribute(RESULT_ATTR, FAILED_OPERATION);
+				}
 			} catch (SQLException e) {
 				throw new DAOException("error while updating user", e);
 			}
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
+			//releaseResourses( statement,  rs, connection);
+			
 			connectionPool.releaseConnection(connection);
 
 			if (statementUser != null) {
@@ -359,21 +321,7 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
 
 		return users;
@@ -402,21 +350,7 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
 		return team;
 	}
@@ -442,24 +376,37 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
 
 		return user;
+	}
+	
+	@Override
+	public UserInfo getUserInfo(int idUser) throws DAOException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		UserInfo userInfo;
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				statement = connection
+						.prepareStatement(String.format(SQLConstant.UserConstant.GET_USER_INFO_BY_ID, idUser));
+				rs = statement.executeQuery();
+				rs.next();
+				userInfo = makeUserInfo(rs);
+			} catch (SQLException e) {
+				throw new DAOException("error while getting users by UserRole", e);
+			}
+
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			releaseResourses( statement,  rs, connection);
+		}
+
+		return userInfo;
 	}
 
 	@Override
@@ -477,18 +424,18 @@ public class SQLUserDAO implements UserDAO {
 			connection = connectionPool.getConnection();
 			try {
 				statementUserInfo = connection
-						.prepareStatement(String.format(SQLConstant.UserConstant.FIND_USER_INFO_BY_LOGIN, login));
+						.prepareStatement(String.format(SQLConstant.UserConstant.GET_USER_INFO_BY_ID, login));
 				rsUserInfo = statementUserInfo.executeQuery();
 				if (rsUserInfo.next()) {
 					userInfo = makeUserInfo(rsUserInfo);
-					request.setAttribute(USER_INFO_ATTRIBUTE, userInfo);
+					request.getSession().setAttribute(USER_INFO_ATTRIBUTE, userInfo);
 
 					statementUser = connection.prepareStatement(
 							String.format(SQLConstant.UserConstant.FIND_USER_BY_ID, userInfo.getIdUserInfo()));
 					rsUser = statementUser.executeQuery();
 					if (rsUser.next()) {
 						user = makeUser(rsUser);
-						request.setAttribute(USER_ATTRIBUTE, user);
+						request.getSession().setAttribute(USER_ATTRIBUTE, user);
 						try {
 							
 							request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
@@ -511,6 +458,7 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
+			//*******************************************
 			connectionPool.releaseConnection(connection);
 			if (rsUser != null) {
 				try {
@@ -566,23 +514,8 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
-
 	}
 
 	@Override
@@ -608,6 +541,7 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
+			//*********************************************
 			connectionPool.releaseConnection(connection);
 			if (statement != null) {
 				try {
@@ -642,23 +576,8 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
-
 		return users;
 	}
 
@@ -781,5 +700,25 @@ public class SQLUserDAO implements UserDAO {
 		}
 		return UserRole.MANAGER;
 	}
+	
+	private void releaseResourses(Statement statement, ResultSet resultSet, Connection connection) throws DAOException {
+		if (resultSet != null) {
+			try {
+				resultSet.close();
+			} catch (SQLException e) {
+				throw new DAOException("erroe while closing resultSet", e);
+			}
+		}
+		if (statement != null) {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				throw new DAOException("erroe while closing statement", e);
+			}
+		}
+		connectionPool.releaseConnection(connection);
+	}
+
+	
 
 }

@@ -16,31 +16,36 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class ChangeAircraftStatusCommand implements Command {
 	private static final String PATH_TO_CHANGE_AIRCRAFT_STATUS = "/WEB-INF/jsp/administrator_action/change_aircraft_status.jsp";
-	private static final String REGISTER_NUMBER_PARAM = "register_number";
+	private static final String PATH_TO_ADMIN_PAGE = "/WEB-INF/jsp/administrator_page.jsp";
+	private static final String CURRENT_PAGE = "current_page";
 	private static final String AIRCRAFTS_ATTR = "aircrafts";
+	private static final String ID_AIRCRAFT_PARAM="id_aircraft";
+	private static final String AIRCRAFT_STATUS_PARAM="aircraft_status";
 	private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
 	private final AircraftService aircraftService = serviceFactory.getAircraftService();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		String aircraftsParameter = request.getParameter(REGISTER_NUMBER_PARAM);
+		String idAircraftParam = request.getParameter(ID_AIRCRAFT_PARAM);
 		List<Aircraft> aircrafts = new ArrayList<Aircraft>();
-
-		if (aircraftsParameter == null) {
+		request.setAttribute(CURRENT_PAGE, PATH_TO_CHANGE_AIRCRAFT_STATUS);
+		if (idAircraftParam == null) {
 			try {
 				aircrafts = aircraftService.getAircraftrs();
 				request.setAttribute(AIRCRAFTS_ATTR, aircrafts);
-				request.getRequestDispatcher(PATH_TO_CHANGE_AIRCRAFT_STATUS).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException | ServiceException e) {
 				// rootLogger.error(e);
 				e.printStackTrace();
 			}
 		} else {
 			try {
-				aircraftService.changeAircraftStatus(request, response);
+				String status=request.getParameter(AIRCRAFT_STATUS_PARAM);
+				int idAircraft=Integer.parseInt(idAircraftParam);
+				aircraftService.changeAircraftStatus(idAircraft, status);
 				aircrafts = aircraftService.getAircraftrs();
 				request.setAttribute(AIRCRAFTS_ATTR, aircrafts);
-				request.getRequestDispatcher(PATH_TO_CHANGE_AIRCRAFT_STATUS).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException | ServiceException e) {
 				// rootLogger.error(e);
 				e.printStackTrace();

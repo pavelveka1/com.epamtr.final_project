@@ -18,7 +18,7 @@ public interface AircraftService {
 
 	void updateAircraft(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 
-	void changeAircraftStatus(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
+	void changeAircraftStatus(int idAircraft, String status) throws ServiceException;
 
 	void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
 

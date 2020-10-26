@@ -76,9 +76,10 @@ position: fixed; /* Фиксированное положение */
 
 aside {
 	background: #B0C4DE;
-	padding: 2px;
-	width: 180px;
+	padding: 0px;
+	width: 250px;
 	float: left;
+	height: 100%
 }
 </style>
 </head>

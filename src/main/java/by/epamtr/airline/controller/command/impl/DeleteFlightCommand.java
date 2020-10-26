@@ -22,6 +22,8 @@ import by.epamtr.airline.service.exception.ServiceException;
 public class DeleteFlightCommand implements Command {
 
 	private static final String PATH_TO_DELETE_FLIGHT = "/WEB-INF/jsp/administrator_action/delete_flight.jsp";
+	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String CURRENT_PAGE="current_page";
 	private static final String FLIGHT_STATUS_PARAM = "flight_status";
 	private static final String FLIGHT_STATUS_ATTR = "flight_status_attr";
 	private static final String ID_FLIGHT_PARAM = "radio_id_flight";
@@ -36,7 +38,7 @@ public class DeleteFlightCommand implements Command {
 		List<Flight> flights;
 		String flightStatus = request.getParameter(FLIGHT_STATUS_PARAM);
 		String selectedFlight=request.getParameter(ID_FLIGHT_PARAM);
-		
+		request.setAttribute(CURRENT_PAGE, PATH_TO_DELETE_FLIGHT);
 		if(selectedFlight==null) {
 			if (flightStatus != null) {
 				
@@ -45,7 +47,7 @@ public class DeleteFlightCommand implements Command {
 					request.getSession().setAttribute(FLIGHTS_ATTR, flights);
 					request.getSession().setAttribute(FLIGHT_STATUS_ATTR, flightStatus);
 					try {
-						request.getRequestDispatcher(PATH_TO_DELETE_FLIGHT).forward(request, response);
+						request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 					} catch (ServletException | IOException e) {
 						rootLogger.error(e);
 					}
@@ -56,7 +58,7 @@ public class DeleteFlightCommand implements Command {
 
 			} else {
 				try {
-					request.getRequestDispatcher(PATH_TO_DELETE_FLIGHT).forward(request, response);
+					request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 				} catch (ServletException | IOException e) {
 					rootLogger.error(e);
 				}
@@ -69,7 +71,7 @@ public class DeleteFlightCommand implements Command {
 				request.getSession().removeAttribute(FLIGHT_STATUS_ATTR);
 				request.getSession().setAttribute(FLIGHTS_ATTR, flights);
 				
-				request.getRequestDispatcher(PATH_TO_DELETE_FLIGHT).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 			} catch (ServiceException | ServletException | IOException e) {
 				// rootLogger.error(e2);
 				e.printStackTrace();

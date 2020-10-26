@@ -63,10 +63,10 @@
 	</form>
 	<br><br>
 	<c:choose>
-		<c:when test="${result_attr=='added'}">
+		<c:when test="${result_attr=='success'}">
 			<c:out value="${user_add_ok}" />
 		</c:when>
-		<c:when test="${result_attr=='not_added'}">
+		<c:when test="${result_attr=='fail'}">
 			<c:out value="${user_add_fail}" />
 		</c:when>
 	</c:choose>

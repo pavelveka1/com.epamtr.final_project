@@ -16,10 +16,10 @@ public class SQLConstant {
 		public static final String ADD_USER_INSERT_IN_USERS_INFO = "INSERT INTO `users_info` (`user_id`,`login`,`password`) VALUES (?,?,?)";
 		public static final String ADD_USER_CHECK_LOGIN = "select login from users_info where login ='%s' ;";
 
-		public static final String DELETE_USER_FROM_USERS_INFO = "DELETE FROM users WHERE id_user = (select users_info.user_id from users_info where login ='%s')";
-		public static final String DELETE_USER_FROM_USERS = "DELETE FROM users_info WHERE login ='%s';";
+		public static final String DELETE_USER_FROM_USERS = "DELETE FROM users WHERE id_user=%d;";
+		public static final String DELETE_USER_FROM_USERS_INFO = "DELETE FROM users_info WHERE user_id =%d;";
 
-		public static final String FIND_USER_INFO_BY_LOGIN = "select * from users_info where login ='%s' ;";
+		public static final String GET_USER_INFO_BY_ID = "select * from users_info where user_id =%d;";
 		public static final String FIND_USER_BY_ID = "select * from users where id_user = %d ;";
 
 		public static final String UPDATE_USER_INFO = "UPDATE users_info SET login='%s', password='%s' WHERE user_id = %d;";
@@ -77,7 +77,7 @@ public class SQLConstant {
 		public static final String GET_REGISTER_NUMBERS = " SELECT registration_number FROM aircrafts ;";
 		public static final String DELETE_AIRCRAFT = " DELETE FROM aircrafts WHERE registration_number='%s' AND id_aircraft NOT IN (SELECT aircraft FROM flights);";
 		public static final String UPDATE_AIRCRAFT = "UPDATE aircrafts SET aircrafts.registration_number='%s' WHERE id_aircraft = (select id_aircraft where aircrafts.registration_number = '%s');";
-		public static final String CHANGE_STATUS_AIRCRAFT = "UPDATE aircrafts SET status='%s' WHERE id_aircraft = (select id_aircraft where aircrafts.registration_number = '%s');";
+		public static final String CHANGE_STATUS_AIRCRAFT = "UPDATE aircrafts SET status='%s' WHERE id_aircraft =%d;";
 		public static final String GET_AIRCRAFTS = "SELECT id_aircraft, registration_number, status, id_aircraft_type, aircraft_type, range_flight, number_passengers FROM aircrafts\r\n"
 				+ "     JOIN aircraft_types ON aircraft_types.id_aircraft_type = aircrafts.type_aircraft;";
 	}

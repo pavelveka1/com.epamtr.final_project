@@ -46,9 +46,9 @@ public class AircraftServiceImpl implements AircraftService{
 	}
 
 	@Override
-	public void changeAircraftStatus(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+	public void changeAircraftStatus(int idAircraft, String status) throws ServiceException {
 		try {
-			aircraftDAO.changeAircraftStatus(request, response);;
+			aircraftDAO.changeAircraftStatus(idAircraft, status);;
 		} catch (DAOException e) {
 			throw new ServiceException("Error while changing status of aircraft",e);
 		}

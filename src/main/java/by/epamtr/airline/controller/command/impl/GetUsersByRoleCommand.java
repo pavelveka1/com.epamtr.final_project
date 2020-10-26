@@ -25,16 +25,16 @@ public class GetUsersByRoleCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		String form = request.getParameter(FORM_PARAM);
+		String role = request.getParameter(ROLE_PARAM);
 		request.setAttribute(CURRENT_PAGE, PATH_TO_GET_USERS_BY_ROLE);
-		if (form != null) {
+		if (role != null) {
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			UserService userService = serviceFactory.getUserService();
-			UserRole role = UserRole.valueOf(request.getParameter(ROLE_PARAM));
+			UserRole userRole = UserRole.valueOf(request.getParameter(ROLE_PARAM));
 			try {
-				List<User> users = userService.getUsers(role);
+				List<User> users = userService.getUsers(userRole);
 				request.setAttribute(USER_BY_ROLE_ATTR, users);
-				request.setAttribute(CURRENT_ROLE_ATTR, role);
+				request.setAttribute(CURRENT_ROLE_ATTR, userRole);
 				try {
 					request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 				} catch (ServletException | IOException e) {

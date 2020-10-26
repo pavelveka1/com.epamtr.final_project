@@ -15,7 +15,7 @@ public interface AircraftDAO {
 
 	void updateAircraft(HttpServletRequest request, HttpServletResponse response) throws DAOException;
 
-	void changeAircraftStatus(HttpServletRequest request, HttpServletResponse response) throws DAOException;
+	void changeAircraftStatus(int idAircraft, String status) throws DAOException;
 
 	void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws DAOException;
 

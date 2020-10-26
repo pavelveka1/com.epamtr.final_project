@@ -17,6 +17,8 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class AddFlightCommand implements Command {
 	private static final String PATH_TO_ADD_FLIGHT = "/WEB-INF/jsp/administrator_action/add_flight.jsp";
+	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String CURRENT_PAGE="current_page";
 	private static final String CURRENT_CITY_PARAM = "current_city";
 	private static final String AIRCRAFTS_ATTR="aircrafts";
 	private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -27,6 +29,7 @@ public class AddFlightCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		String currentCity=request.getParameter(CURRENT_CITY_PARAM);
+		request.setAttribute(CURRENT_PAGE, PATH_TO_ADD_FLIGHT);
 		if(currentCity==null) {
 			try {
 				try {
@@ -35,14 +38,14 @@ public class AddFlightCommand implements Command {
 				} catch (ServiceException e) {
 					rootLogger.error("Error while getting registration number of aircrafts", e);
 				}
-				request.getRequestDispatcher(PATH_TO_ADD_FLIGHT).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
 				rootLogger.error("Error while going to add_flight.jsp page", e);
 			}
 		}else {
 			try {
 				flightService.addFlight(request, response);
-				request.getRequestDispatcher(PATH_TO_ADD_FLIGHT).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 			} catch (ServiceException | ServletException | IOException e) {
 				rootLogger.error("Error while adding new flght",e);
 			}

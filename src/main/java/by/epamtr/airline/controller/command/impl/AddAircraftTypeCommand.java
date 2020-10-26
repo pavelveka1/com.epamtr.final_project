@@ -15,23 +15,26 @@ import by.epamtr.airline.service.exception.ServiceException;
 public class AddAircraftTypeCommand implements Command {
 
 		private static final String PATH_TO_ADD_AIRCRAFT_TYPE="/WEB-INF/jsp/administrator_action/add_aircraft_type.jsp";
+		private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+		private static final String CURRENT_PAGE="current_page";
 
 		@Override
 		public void execute(HttpServletRequest request, HttpServletResponse response)  {
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			AircraftService aircraftService = serviceFactory.getAircraftService();
 			String page=request.getParameter("aircraft_type");
+			request.setAttribute(CURRENT_PAGE, PATH_TO_ADD_AIRCRAFT_TYPE);
 			if(page!=null) {
 				try {
 					aircraftService.addAircraftType(request, response);
-					request.getRequestDispatcher(PATH_TO_ADD_AIRCRAFT_TYPE).forward(request, response);
+					request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 				} catch (ServiceException | ServletException | IOException e2) {
 				//	rootLogger.error(e2);
 					e2.printStackTrace();
 				}
 			}else {
 				try {
-					request.getRequestDispatcher(PATH_TO_ADD_AIRCRAFT_TYPE).forward(request, response);
+					request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 				} catch (ServletException | IOException e) {
 					rootLogger.error(e);
 				}

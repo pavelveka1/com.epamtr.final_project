@@ -34,6 +34,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 	private static final String ID_AIRCRAFT_TYPE = "id_iarcraft_type";
 	private static final String REGISTER_NUMBER_PARAM = "register_number";
 	private static final String AIRCRAFT_STATUS_PARAM = "aircraft_status";
+	private static final String AIRCRAFT_NUMBER_ATTR="aircraft_number";
 	
 	
 	
@@ -62,23 +63,8 @@ public class SQLAircraftDAO implements AircraftDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
-
 	}
 
 	@Override
@@ -99,23 +85,8 @@ public class SQLAircraftDAO implements AircraftDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
-
 	}
 
 	@Override
@@ -138,6 +109,8 @@ public class SQLAircraftDAO implements AircraftDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
+			
+			//*******************************************************
 			connectionPool.releaseConnection(connection);
 
 			if (statement != null) {
@@ -151,17 +124,14 @@ public class SQLAircraftDAO implements AircraftDAO {
 	}
 
 	@Override
-	public void changeAircraftStatus(HttpServletRequest request, HttpServletResponse response) throws DAOException {
-		String registrationNumber = request.getParameter(REGISTER_NUMBER_PARAM);
-		String newStatus = request.getParameter(AIRCRAFT_STATUS_PARAM);
-		
+	public void changeAircraftStatus(int idAircraft, String status) throws DAOException {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
 			connection = connectionPool.getConnection();
 			try {
 				//connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE).executeQuery();
-				statement = connection.prepareStatement(String.format(SQLConstant.AircraftConstant.CHANGE_STATUS_AIRCRAFT, newStatus, registrationNumber));
+				statement = connection.prepareStatement(String.format(SQLConstant.AircraftConstant.CHANGE_STATUS_AIRCRAFT, status, idAircraft));
 				statement.executeUpdate();
 				//connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE).executeQuery();
 			} catch (SQLException e) {
@@ -170,6 +140,8 @@ public class SQLAircraftDAO implements AircraftDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
+			
+			//****************************************************
 			connectionPool.releaseConnection(connection);
 
 			if (statement != null) {
@@ -206,23 +178,8 @@ public class SQLAircraftDAO implements AircraftDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
-
 	}
 
 	@Override
@@ -242,23 +199,8 @@ public class SQLAircraftDAO implements AircraftDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
-
 	}
 
 	@Override
@@ -282,21 +224,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
 		return aircrafts;
 	}
@@ -322,21 +250,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			connectionPool.releaseConnection(connection);
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing resultSet", e);
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
+			releaseResourses( statement,  rs, connection);
 		}
 		return aircraftTypes;
 	}
@@ -358,7 +272,24 @@ public class SQLAircraftDAO implements AircraftDAO {
 		String registrationNumber=resultSet.getString(REGISTER_NUMBER_COLUMN);
 		String status=resultSet.getString(STATUS_COLUMN);
 		return new Aircraft(id, type, registrationNumber, status);
-		
+	}
+	
+	private void releaseResourses(Statement statement, ResultSet resultSet, Connection connection) throws DAOException {
+		if (resultSet != null) {
+			try {
+				resultSet.close();
+			} catch (SQLException e) {
+				throw new DAOException("erroe while closing resultSet", e);
+			}
+		}
+		if (statement != null) {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				throw new DAOException("erroe while closing statement", e);
+			}
+		}
+		connectionPool.releaseConnection(connection);
 	}
 
 }

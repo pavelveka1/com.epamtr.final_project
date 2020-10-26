@@ -11,6 +11,7 @@ import by.epamtr.airline.dao.UserDAO;
 import by.epamtr.airline.dao.exception.DAOException;
 import by.epamtr.airline.entity.Crew;
 import by.epamtr.airline.entity.User;
+import by.epamtr.airline.entity.UserInfo;
 import by.epamtr.airline.entity.UserRole;
 import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
@@ -61,9 +62,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean deliteUser(String login) throws ServiceException {
+	public boolean deliteUser(int idUser) throws ServiceException {
 		try {
-			return userDAO.deliteUser(login);
+			return userDAO.deliteUser(idUser);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while deletion user", e);
 		}
@@ -110,6 +111,17 @@ public class UserServiceImpl implements UserService {
 			}	
 		return user;
 	}
+	
+	@Override
+	public UserInfo getUserInfo(int idUser) throws ServiceException {
+		UserInfo userInfo;
+		try {
+			userInfo=userDAO.getUserInfo(idUser);
+			} catch (DAOException e) {
+				throw new ServiceException("Error while getting user by id from DB", e);
+			}	
+		return userInfo;
+	}
 
 	@Override
 	public void findUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
@@ -150,4 +162,6 @@ public class UserServiceImpl implements UserService {
 			}	
 		return freeUsersByPosition;
 	}
+
+	
 }

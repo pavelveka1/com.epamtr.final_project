@@ -7,6 +7,8 @@
 <title>Users by role</title>
 </head>
 <body>
+
+
 	<form action="Controller" method="POST">
 		<input type="hidden" name="command" value="GET_USERS_BY_ROLE">
 		<input type="hidden" name="form" value="filled"> <label>
@@ -17,34 +19,59 @@
 			<option>PILOT</option>
 			<option>FLIGHT ATTENDANT</option>
 			<option>ENGINEER</option>
-		</select> <input type="submit" value="Find" /> <br>
-		<br>
-		<c:choose>
-		<c:when test="${current_role!=null}">
+		</select> <input type="submit" value="Find" />
+	</form>
+	<br>
+	<br>
+	<c:choose>
+			<c:when test="${deleted_user=='success'}">
+				<c:out value="${deleted_user_ok}" />
+			</c:when>
+			<c:when test="${deleted_user=='fail'}">
+				<c:out value="${deleted_user_fail}" />
+			</c:when>
+		</c:choose>
+	
+<c:choose>
+	<c:when test="${current_role!=null}">
 		
-		<label>Current role: <c:out value="${current_role.role}" /></label>
-		<br>
-		<table border="1">
-			<tr>
-				<th>Name</th>
-				<th>Surname</th>
-				<th>Patronimic</th>
-				<th>Email</th>
-				<th>Role</th>
-			</tr>
-			<c:forEach var="user_item" items="${users_by_role}">
+			<label>Current role: <c:out value="${current_role.role}" /></label>
+			<br>
+			<table border="1">
 				<tr>
-					<td><c:out value="${user_item.name}" /></td>
-					<td><c:out value="${user_item.surname}" /></td>
-					<td><c:out value="${user_item.patronimic}" /></td>
-					<td><c:out value="${user_item.email}" /></td>
-					<td><c:out value="${user_item.role}" /></td>
+					<th>Name</th>
+					<th>Surname</th>
+					<th>Patronimic</th>
+					<th>Email</th>
+					<th>Role</th>
+					<th>Delete</th>
+					<th>Update</th>
 				</tr>
-			</c:forEach>
-		</table>
-		</c:when>
+				<c:forEach var="user_item" items="${users_by_role}">
+
+					<tr>
+						<td><c:out value="${user_item.name}" /></td>
+						<td><c:out value="${user_item.surname}" /></td>
+						<td><c:out value="${user_item.patronimic}" /></td>
+						<td><c:out value="${user_item.email}" /></td>
+						<td><c:out value="${user_item.role}" /></td>
+						<td><form action="Controller" method="POST">
+								<input type="hidden" name="command" value="DELITE_USER">
+								<input type="hidden" name="id_user" value="${user_item.idUser}">
+								<input type="submit" value="Delete">
+							</form></td>
+						<td><form action="Controller" method="POST">
+								<input type="hidden" name="command" value="UPDATE_USER">
+								<input type="hidden" name="id_user" value="${user_item.idUser}">
+								<input type="submit" value="Update">
+							</form></td>
+					</tr>
+				</c:forEach>
+			</table>
+	</c:when>
 	</c:choose>
-		
-		
+
+
+
 </body>
 </html>

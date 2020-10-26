@@ -19,6 +19,8 @@ public class UpdateFlightCommand implements Command {
 
 	private static final String PATH_TO_UPDATE_FLIGHT = "/WEB-INF/jsp/administrator_action/update_flight.jsp";
 	private static final String PATH_TO_UPDATE_FLIGHT_DATA = "/WEB-INF/jsp/administrator_action/update_flight_data.jsp";
+	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String CURRENT_PAGE="current_page";
 	private static final String FLIGHT_STATUS_PARAM = "flight_status";
 	private static final String ID_FLIGHT_PARAM = "radio_id_flight";
 	private static final String SELECTED_FLIGHT_ATTR="selected_flight";
@@ -35,11 +37,13 @@ public class UpdateFlightCommand implements Command {
 		String flightStatus = request.getParameter(FLIGHT_STATUS_PARAM);
 		String selectedFlight=request.getParameter(ID_FLIGHT_PARAM);
 		String flightDataStatus=request.getParameter(FLIGHT_DATA_STATUS);
+		request.setAttribute(CURRENT_PAGE, PATH_TO_UPDATE_FLIGHT);
 		if(flightDataStatus!=null) {
 			try {
+				
 				Flight flight =flightService.updateFlight(Integer.parseInt(request.getParameter(FLIGHT_ID_PARAM)),request, response);
 				request.setAttribute(SELECTED_FLIGHT_ATTR, flight);
-				request.getRequestDispatcher(PATH_TO_UPDATE_FLIGHT_DATA).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 			
 			} catch (ServiceException | ServletException | IOException e) {
 				// rootLogger.error(e2);
@@ -53,7 +57,7 @@ public class UpdateFlightCommand implements Command {
 						flights = flightService.getFlights(FlightStatus.valueOf(request.getParameter(FLIGHT_STATUS_PARAM)));
 						request.getSession().setAttribute("flights", flights);
 						try {
-							request.getRequestDispatcher(PATH_TO_UPDATE_FLIGHT).forward(request, response);
+							request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 						} catch (ServletException | IOException e) {
 							rootLogger.error(e);
 						}
@@ -64,7 +68,7 @@ public class UpdateFlightCommand implements Command {
 
 				} else {
 					try {
-						request.getRequestDispatcher(PATH_TO_UPDATE_FLIGHT).forward(request, response);
+						request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 					} catch (ServletException | IOException e) {
 						rootLogger.error(e);
 					}
@@ -72,12 +76,13 @@ public class UpdateFlightCommand implements Command {
 			}else {
 				int idSelectedFlight=Integer.parseInt(selectedFlight);
 				try {
+					request.setAttribute(CURRENT_PAGE, PATH_TO_UPDATE_FLIGHT_DATA);
 					Flight flight=flightService.getFlight(idSelectedFlight);
 					AircraftService aircraftService=serviceFactory.getAircraftService();
 					List<Aircraft> aircrafts = aircraftService.getAircraftrs();
 					request.setAttribute(AIRCRAFTS_ATTR, aircrafts);
 					request.setAttribute(SELECTED_FLIGHT_ATTR, flight);
-					request.getRequestDispatcher(PATH_TO_UPDATE_FLIGHT_DATA).forward(request, response);
+					request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
 				} catch (ServiceException | ServletException | IOException e) {
 					// rootLogger.error(e2);
 					e.printStackTrace();
