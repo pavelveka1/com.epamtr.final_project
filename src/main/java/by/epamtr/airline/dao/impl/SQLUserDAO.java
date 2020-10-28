@@ -27,12 +27,14 @@ import by.epamtr.airline.entity.UserRole;
 
 public class SQLUserDAO implements UserDAO {
 
-	private final String GO_TO_MANAGER_PAGE_COMMAND = "/Controller?command=GO_TO_MANAGER_PAGE";
-	private final String GO_TO_DISPATCHER_PAGE_COMMAND = "/Controller?command=GO_TO_DISPATCHER_PAGE";
-	private final String GO_TO_ADMINISTRATOR_PAGE_COMMAND = "/Controller?command=GO_TO_ADMINISTRATOR_PAGE";
-	private final String GO_TO_CREW_PAGE_COMMAND = "/Controller?command=GO_TO_CREW_PAGE";
+	private final String GO_TO_MAIN_PAGE_COMMAND = "/Controller?command=GO_TO_MAIN_PAGE";
 	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
 	private static final String PATH_TO_UPDATE_USER="/WEB-INF/jsp/administrator_action/update_user.jsp";
+	private static final String CURRENT_MENU="menu";
+	private static final String ADMIN_MENU="admin_menu";
+	private static final String DISPATCHER_MENU="dispatcher_menu";
+	private static final String MANAGER_MENU="manager_menu";
+	private static final String CREW_MENU="crew_menu";
 
 	private final String ADMINISTRATOR = "ADMINISTRATOR";
 	private final String DISPATCHER = "DISPATCHER";
@@ -79,7 +81,6 @@ public class SQLUserDAO implements UserDAO {
 
 	private final String PATH_TO_CONTROLLER = "/Controller?command=GO_TO_LOGIN_PAGE";
 	private final String PATH_TO_ADD_USER_PAGE = "/WEB-INF/jsp/administrator_action/add_user.jsp";
-	private final String PATH_TO_UPDATE_USER_PAGE = "/WEB-INF/jsp/administrator_action/update_user.jsp";
 
 	private ConnectionPool connectionPool = ConnectionPoolImpl.getInstance();
 
@@ -586,20 +587,21 @@ public class SQLUserDAO implements UserDAO {
 		try {
 			switch (userRole) {
 			case MANAGER:
-				request.getRequestDispatcher(GO_TO_MANAGER_PAGE_COMMAND).forward(request, response);
+				request.getSession().setAttribute(CURRENT_MENU, MANAGER_MENU);
 				break;
 			case DISPATCHER:
-				request.getRequestDispatcher(GO_TO_DISPATCHER_PAGE_COMMAND).forward(request, response);
+				request.getSession().setAttribute(CURRENT_MENU, DISPATCHER_MENU);
 				break;
 			case ADMINISTRATOR:
-				request.getRequestDispatcher(GO_TO_ADMINISTRATOR_PAGE_COMMAND).forward(request, response);
+				request.getSession().setAttribute(CURRENT_MENU, ADMIN_MENU);
 				break;
 			case PILOT:
 			case ENGINEER:
 			case FLIGHT_ATTENDANT:
-				request.getRequestDispatcher(GO_TO_CREW_PAGE_COMMAND).forward(request, response);
+				request.getSession().setAttribute(CURRENT_MENU, CREW_MENU);
 				break;
 			}
+			request.getRequestDispatcher(GO_TO_MAIN_PAGE_COMMAND).forward(request, response);
 		} catch (ServletException | IOException e) {
 			throw new DAOException("Error while performing command forward to mapping /Controller", e);
 		}

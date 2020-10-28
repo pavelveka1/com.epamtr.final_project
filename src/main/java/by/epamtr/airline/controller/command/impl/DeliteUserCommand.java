@@ -18,7 +18,7 @@ public class DeliteUserCommand implements Command {
 	private static final String RESULT_OK = "success";
 	private static final String RESULT_FAIL = "fail";
 	private static final String ID_USER_PARAM="id_user";
-	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String PATH_TO_MAIN_PAGE="/WEB-INF/jsp/main_page.jsp";
 	private static final String CURRENT_PAGE="current_page";
 
 	@Override
@@ -26,7 +26,6 @@ public class DeliteUserCommand implements Command {
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		UserService userService = serviceFactory.getUserService();
 		int idUser = Integer.parseInt(request.getParameter(ID_USER_PARAM));
-		String login = request.getParameter(LOGIN_PARAM);
 		request.setAttribute(CURRENT_PAGE, PATH_TO_GET_USERS_BY_ROLE);
 		if (idUser>0) {
 			try {
@@ -36,21 +35,20 @@ public class DeliteUserCommand implements Command {
 				}else {
 					request.setAttribute(DELETED_USER_ATTR, RESULT_FAIL);
 				}
-				
 			} catch (ServiceException e2) {
 				// rootLogger.error(e2);
 				e2.printStackTrace();
 			}
 
 			try {
-				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
 				rootLogger.error(e);
 			}
 
 		} else {
 			try {
-				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
 				rootLogger.error(e);
 			}

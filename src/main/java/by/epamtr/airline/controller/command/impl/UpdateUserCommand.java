@@ -17,7 +17,7 @@ public class UpdateUserCommand implements Command {
 	private static final String PATH_TO_UPDATE_USER_PAGE="/WEB-INF/jsp/administrator_action/update_user.jsp";
 	private static final String USER_ATTRIBUTE = "selected_user";
 	private static final String USER_INFO_ATTRIBUTE = "user_info";
-	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String PATH_TO_MAIN_PAGE="/WEB-INF/jsp/main_page.jsp";
 	private static final String CURRENT_PAGE="current_page";
 	private static final String ID_USER_PARAM="id_user";
 	private static final String CHANGES_PARAM="changes";
@@ -45,7 +45,7 @@ public class UpdateUserCommand implements Command {
 						UserInfo userInfo=userService.getUserInfo(idUser);
 						request.getSession().setAttribute(USER_ATTRIBUTE, user);
 						request.getSession().setAttribute(USER_INFO_ATTRIBUTE, userInfo);
-					request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+					request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 				} catch ( ServletException | ServiceException | IOException e) {
 					// rootLogger.error(e);
 					e.printStackTrace();
@@ -60,7 +60,7 @@ public class UpdateUserCommand implements Command {
 					UserInfo userInfo=userService.getUserInfo(idUser);
 					request.getSession().setAttribute(USER_ATTRIBUTE, user);
 					request.getSession().setAttribute(USER_INFO_ATTRIBUTE, userInfo);
-					request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+					request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 				} catch (ServletException | IOException | ServiceException e) {
 					// rootLogger.error(e);
 					e.printStackTrace();

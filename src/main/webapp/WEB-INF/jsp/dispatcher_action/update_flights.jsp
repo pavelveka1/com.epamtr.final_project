@@ -35,8 +35,6 @@
 				<th>Current status</th>
 				<th>Choose status</th>
 				<th>Apply new status</th>
-				<th>Delete flight</th>
-				<th>Update flight</th>
 			</tr>
 			<c:forEach var="flight_item" items="${flights}">
 				<tr>
@@ -59,16 +57,6 @@
 						<input type="hidden" name="id_flight" value="${flight_item.idFlight}"  >
 						</td>
 					</form>
-					<td><form action="Controller" method="POST">
-							<input type="hidden" name="command" value="DELETE_FLIGHT">
-							<input type="hidden" name="id_flight" value="${flight_item.idFlight}"  >
-							<input type="submit" value="Delete flight" />
-						</form></td>
-						<td><form action="Controller" method="POST">
-							<input type="hidden" name="command" value="UPDATE_FLIGHT">
-							<input type="hidden" name="id_flight" value="${flight_item.idFlight}"  >
-							<input type="submit" value="Update flight" />
-						</form> </td>
 				</tr>
 			</c:forEach>
 		</table>

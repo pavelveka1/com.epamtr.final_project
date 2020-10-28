@@ -27,11 +27,6 @@
 				</tr>
 			</table>
 			<br>
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="GET_FLIGHTS_BY_STATUS">
-
-
-
 				<table border="1">
 					<tr>
 						<th>Current city</th>
@@ -54,13 +49,14 @@
 							<td><c:out value="${flight_item.aircraftType}" /></td>
 							<td><c:out value="${flight_item.aircraftNumber}" /></td>
 							<td><c:out value="${flight_item.status}" /></td>
-							<td><input type=radio name="radio_id_flight"
-								value="${flight_item.idFlight}"></td>
+							<td><form action="Controller" method="POST">
+							<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">
+							<input type="hidden" name="id_flight" value="${flight_item.idFlight}"  >
+							<input type="submit" value="Show crew" />
+						</form></td>
 						</tr>
 					</c:forEach>
 				</table>
-
-				<input type="submit" value="Find crew" />
 			</form>
 		</c:when>
 	</c:choose>

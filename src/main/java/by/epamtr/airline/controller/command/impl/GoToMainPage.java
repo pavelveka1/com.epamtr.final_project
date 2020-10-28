@@ -8,12 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import by.epamtr.airline.controller.command.Command;
 
-public class GoToDispatcherPage implements Command {
-	private static final String PATH_TO_DISPATCHER_PAGE="/WEB-INF/jsp/dispatcher_page.jsp";
+public class GoToMainPage implements Command {
+	private static final String PATH_TO_MAIN_PAGE="/WEB-INF/jsp/main_page.jsp";
 	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) {
+	public void execute(HttpServletRequest request, HttpServletResponse response)  {
 		try {
-			request.getRequestDispatcher(PATH_TO_DISPATCHER_PAGE).forward(request, response);
+			request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
 			rootLogger.error(e);
 		}

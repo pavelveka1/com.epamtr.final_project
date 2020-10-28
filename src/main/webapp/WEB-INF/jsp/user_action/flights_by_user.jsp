@@ -17,15 +17,9 @@
 		</tr>
 	</table>
 	<br>
-	<table>
-		<tr>
-			<th><label>Selected role: </label></th>
-			<th><c:out value="${selected_role}" /></th>
-		</tr>
-	</table>
-	<br>
-
-
+	<c:choose>
+	<c:when test="${selected_user!=null}">
+	
 	<table border="1">
 		<tr>
 			<th>Current city</th>
@@ -51,5 +45,7 @@
 		</c:forEach>
 	</table>
 	<br>
+	</c:when>
+	</c:choose>
 </body>
 </html>

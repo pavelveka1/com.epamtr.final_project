@@ -37,11 +37,7 @@
 		 <c:choose>
 		<c:when test="${selected_position!=null}">
 		<label>Selected position: <c:out value="${selected_position}" /></label>
-		 <br><br>
-		<form action="Controller" method="POST">
-			<input type="hidden" name="command" value="ADD_CREW_TO_FLIGHT">
-			<input type="hidden" name="flight_id"/>
-			<input type="submit" value="Add crew item" />
+		 <br>
 			<br>
 				value="${selected_flight.idFlight}">
 			<table border="1">
@@ -60,12 +56,16 @@
 					<td><c:out value="${user_item.patronimic}" /></td>
 					<td><c:out value="${user_item.email}" /></td>
 					<td><c:out value="${user_item.role.role}" /></td>
-					<td><input type=radio name="selected_user"
-					value="${user_item.idUser}"></td>
+					<td>   <form action="Controller" method="POST">
+								<input type="hidden" name="command" value="ADD_CREW_TO_FLIGHT">
+								<input type="hidden" name="selected_user" value="${user_item.idUser}">
+								<input type="hidden" name="flight_id"/>
+								<input type="submit" value="Add to flight ">
+							</form>   </td>
 					</tr>
 				</c:forEach>
 			</table>
-		</form>
+		
 		
 		</c:when>
 	</c:choose>

@@ -21,9 +21,6 @@
 	<br>
 	<br>
 
-<form action="Controller" method="POST">
-	<input type="hidden" name="command" value="DELETE_CREW_FROM_FLIGHT"> 
-	<input type= "hidden" name="flight_id" value="${selected_flight.idFlight}">
 	<table border="1">
 		<tr>
 			<th>Name</th>
@@ -31,7 +28,7 @@
 			<th>Patronimic</th>
 			<th>Email</th>
 			<th>Crew position</th>
-			<th>Choose</th>
+			<th>Delete crew item</th>
 		</tr>
 		<c:forEach var="crew_item" items="${flight_team}">
 			<tr>
@@ -40,14 +37,17 @@
 				<td><c:out value="${crew_item.user.patronimic}" /></td>
 				<td><c:out value="${crew_item.user.email}" /></td>
 				<td><c:out value="${crew_item.crewPosition}" /></td>
-				<td><input type=radio name="radio_id_crew"
-					value="${crew_item.user.idUser}"></td>
+				<td>    <form action="Controller" method="POST">
+								<input type="hidden" name="command" value="DELETE_CREW_FROM_FLIGHT">
+								<input type="hidden" name="id_selected_user" value="${crew_item.user.idUser}">
+								<input type="hidden" name="flight_id" value="${selected_flight.idFlight}">
+								<input type="submit" value="Delete ">
+							</form></td>
 			</tr>
 		</c:forEach>
 	</table>
 	<br>
-		<input type="submit" value="Delete crew item" />
-	</form>
+		
 	<br>
 	<form action="Controller" method="POST">
 	<input type="hidden" name="command" value="ADD_CREW_TO_FLIGHT"> 

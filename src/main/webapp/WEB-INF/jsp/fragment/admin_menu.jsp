@@ -23,10 +23,7 @@
 <fmt:message bundle="${loc}" key="aircraft.status.change"
 	var="change_status_aircraft" />
 <fmt:message bundle="${loc}" key="flight.add" var="add_flight" />
-<fmt:message bundle="${loc}" key="flight.delete" var="delete_flight" />
-<fmt:message bundle="${loc}" key="flight.update" var="update_flight" />
-<fmt:message bundle="${loc}" key="flight.get_by_status"
-	var="get_flights_by_status" />
+<fmt:message bundle="${loc}" key="flight.action" var="action_flight" />
 <fmt:message bundle="${loc}" key="flight.get_by_user"
 	var="get_flights_by_user" />
 
@@ -36,12 +33,6 @@
 	<li><a
 				href="http://localhost:8080/airline/Controller?action=Controller&command=ADD_USER"><c:out
 						value="${add_user}" /></a></li>
-		<li><a
-				href="http://localhost:8080/airline/Controller?action=Controller&command=DELITE_USER"><c:out
-						value="${delete_user}" /></a></li>
-		<li><a
-				href="http://localhost:8080/airline/Controller?action=Controller&command=UPDATE_USER"><c:out
-						value="${update_user}" /></a></li>
 		<li><a
 				href="http://localhost:8080/airline/Controller?action=Controller&command=GET_USERS_BY_ROLE"><c:out
 						value="${get_users_by_role}" /></a></li>
@@ -71,13 +62,7 @@
 						value="${add_flight}" /></a></li>
 		<li><a
 				href="http://localhost:8080/airline/Controller?action=Controller&command=DELETE_FLIGHT"><c:out
-						value="${delete_flight}" /></a></li>
-		<li><a
-				href="http://localhost:8080/airline/Controller?action=Controller&command=UPDATE_FLIGHT"><c:out
-						value="${update_flight}" /></a></li>
-		<li><a
-				href="http://localhost:8080/airline/Controller?action=Controller&command=GET_FLIGHTS_BY_STATUS"><c:out
-						value="${get_flights_by_status}" /></a></li>
+						value="${action_flight}" /></a></li>
 		<li><a
 				href="http://localhost:8080/airline/Controller?action=Controller&command=GET_FLIGHTS_BY_USER"><c:out
 						value="${get_flights_by_user}" /></a></li>

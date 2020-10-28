@@ -11,6 +11,7 @@ import by.epamtr.airline.controller.command.impl.AddCrewToFlightCommand;
 import by.epamtr.airline.controller.command.impl.AddFlightCommand;
 import by.epamtr.airline.controller.command.impl.AddUserCommand;
 import by.epamtr.airline.controller.command.impl.ChangeAircraftStatusCommand;
+import by.epamtr.airline.controller.command.impl.ChangeFlightStatusCommand;
 import by.epamtr.airline.controller.command.impl.DeleteAircraftCommand;
 import by.epamtr.airline.controller.command.impl.DeleteAircraftTypeCommand;
 import by.epamtr.airline.controller.command.impl.DeleteCrewFromFlightCommand;
@@ -23,11 +24,8 @@ import by.epamtr.airline.controller.command.impl.GetUserCommand;
 import by.epamtr.airline.controller.command.impl.GetUsersByFlightIdCommand;
 import by.epamtr.airline.controller.command.impl.GetUsersByRoleCommand;
 import by.epamtr.airline.controller.command.impl.GetUsersCommand;
-import by.epamtr.airline.controller.command.impl.GoToAdministratorPage;
-import by.epamtr.airline.controller.command.impl.GoToCrewPage;
-import by.epamtr.airline.controller.command.impl.GoToDispatcherPage;
+import by.epamtr.airline.controller.command.impl.GoToMainPage;
 import by.epamtr.airline.controller.command.impl.GoToLoginPage;
-import by.epamtr.airline.controller.command.impl.GoToManagerPage;
 import by.epamtr.airline.controller.command.impl.SignIn;
 import by.epamtr.airline.controller.command.impl.SignOut;
 import by.epamtr.airline.controller.command.impl.UpdateAircraftCommand;
@@ -44,10 +42,7 @@ public class CommandProvider {
 		commands.put(CommandName.SIGN_OUT, new SignOut());
 		
 		commands.put(CommandName.GO_TO_LOGIN_PAGE, new GoToLoginPage());
-		commands.put(CommandName.GO_TO_CREW_PAGE, new GoToCrewPage());
-		commands.put(CommandName.GO_TO_ADMINISTRATOR_PAGE, new GoToAdministratorPage());
-		commands.put(CommandName.GO_TO_DISPATCHER_PAGE, new GoToDispatcherPage());
-		commands.put(CommandName.GO_TO_MANAGER_PAGE, new GoToManagerPage());
+		commands.put(CommandName.GO_TO_MAIN_PAGE, new GoToMainPage());
 		commands.put(CommandName.WRONG_REQUEST, new GoToLoginPage());
 		
 		commands.put(CommandName.ADD_USER, new AddUserCommand());
@@ -66,6 +61,7 @@ public class CommandProvider {
 		commands.put(CommandName.UPDATE_FLIGHT, new UpdateFlightCommand());
 		commands.put(CommandName.GET_FLIGHTS_BY_STATUS, new GetFlightsByStatusCommand());
 		commands.put(CommandName.GET_FLIGHTS_BY_USER, new GetFlightsByUser());
+		commands.put(CommandName.CHANGE_FLIGHT_STATUS, new ChangeFlightStatusCommand());
 		
 		commands.put(CommandName.ADD_AIRCRAFT, new AddAircraftCommand());
 		commands.put(CommandName.DELETE_AIRCRAFT, new DeleteAircraftCommand());

@@ -7,37 +7,7 @@
 <title>Login page</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->
-<link rel="icon" type="image/png"
-	href="resources/images/icons/favicon.ico" />
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-	href="resources/vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-	href="resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-	href="resources/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-	href="resources/vendor/animate/animate.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-	href="resources/vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-	href="resources/vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-	href="resources/vendor/select2/select2.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-	href="resources/vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css" href="resources/css/util.css">
-<link rel="stylesheet" type="text/css" href="resources/css/main.css">
-<!--===============================================================================================-->
+
 <fmt:setLocale value="${sessionScope.local}" />
 <fmt:setBundle basename="by.epamtr.airline.localization.local" var="loc" />
 <fmt:message bundle="${loc}" key="login" var="login" />
@@ -47,64 +17,169 @@
 <fmt:message bundle="${loc}" key="button.login" var="button_login" />
 <fmt:message bundle="${loc}" key="text.airline" var="text_airline" />
 <fmt:message bundle="${loc}" key="user.sign_in.fail" var="sign_in_fail" />
+<fmt:message bundle="${loc}" key="text.sign_in" var="sign_in" />
 <style>
+body {
+	background-image:
+		url(https://progorodsamara.ru/userfiles/picoriginal/img-20200815203321-460.jpg);
+}
+
 strong {
 	color: red;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.transparent {
+	position: relative;
+	max-width: 400px;
+	padding: 60px 50px;
+	margin: 50px auto 0;
+	background-size: cover;
+}
+
+.transparent:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: linear-gradient(to right bottom, rgba(43, 44, 78, .5),
+		rgba(104, 22, 96, .5));
+}
+
+.form-inner {
+	position: relative;
+}
+
+.form-inner h3 {
+	position: relative;
+	margin-top: 0;
+	color: white;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+	font-size: 26px;
+	text-transform: uppercase;
+}
+
+.form-inner h3:after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -6px;
+	height: 2px;
+	width: 60px;
+	background: #1762EE;
+}
+
+.form-inner label {
+	display: block;
+	padding-left: 15px;
+	font-family: 'Roboto', sans-serif;
+	color: rgba(255, 255, 255, .6);
+	text-transform: uppercase;
+	font-size: 14px;
+}
+
+.form-inner input {
+	display: block;
+	width: 100%;
+	padding: 0 15px;
+	margin: 10px 0 15px;
+	border-width: 0;
+	line-height: 40px;
+	border-radius: 20px;
+	color: white;
+	background: rgba(255, 255, 255, .2);
+	font-family: 'Roboto', sans-serif;
+}
+
+.form-inner input[type="checkbox"] {
+	position: absolute;
+	opacity: 0;
+}
+
+#custom-checkbox+label {
+	position: relative;
+	margin: 20px 0;
+	text-transform: none;
+	cursor: pointer;
+}
+
+#custom-checkbox+label:before {
+	content: "";
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+	vertical-align: text-top;
+	background: white;
+}
+
+#custom-checkbox:checked+label:before {
+	background: #1762EE;
+}
+
+#custom-checkbox:checked+label:after {
+	content: "";
+	position: absolute;
+	width: 2px;
+	height: 2px;
+	left: 20px;
+	top: 9px;
+	background: white;
+	box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0
+		white, 4px -6px 0 white, 4px -8px 0 white;
+	transform: rotate(45deg);
+}
+
+.form-inner input[type="submit"] {
+	background: #1762EE;
 }
 </style>
 </head>
 
 <body>
+<div align="right">
+	<div>
+	<form action="Locale" method="POST">
+			<input type="hidden" name="local" value="ru"> <input
+				type="hidden" name="jsp" value="/WEB-INF/jsp/login_page.jsp">
+			<input type="image"
+				src="https://v1.iconsearch.ru/uploads/icons/finalflags/48x48/russia-flag.png"
+				alt="Russian" />
+		</form>
+	</div>
+	<div>
+	<form action="Locale" method="POST">
+			<input type="hidden" name="local" value="en"> <input
+				type="hidden" name="jsp" value="/WEB-INF/jsp/login_page.jsp">
+			<input type="image"
+				src="https://v1.iconsearch.ru/uploads/icons/finalflags/48x48/united-kingdom-flag.png"
+				alt="English" />
+		</form>
+	</div>
+	</div>
+	<h1 align="center" style="color: white">
+		<c:out value="${text_airline}" />
+	</h1>
+	
+	<form class="transparent" action="Controller" method="POST">
+		<input type="hidden" name="command" value="sign_in">
+		<div class="form-inner">
+			<h3>
+				<c:out value="${sign_in}"></c:out>
+			</h3>
+			<label for="username"><c:out value="${login}"></c:out></label> <input
+				type="text" name="login"> <label for="password"><c:out
+					value="${password}"></c:out></label> <input type="password" name="password">
+			<input type="submit" value="${button_login}">
+		</div>
+	</form>
 
-
-	<div class="container-login100"
-		style="background-image: url('bg-01.jpg');">
-
-		<div class="wrap-login100 p-t-30 p-b-50">
-			<div class="button-container">
-
-				<form class="button-container" action="Locale" method="POST">
-					<input type="hidden" name="local" value="ru"> <input
-						type="hidden" name="jsp" value="/WEB-INF/jsp/login_page.jsp">
-					<input type="submit" value="${button_ru}" />
-				</form>
-
-				<form action="Locale" method="POST">
-					<input type="hidden" name="local" value="en"> <input
-						type="hidden" name="jsp" value="/WEB-INF/jsp/login_page.jsp">
-					<input type="submit" value="${button_en}" />
-				</form>
-
-			</div>
-			<span class="login100-form-title p-b-41"><c:out
-					value="${text_airline}" /> </span>
-			<form class="login100-form validate-form p-b-33 p-t-5"
-				action="Controller" method="POST">
-				<input type="hidden" name="command" value="sign_in">
-				<div class="wrap-input100 validate-input"
-					data-validate="Enter username">
-					<input class="input100" type="text" name="login"
-						placeholder="${login}"> <span class="focus-input100"
-						data-placeholder="&#xe82a;"></span>
-				</div>
-
-				<div class="wrap-input100 validate-input"
-					data-validate="Enter password">
-					<input class="input100" type="password" name="password"
-						placeholder=${password}> <span class="focus-input100"
-						data-placeholder="&#xe80f;"></span>
-				</div>
-
-				<div class="container-login100-form-btn m-t-32">
-
-					<button class="login100-form-btn">
-						<c:out value="${button_login}" />
-					</button>
-
-				</div>
-
-			</form>
-			<br>
 			<div>
 				<strong> <c:choose>
 						<c:when test="${sign_in_fail_attr=='sign_in_fail'}">
@@ -118,11 +193,5 @@ strong {
 		</div>
 	</div>
 	</div>
-
-
-	<div id="dropDownSelect1"></div>
-
-
-
 </body>
 </html>

@@ -12,6 +12,20 @@
 
   <title>height</title>
   <style>
+  .wrapper {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 1;
+ }
+ 
+ .wrapper-user-name-location{
+ grid-column: 1 / 2;
+ }
+ 
+ .wrapper-button-location{
+ grid-column: 6;
+ }
+  
   a:link {
   color: #FF00FF; 
   border-bottom: 1px dashed; 
@@ -42,8 +56,8 @@ a:active {
   }
    .layer {
     height: 60px; /* Высота блока */
-    width: 100%; /* Ширина блока */
-    background: #4B0082; /* Цвет фона */
+    width: 1fr; /* Ширина блока */
+  
     padding: 7px; /* Поля вокруг текста */
     border: none; /* Параметры рамки */
     text-align: left;
@@ -61,7 +75,7 @@ a:active {
  <body> 
   <div class="layer">
   
-  <div>
+  <div class="wrapper-use-name-location">
    <h4>
   
 			<c:out value="${user.role}" />
@@ -71,37 +85,29 @@ a:active {
 			<c:out value="${user.patronimic}" />
 		</h4>
   </div>
-  
+  <div class="wrapper-button-location" align="right">
   <div>
-   <form action="Controller" method="POST">
-    <input type="hidden" name="command" value="SIGN_OUT">
-    <input type="submit" value="${sign_out}" />
-   </form>
-  </div>
- <div>
-   <form action="Locale" method="POST">
-    <input type="hidden" name="local" value="ru">
-     <input type="hidden" name="jsp" value="/WEB-INF/jsp/administrator_page.jsp">
-    <input type="submit" value="${button_ru}" />
-   </form>
-  </div>
-  <div>
-   <form action="Locale" method="POST">
-    <input type="hidden" name="local" value="ru">
-    <input type="hidden" name="jsp" value="/WEB-INF/jsp/administrator_page.jsp">
-    <input type="submit" value="${button_en}" />
-   </form>
-  </div>
- <div>
  <a href="http://localhost:8080/airline/Controller?action=Controller&command=SIGN_OUT"><c:out value="${sign_out}"/></a>
  </div>
- <div>
- <a href="http://localhost:8080/airline/Locale?action=Locale&local=ru&jsp=/WEB-INF/jsp/administrator_page.jsp"><c:out value="${button_ru}"/></a>
- </div>
- <div>
- <a href="http://localhost:8080/airline/Locale?action=Locale&local=ru&jsp=/WEB-INF/jsp/administrator_page.jsp"><c:out value="${button_en}"/></a>
- </div>
- 
-  </div> 
+  <div>
+	<form action="Locale" method="POST">
+			<input type="hidden" name="local" value="ru"> <input
+				type="hidden" name="jsp" value="/WEB-INF/jsp/administrator_page.jsp">
+			<input type="image"
+				src="https://v1.iconsearch.ru/uploads/icons/finalflags/48x48/russia-flag.png"
+				alt="Russian" />
+		</form>
+	</div>
+	<div>
+	<form action="Locale" method="POST">
+			<input type="hidden" name="local" value="en"> <input
+				type="hidden" name="jsp" value="/WEB-INF/jsp/administrator_page.jsp">
+			<input type="image"
+				src="https://v1.iconsearch.ru/uploads/icons/finalflags/48x48/united-kingdom-flag.png"
+				alt="English" />
+		</form>
+	</div>
+	</div>
+	</div>
  </body>
 </html>

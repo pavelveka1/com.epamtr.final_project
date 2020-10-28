@@ -15,7 +15,7 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class DeleteAircraftCommand implements Command {
 	private static final String PATH_TO_DELETE_AIRCRAFT = "/WEB-INF/jsp/administrator_action/delete_aircraft.jsp";
-	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String PATH_TO_MAIN_PAGE="/WEB-INF/jsp/main_page.jsp";
 	private static final String CURRENT_PAGE="current_page";
 	private static final String AIRCRAFT_NUMBER_PARAM="aircraft_numbers";
 	private static final String AIRCRAFTS_ATTR = "aircrafts";
@@ -32,7 +32,7 @@ public class DeleteAircraftCommand implements Command {
 			try {
 				aircrafts = aircraftService.getAircraftrs();
 				request.setAttribute(AIRCRAFTS_ATTR, aircrafts);
-				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException | ServiceException e) {
 				// rootLogger.error(e);
 				e.printStackTrace();
@@ -42,7 +42,7 @@ public class DeleteAircraftCommand implements Command {
 				aircraftService.deleteAircraft(request.getParameter(AIRCRAFT_NUMBER_PARAM));
 				aircrafts = aircraftService.getAircraftrs();
 				request.setAttribute(AIRCRAFTS_ATTR, aircrafts);
-				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException | ServiceException e) {
 				// rootLogger.error(e);
 				e.printStackTrace();

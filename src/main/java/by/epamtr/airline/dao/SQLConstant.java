@@ -67,6 +67,7 @@ public class SQLConstant {
 				"				WHERE id_flight IN (SELECT flight_id FROM crews WHERE crew_user_id= %d);";
 		public static final String GET_FREE_POSITIONS_BY_FLIGHT_ID="select * from crew_positions where id_crew_position NOT IN (SELECT crew_position FROM crews WHERE flight_id = %d);";
 
+		public static final String CHANGE_STATUS_FLIGHT="UPDATE flights SET flight_status='%s' WHERE id_flight =%d;";
 	}
 
 	public static class AircraftConstant {

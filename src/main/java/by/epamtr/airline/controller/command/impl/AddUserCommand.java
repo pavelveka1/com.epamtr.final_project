@@ -12,7 +12,7 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class AddUserCommand implements Command {
 	private static final String PATH_TO_ADD_USER_PAGE="/WEB-INF/jsp/administrator_action/add_user.jsp";
-	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String PATH_TO_MAIN_PAGE="/WEB-INF/jsp/main_page.jsp";
 	private static final String CURRENT_PAGE="current_page";
 
 	@Override
@@ -24,14 +24,14 @@ public class AddUserCommand implements Command {
 		if(page!=null) {
 			try {
 				userService.addUser(request, response);
-				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServiceException | ServletException | IOException e2) {
 			//	rootLogger.error(e2);
 				e2.printStackTrace();
 			}
 		}else {
 			try {
-				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
 				rootLogger.error(e);
 			}

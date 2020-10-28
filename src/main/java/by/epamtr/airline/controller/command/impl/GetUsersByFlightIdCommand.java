@@ -20,11 +20,11 @@ public class GetUsersByFlightIdCommand implements Command {
 	private static final String PATH_TO_ADD_CREW_ITEM_TO_FLIGHT = "/WEB-INF/jsp/dispatcher_action/add_crew_item_to_flight.jsp";
 	private static final String PATH_TO_GET_CREW_BY_FLIGHT = "/WEB-INF/jsp/administrator_action/crew_by_flight.jsp";
 	private static final String FLIGHT_STATUS_PARAM = "flight_status";
-	private static final String ID_FLIGHT_PARAM = "radio_id_flight";
+	private static final String ID_FLIGHT_PARAM = "id_flight";
 	private static final String ADD_CREW_TO_FLIGHT_PARAM="add_crew";
 	private static final String SELECTED_FLIGHT_ATTR="selected_flight";
 	private static final String TEAM_BY_FLIGHT_ATTR="flight_team";
-	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
+	private static final String PATH_TO_MAIN_PAGE="/WEB-INF/jsp/main_page.jsp";
 	private static final String CURRENT_PAGE="current_page";
 	private static final String FLIGHTS_ATTR="flights";
 
@@ -46,7 +46,7 @@ public class GetUsersByFlightIdCommand implements Command {
 						flights = flightService.getFlights(FlightStatus.valueOf(request.getParameter(FLIGHT_STATUS_PARAM)));
 						request.getSession().setAttribute(FLIGHTS_ATTR, flights);
 						try {
-							request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+							request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 						} catch (ServletException | IOException e) {
 							rootLogger.error(e);
 						}
@@ -58,7 +58,7 @@ public class GetUsersByFlightIdCommand implements Command {
 				} else {
 					try {
 						request.setAttribute(CURRENT_PAGE, PATH_TO_GET_USERS_BY_FLIGHT);
-						request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+						request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 					} catch (ServletException | IOException e) {
 						rootLogger.error(e);
 					}
@@ -72,7 +72,7 @@ public class GetUsersByFlightIdCommand implements Command {
 					List<Crew> team=userService.getUsers(idSelectedFlight);
 					request.setAttribute(TEAM_BY_FLIGHT_ATTR, team);
 					request.setAttribute(CURRENT_PAGE, PATH_TO_GET_CREW_BY_FLIGHT);
-					request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+					request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 				} catch (ServiceException | ServletException | IOException e) {
 					// rootLogger.error(e2);
 					e.printStackTrace();
@@ -82,7 +82,7 @@ public class GetUsersByFlightIdCommand implements Command {
 			
 			try {
 				request.setAttribute(CURRENT_PAGE, PATH_TO_GET_CREW_BY_FLIGHT);
-				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
 				// rootLogger.error(e2);
 				e.printStackTrace();

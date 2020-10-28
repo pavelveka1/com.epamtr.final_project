@@ -7,101 +7,81 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-* {
-	box-sizing: border-box;
+body{
+background-color: black
+}
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 5px;
+  grid-template-rows: repeat(8, 1fr);
+  border: 2px solid #f76707;
+	border-radius: 5px;
+	background-color: #fff4e6;
 }
 
-body {
-	font-family: Arial, Helvetica, sans-serif;
-	backgroung-image: url(bg-01.jpg);
+.wrapper>div {
+	border: 2px solid #ffa94d;
+	border-radius: 5px;
+	background-color: #ffd8a8;
+	padding: 1em;
+	color: #d9480f;
+}
+.header {
+  grid-column: 1 / 6;
+  grid-row: 1;
+     background-image: url(http://liveangarsk.ru/files/images/2234043bdc76379567a0073555f2190f-oblaka20130728_161644.jpg);
+     background-repeat: no-repeat;
+     background-size: cover;
 }
 
-/* Style the header */
-
-/* Create two columns/boxes that floats next to each other */
-nav {
-	float: left;
-	width: 20%;
-	height: 300px; /* only for demonstration, should be removed */
-	background: #ccc;
-	padding: 20px;
+.menu { 
+  grid-column: 1;
+  grid-row: 2 / 8;
+   background-image: url(https://informburo.kz/img/inner/824/90/172.jpg);
+   background-repeat: no-repeat;
+     background-size: cover;
+}
+.content {
+  grid-column: 2 /6;
+  grid-row: 2 / 8;
+     background-image: url(https://farm6.staticflickr.com/5752/22216960510_a97d67072c_o.jpg);
+      background-repeat: no-repeat;
+     background-size: cover;
+}
+.footer {
+  grid-column: 1 / 6;
+  grid-row: 8;
+   background-image: url(https://ic.pics.livejournal.com/gotskaya/15977901/237456/237456_900.jpg);
+      background-repeat: no-repeat;
+     background-size: cover;
 }
 
-/* Style the list inside the menu */
-nav ul {
-	list-style-type: none;
-	padding: 10;
-}
 
-/* Clear floats after the columns */
-section:after {
-	content: "";
-	display: table;
-	clear: both;
-	height: 80%;
-}
 
-form {
-	margin: 2px; /* Отступы вокруг элемента */
-	padding: 10px; /* Поля вокруг текста */
-}
-
-/* Style the footer */
-footer {
-position: fixed; /* Фиксированное положение */
-    left: 0; bottom: 0; /* Левый нижний угол */
-    padding: 10px; /* Поля вокруг текста */
-    width: 100%; /* Ширина слоя */
-	background-color: #777;
-	text-align: center;
-	color: white;
-}
-
- #footer {
-    position: fixed; /* Фиксированное положение */
-    left: 0; bottom: 0; /* Левый нижний угол */
-    padding: 10px; /* Поля вокруг текста */
-    background: #39b54a; /* Цвет фона */
-    color: #fff; /* Цвет текста */
-    width: 100%; /* Ширина слоя */
-   }
-
-/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
-@media ( max-width : 600px) {
-	nav, article {
-		width: 100%;
-		height: auto;
-	}
-}
-
-aside {
-	background: #B0C4DE;
-	padding: 0px;
-	width: 250px;
-	float: left;
-	height: 100%
-}
 </style>
 </head>
 <body>
-
-	<header>
+	<div class="wrapper">
+		<div class="header">
+			<header>
 		<jsp:include page="fragment/header.jsp" />
 	</header>
-
-	<aside>
-		<jsp:include page="fragment/aside.jsp" />
-	</aside>
-
-	<main>
-		<jsp:include page="${current_page}" />
-	</main>
-
-	<footer>
-		<p>Footer</p>
-	</footer>
-
+		</div>
+		<div class="menu">
+		<p>Menu</p>
+		</div>
+		<div class="content">
+		<a>Main</a>
+		</div>
+		<div class="footer">
+			<footer>
+				<p>footer</p>
+			</footer>
+		</div>
+	</div>
 </body>
+</html>
 
 
 </html>

@@ -16,7 +16,7 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class ChangeAircraftStatusCommand implements Command {
 	private static final String PATH_TO_CHANGE_AIRCRAFT_STATUS = "/WEB-INF/jsp/administrator_action/change_aircraft_status.jsp";
-	private static final String PATH_TO_ADMIN_PAGE = "/WEB-INF/jsp/administrator_page.jsp";
+	private static final String PATH_TO_MAIN_PAGE="/WEB-INF/jsp/main_page.jsp";
 	private static final String CURRENT_PAGE = "current_page";
 	private static final String AIRCRAFTS_ATTR = "aircrafts";
 	private static final String ID_AIRCRAFT_PARAM="id_aircraft";
@@ -33,7 +33,7 @@ public class ChangeAircraftStatusCommand implements Command {
 			try {
 				aircrafts = aircraftService.getAircraftrs();
 				request.setAttribute(AIRCRAFTS_ATTR, aircrafts);
-				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException | ServiceException e) {
 				// rootLogger.error(e);
 				e.printStackTrace();
@@ -45,7 +45,7 @@ public class ChangeAircraftStatusCommand implements Command {
 				aircraftService.changeAircraftStatus(idAircraft, status);
 				aircrafts = aircraftService.getAircraftrs();
 				request.setAttribute(AIRCRAFTS_ATTR, aircrafts);
-				request.getRequestDispatcher(PATH_TO_ADMIN_PAGE).forward(request, response);
+				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException | ServiceException e) {
 				// rootLogger.error(e);
 				e.printStackTrace();

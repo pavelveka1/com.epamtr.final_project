@@ -199,7 +199,33 @@ public class SQLFlightDAO implements FlightDAO {
 
 	@Override
 	public void changeFlightStatus(int idFlight, FlightStatus flightStatus) throws DAOException {
-		// TODO Auto-generated method stub
+		Connection connection = null;
+		PreparedStatement statement = null;
+		try {
+			connection = connectionPool.getConnection();
+			try {
+				//connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE).executeQuery();
+				statement = connection.prepareStatement(String.format(SQLConstant.FlightConstant.CHANGE_STATUS_FLIGHT, flightStatus, idFlight));
+				statement.executeUpdate();
+				//connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE).executeQuery();
+			} catch (SQLException e) {
+				throw new DAOException("error while updating aircraft status", e);
+			}
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("error while getting connection from ConnectionPool", e);
+		} finally {
+			
+			//****************************************************
+			connectionPool.releaseConnection(connection);
+
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new DAOException("erroe while closing statement", e);
+				}
+			}
+		}
 
 	}
 
