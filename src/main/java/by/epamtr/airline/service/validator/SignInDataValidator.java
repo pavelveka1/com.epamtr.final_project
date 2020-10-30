@@ -12,10 +12,7 @@ public class SignInDataValidator {
 	private static Pattern passwordPattern=Pattern.compile(PASSWORD_PATTERN);
 	private static Matcher loginMatcher;
 	private static Matcher passwordMatcher;
-	public static boolean validate(HttpServletRequest request) {
-		String login=request.getParameter("login");
-		String password=request.getParameter("password");
-		
+	public static boolean validate(String login, String password) {
 		loginMatcher=loginPattern.matcher(login);
 		passwordMatcher=passwordPattern.matcher(password);
 		 if(loginMatcher.matches()) {

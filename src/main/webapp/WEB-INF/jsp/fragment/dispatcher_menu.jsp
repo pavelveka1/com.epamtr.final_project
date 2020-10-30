@@ -9,20 +9,8 @@
 <title>Insert title here</title>
 <fmt:setLocale value="${sessionScope.local}" />
 <fmt:setBundle basename="by.epamtr.airline.localization.local" var="loc" />
-<fmt:message bundle="${loc}" key="user.add" var="add_user" />
-<fmt:message bundle="${loc}" key="user.delete" var="delete_user" />
-<fmt:message bundle="${loc}" key="user.update" var="update_user" />
 <fmt:message bundle="${loc}" key="dispatcher.user.get_by_role" var="get_users_by_role_for_dispatcher" />
 <fmt:message bundle="${loc}" key="dispatcher.crew.form" var="form_crew" />
-<fmt:message bundle="${loc}" key="aircraft.type.add" var="add_aircraft_type" />
-<fmt:message bundle="${loc}" key="aircraft.type.delete" var="delete_aircraft_type" />
-
-<fmt:message bundle="${loc}" key="aircraft.add" var="add_aircraft" />
-<fmt:message bundle="${loc}" key="aircraft.delete" var="delete_aircraft" />
-<fmt:message bundle="${loc}" key="aircraft.update" var="update_aircraft" />
-<fmt:message bundle="${loc}" key="aircraft.status.change"
-	var="change_status_aircraft" />
-<fmt:message bundle="${loc}" key="flight.add" var="add_flight" />
 <fmt:message bundle="${loc}" key="flight.action" var="action_flight" />
 <fmt:message bundle="${loc}" key="flight.get_by_user"
 	var="get_flights_by_user" />

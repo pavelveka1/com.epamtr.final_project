@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import by.epamtr.airline.dao.AircraftDAO;
 import by.epamtr.airline.dao.AircraftStatusDAO;
-import by.epamtr.airline.dao.SQLConstant;
+import by.epamtr.airline.dao.SQLQueryConstant;
 import by.epamtr.airline.dao.connection_pool.ConnectionPool;
 import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
 import by.epamtr.airline.dao.connection_pool.impl.ConnectionPoolImpl;
@@ -51,7 +51,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				statement = connection.prepareStatement(SQLConstant.AircraftConstant.ADD_AIRCRAFT);
+				statement = connection.prepareStatement(SQLQueryConstant.AircraftConstant.ADD_AIRCRAFT);
 				statement.setInt(1, idTypeAircraft);
 				statement.setString(2, registerNumber);
 				statement.setString(3, statusAircraft);
@@ -76,7 +76,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			connection = connectionPool.getConnection();
 			try {
 				statement = connection.prepareStatement(
-						String.format(SQLConstant.AircraftConstant.DELETE_AIRCRAFT, registrationNumber));
+						String.format(SQLQueryConstant.AircraftConstant.DELETE_AIRCRAFT, registrationNumber));
 				statement.executeUpdate();
 
 			} catch (SQLException e) {
@@ -99,10 +99,10 @@ public class SQLAircraftDAO implements AircraftDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE).executeQuery();
-				statement = connection.prepareStatement(String.format(SQLConstant.AircraftConstant.UPDATE_AIRCRAFT, newRegistrationNumber, registrationNumber ));
+				connection.prepareStatement(SQLQueryConstant.CONSTRAINT_DISABLE).executeQuery();
+				statement = connection.prepareStatement(String.format(SQLQueryConstant.AircraftConstant.UPDATE_AIRCRAFT, newRegistrationNumber, registrationNumber ));
 				statement.executeUpdate();
-				connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE).executeQuery();
+				connection.prepareStatement(SQLQueryConstant.CONSTRAINT_ENABLE).executeQuery();
 			} catch (SQLException e) {
 				throw new DAOException("error while updating user", e);
 			}
@@ -131,7 +131,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			connection = connectionPool.getConnection();
 			try {
 				//connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE).executeQuery();
-				statement = connection.prepareStatement(String.format(SQLConstant.AircraftConstant.CHANGE_STATUS_AIRCRAFT, status, idAircraft));
+				statement = connection.prepareStatement(String.format(SQLQueryConstant.AircraftConstant.CHANGE_STATUS_AIRCRAFT, status, idAircraft));
 				statement.executeUpdate();
 				//connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE).executeQuery();
 			} catch (SQLException e) {
@@ -166,7 +166,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				statement = connection.prepareStatement(SQLConstant.AircraftConstant.ADD_AIRCRAFT_TYPES);
+				statement = connection.prepareStatement(SQLQueryConstant.AircraftConstant.ADD_AIRCRAFT_TYPES);
 				statement.setString(1, aircraftType);
 				statement.setInt(2, flightRange);
 				statement.setInt(3, numberPassenger);
@@ -192,7 +192,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			try {
 				statement = connection.createStatement();
 				int a = statement.executeUpdate(
-						String.format(SQLConstant.AircraftConstant.DELETE_AIRCRAFT_TYPE, idAircraftType));
+						String.format(SQLQueryConstant.AircraftConstant.DELETE_AIRCRAFT_TYPE, idAircraftType));
 			} catch (SQLException e) {
 				throw new DAOException("Error during deletion aircraft types", e);
 			}
@@ -212,7 +212,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				statement = connection.prepareStatement(SQLConstant.AircraftConstant.GET_AIRCRAFTS);
+				statement = connection.prepareStatement(SQLQueryConstant.AircraftConstant.GET_AIRCRAFTS);
 				rs = statement.executeQuery();
 				while (rs.next()) {
 					aircrafts.add(makeAircraft(rs));
@@ -238,7 +238,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				statement = connection.prepareStatement(SQLConstant.AircraftConstant.GET_AIRCRAFT_TYPES);
+				statement = connection.prepareStatement(SQLQueryConstant.AircraftConstant.GET_AIRCRAFT_TYPES);
 				rs = statement.executeQuery();
 				while (rs.next()) {
 					aircraftTypes.add(makeAircraftType(rs));

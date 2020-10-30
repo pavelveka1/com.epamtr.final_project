@@ -12,17 +12,15 @@ import by.epamtr.airline.entity.UserRole;
 
 public interface UserDAO {
 
-	void signIn(HttpServletRequest request, HttpServletResponse response) throws DAOException;
+	User signIn(String login, String password) throws DAOException;
 
-	void signOut(HttpServletRequest request, HttpServletResponse response) throws DAOException;
-
-	void addUser(HttpServletRequest request, HttpServletResponse response) throws DAOException;
+	boolean addUser(User user, UserInfo userInfo) throws DAOException;
 
 	boolean deliteUser(int idUser) throws DAOException;
 
-	void updateUser(HttpServletRequest request, HttpServletResponse response) throws DAOException;
+	boolean updateUser(User user, UserInfo userInfo) throws DAOException;
 
-	void findUser(HttpServletRequest request, HttpServletResponse response) throws DAOException;
+	
 
 	List<User> getUsers(UserRole role) throws DAOException;
 

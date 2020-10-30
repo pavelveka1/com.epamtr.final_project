@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import by.epamtr.airline.dao.FlightDAO;
-import by.epamtr.airline.dao.SQLConstant;
+import by.epamtr.airline.dao.SQLQueryConstant;
 import by.epamtr.airline.dao.connection_pool.ConnectionPool;
 import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
 import by.epamtr.airline.dao.connection_pool.impl.ConnectionPoolImpl;
@@ -62,7 +62,7 @@ public class SQLFlightDAO implements FlightDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				statement = connection.prepareStatement(SQLConstant.FlightConstant.ADD_FLIGHT);
+				statement = connection.prepareStatement(SQLQueryConstant.FlightConstant.ADD_FLIGHT);
 				statement.setString(1, currentCity);
 				statement.setString(2, destinationCity);
 				statement.setInt(3, flightRange);
@@ -93,10 +93,10 @@ public class SQLFlightDAO implements FlightDAO {
 			connection = connectionPool.getConnection();
 			try {
 				statementDeleteFlight = connection.prepareStatement(
-						String.format(String.format(SQLConstant.FlightConstant.DELETE_FLIGHT, idFlight)));
+						String.format(String.format(SQLQueryConstant.FlightConstant.DELETE_FLIGHT, idFlight)));
 				statementDeleteFlight.executeUpdate();
 				statementDeleteCrews = connection
-						.prepareStatement(String.format(SQLConstant.FlightConstant.DELETE_CREW, idFlight));
+						.prepareStatement(String.format(SQLQueryConstant.FlightConstant.DELETE_CREW, idFlight));
 				statementDeleteCrews.executeUpdate();
 
 			} catch (SQLException e) {
@@ -154,11 +154,11 @@ public class SQLFlightDAO implements FlightDAO {
 			try {
 				// connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE).executeQuery();
 				statement = connection.prepareStatement(
-						String.format(SQLConstant.FlightConstant.UPDATE_FLIGHT, currentCity, destinationCity,
+						String.format(SQLQueryConstant.FlightConstant.UPDATE_FLIGHT, currentCity, destinationCity,
 								flightRange, flightTime, timeDeparture, aircraftNumber, flightStatus, idFlight));
 				statement.executeUpdate();
 				updatedFlightStatement = connection
-						.prepareStatement(String.format(SQLConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
+						.prepareStatement(String.format(SQLQueryConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
 				rs = updatedFlightStatement.executeQuery();
 				rs.next();
 				flight = createFlight(rs);
@@ -205,7 +205,7 @@ public class SQLFlightDAO implements FlightDAO {
 			connection = connectionPool.getConnection();
 			try {
 				//connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE).executeQuery();
-				statement = connection.prepareStatement(String.format(SQLConstant.FlightConstant.CHANGE_STATUS_FLIGHT, flightStatus, idFlight));
+				statement = connection.prepareStatement(String.format(SQLQueryConstant.FlightConstant.CHANGE_STATUS_FLIGHT, flightStatus, idFlight));
 				statement.executeUpdate();
 				//connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE).executeQuery();
 			} catch (SQLException e) {
@@ -239,7 +239,7 @@ public class SQLFlightDAO implements FlightDAO {
 			connection = connectionPool.getConnection();
 			try {
 				statement = connection
-						.prepareStatement(String.format(SQLConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
+						.prepareStatement(String.format(SQLQueryConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
 				rs = statement.executeQuery();
 				rs.next();
 				flight = createFlight(rs);
@@ -271,7 +271,7 @@ public class SQLFlightDAO implements FlightDAO {
 			connection = connectionPool.getConnection();
 			try {
 				statement = connection
-						.prepareStatement(String.format(SQLConstant.FlightConstant.GET_FLIGHTS_BY_USER_ID, idUser));
+						.prepareStatement(String.format(SQLQueryConstant.FlightConstant.GET_FLIGHTS_BY_USER_ID, idUser));
 				rs = statement.executeQuery();
 				while (rs.next()) {
 					flights.add(createFlight(rs));
@@ -310,7 +310,7 @@ public class SQLFlightDAO implements FlightDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				statement = connection.prepareStatement(SQLConstant.FlightConstant.GET_FLIGHTS_BY_STATUS);
+				statement = connection.prepareStatement(SQLQueryConstant.FlightConstant.GET_FLIGHTS_BY_STATUS);
 				rs = statement.executeQuery();
 				while (rs.next()) {
 					if (flightStatus == FlightStatus.valueOf(rs.getString(FLIGHT_STATUS_COLUMN))) {
@@ -341,7 +341,7 @@ public class SQLFlightDAO implements FlightDAO {
 			connection = connectionPool.getConnection();
 			try {
 				statement = connection.prepareStatement(
-						String.format(SQLConstant.FlightConstant.GET_FREE_POSITIONS_BY_FLIGHT_ID, flightId));
+						String.format(SQLQueryConstant.FlightConstant.GET_FREE_POSITIONS_BY_FLIGHT_ID, flightId));
 				rs = statement.executeQuery();
 				while (rs.next()) {
 					freeCrewPositions.add(createCrewPosition(rs));

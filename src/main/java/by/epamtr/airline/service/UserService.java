@@ -13,17 +13,15 @@ import by.epamtr.airline.entity.UserRole;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public interface UserService {
-	void signIn(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
+	User signIn(String login, String password) throws ServiceException;
 
-	void signOut(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
-
-	void addUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
+	boolean addUser(User user, UserInfo userInfo) throws ServiceException;
 
 	boolean deliteUser(int idUser) throws ServiceException;
 
-	void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
+	boolean updateUser(User user, UserInfo userInfo) throws ServiceException;
 	
-	void findUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
+	
 
 	List<User> getUsers(UserRole role) throws ServiceException;
 

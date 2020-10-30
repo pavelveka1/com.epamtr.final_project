@@ -17,7 +17,7 @@
 			<option>ADMINISTRATOR</option>
 			<option>DISPATCHER</option>
 			<option>PILOT</option>
-			<option>FLIGHT ATTENDANT</option>
+			<option>ATTENDANT</option>
 			<option>ENGINEER</option>
 		</select> <input type="submit" value="Find" />
 	</form>

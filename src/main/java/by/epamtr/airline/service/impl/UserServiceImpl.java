@@ -1,9 +1,6 @@
 package by.epamtr.airline.service.impl;
 
-import java.io.IOException;
 import java.util.List;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import by.epamtr.airline.dao.DAOFactory;
@@ -18,23 +15,16 @@ import by.epamtr.airline.service.exception.ServiceException;
 import by.epamtr.airline.service.validator.SignInDataValidator;
 
 public class UserServiceImpl implements UserService {
-	private final String SIGN_IN_FAIL_ATTR="sign_in_fail_attr";
-	private final String SIGN_IN_FAIL="sign_in_fail";
-	private final String PATH_TO_CONTROLLER = "/Controller?command=GO_TO_LOGIN_PAGE";
-	
+
 	private UserDAO userDAO = DAOFactory.getInstance().getSqlUserImpl();
 	@Override
-	public void signIn(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-		if(!SignInDataValidator.validate(request)) {
-			request.setAttribute(SIGN_IN_FAIL_ATTR, SIGN_IN_FAIL);
-			try {
-				request.getRequestDispatcher(PATH_TO_CONTROLLER).forward(request, response);
-			} catch (ServletException | IOException e) {
-				throw new ServiceException(e);
-			}
+	public User signIn(String login, String password) throws ServiceException {
+		if(!SignInDataValidator.validate(login, password)) {
+			return null;
+			
 		}else {
 			try {
-				userDAO.signIn(request, response);
+			return	userDAO.signIn(login, password);
 			} catch (DAOException e) {
 				throw new ServiceException("Error while signing in", e);
 			}
@@ -42,19 +32,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void signOut(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+	public boolean addUser(User user, UserInfo userInfo) throws ServiceException {
 		try {
-			userDAO.signOut(request, response);
-		} catch (DAOException e) {
-			throw new ServiceException("Error while signing out", e);
-		}
-
-	}
-
-	@Override
-	public void addUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-		try {
-			userDAO.addUser(request, response);
+		return	userDAO.addUser(user, userInfo);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while adding new user", e);
 		}
@@ -72,11 +52,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+	public boolean updateUser(User user, UserInfo userInfo) throws ServiceException {
 		try {
-			userDAO.updateUser( request, response);
+			return userDAO.updateUser(user, userInfo);
 		} catch (DAOException e) {
-			throw new ServiceException("Error while adding new user", e);
+			throw new ServiceException("Error while updateing new user", e);
 		}
 		
 	}
@@ -123,14 +103,7 @@ public class UserServiceImpl implements UserService {
 		return userInfo;
 	}
 
-	@Override
-	public void findUser(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-		try {
-			userDAO.findUser(request, response);
-		} catch (DAOException e) {
-			throw new ServiceException("Error while adding new user", e);
-		}
-	}
+
 
 	@Override
 	public void deliteCrewFromFlight(int flightId, int userId) throws ServiceException {

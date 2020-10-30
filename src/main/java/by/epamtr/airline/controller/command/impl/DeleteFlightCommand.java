@@ -46,7 +46,7 @@ public class DeleteFlightCommand implements Command {
 		String currentUserRole=((User)request.getSession().getAttribute(SIGNED_IN_USER_ATTRIBUTE)).getRole().getRole();
 		if(currentUserRole.equalsIgnoreCase(UserRole.ADMINISTRATOR.getRole())) {
 			request.setAttribute(CURRENT_PAGE, PATH_TO_DELETE_FLIGHT);
-		}else {
+		}else  {
 			request.setAttribute(CURRENT_PAGE, PATH_TO_UPDATE_FLIGHT);
 		}
 		
@@ -60,7 +60,8 @@ public class DeleteFlightCommand implements Command {
 					try {
 						request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 					} catch (ServletException | IOException e) {
-						rootLogger.error(e);
+						//rootLogger.error(e);
+						e.printStackTrace();
 					}
 				} catch (ServiceException e2) {
 					// rootLogger.error(e2);

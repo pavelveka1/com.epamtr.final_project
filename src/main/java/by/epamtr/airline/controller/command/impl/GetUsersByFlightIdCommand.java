@@ -10,6 +10,7 @@ import by.epamtr.airline.entity.Crew;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
 import by.epamtr.airline.entity.User;
+import by.epamtr.airline.entity.UserRole;
 import by.epamtr.airline.service.FlightService;
 import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.UserService;
@@ -17,7 +18,7 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class GetUsersByFlightIdCommand implements Command {
 	private static final String PATH_TO_GET_USERS_BY_FLIGHT = "/WEB-INF/jsp/administrator_action/users_by_flight.jsp";
-	private static final String PATH_TO_ADD_CREW_ITEM_TO_FLIGHT = "/WEB-INF/jsp/dispatcher_action/add_crew_item_to_flight.jsp";
+	private static final String PATH_TO_GET_CREW_BY_FLIGHT_FOR_CREW = "/WEB-INF/jsp/user_action/crew_by_flight_data.jsp";
 	private static final String PATH_TO_GET_CREW_BY_FLIGHT = "/WEB-INF/jsp/administrator_action/crew_by_flight.jsp";
 	private static final String FLIGHT_STATUS_PARAM = "flight_status";
 	private static final String ID_FLIGHT_PARAM = "id_flight";
@@ -27,6 +28,7 @@ public class GetUsersByFlightIdCommand implements Command {
 	private static final String PATH_TO_MAIN_PAGE="/WEB-INF/jsp/main_page.jsp";
 	private static final String CURRENT_PAGE="current_page";
 	private static final String FLIGHTS_ATTR="flights";
+	private static final String SIGNED_IN_USER_ATTRIBUTE="user";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -71,7 +73,20 @@ public class GetUsersByFlightIdCommand implements Command {
 					request.setAttribute(SELECTED_FLIGHT_ATTR, flight);
 					List<Crew> team=userService.getUsers(idSelectedFlight);
 					request.setAttribute(TEAM_BY_FLIGHT_ATTR, team);
-					request.setAttribute(CURRENT_PAGE, PATH_TO_GET_CREW_BY_FLIGHT);
+
+					UserRole userCurrentRole=((User)request.getSession().getAttribute(SIGNED_IN_USER_ATTRIBUTE)).getRole();
+					switch (userCurrentRole) {
+					case DISPATCHER:
+					case ADMINISTRATOR:
+						request.setAttribute(CURRENT_PAGE,  PATH_TO_GET_CREW_BY_FLIGHT);
+						break;
+					case MANAGER:
+					case PILOT:
+					case ENGINEER:
+					case ATTENDANT:
+						request.setAttribute(CURRENT_PAGE,  PATH_TO_GET_CREW_BY_FLIGHT_FOR_CREW);
+						break;
+					}
 					request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
 				} catch (ServiceException | ServletException | IOException e) {
 					// rootLogger.error(e2);

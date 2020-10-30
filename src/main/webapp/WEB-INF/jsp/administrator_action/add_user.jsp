@@ -34,7 +34,7 @@
 			<tr>
 			<td> <label>Email </label>    </td>
 			<td>  <input
-			type="text" name="email" placeholder="email">   </td>
+			type="text" name="e_mail" placeholder="email">   </td>
 			</tr>
 			<tr>
 			<td>  <label>Role<label>   </td>

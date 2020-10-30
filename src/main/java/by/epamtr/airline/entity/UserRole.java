@@ -3,12 +3,12 @@ package by.epamtr.airline.entity;
 public enum UserRole {
 
 	
-	MANAGER("Менеджер"),
-	DISPATCHER("Диспетчер"),
-	ADMINISTRATOR("Администратор"),
-	PILOT("Пилот"),
-	FLIGHT_ATTENDANT("Бортпроводник"),
-	ENGINEER("Инженер");
+	MANAGER("MANAGER"),
+	DISPATCHER("DISPATCHER"),
+	ADMINISTRATOR("ADMINISTRATOR"),
+	PILOT("PILOT"),
+	ATTENDANT("ATTENDANT"),
+	ENGINEER("ENGINEER");
 	
 	private String role;
 	

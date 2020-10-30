@@ -1,6 +1,6 @@
 package by.epamtr.airline.dao;
 
-public class SQLConstant {
+public class SQLQueryConstant {
 
 	public static final String CONSTRAINT_DISABLE = "SET FOREIGN_KEY_CHECKS=0;";
 	public static final String CONSTRAINT_ENABLE = "SET FOREIGN_KEY_CHECKS=1;";

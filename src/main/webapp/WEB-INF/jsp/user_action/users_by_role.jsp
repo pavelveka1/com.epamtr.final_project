@@ -39,7 +39,7 @@
 										<input type="hidden" name="command"
 											value="GET_FLIGHTS_BY_USER"> <input type="hidden"
 											name="id_selected_user" value="${user_item.idUser}">
-										<input type="submit" value="Show crew" />
+										<input type="submit" value="Show flights" />
 									</form></td>
 							</tr>
 						</c:forEach>
