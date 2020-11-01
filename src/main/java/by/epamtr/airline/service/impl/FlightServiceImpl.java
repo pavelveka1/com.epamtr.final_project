@@ -9,6 +9,7 @@ import by.epamtr.airline.dao.AircraftDAO;
 import by.epamtr.airline.dao.DAOFactory;
 import by.epamtr.airline.dao.FlightDAO;
 import by.epamtr.airline.dao.exception.DAOException;
+import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.CrewPosition;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
@@ -20,9 +21,9 @@ public class FlightServiceImpl implements FlightService {
 	private FlightDAO flightDAO = DAOFactory.getInstance().getSqlFlightImpl();
 
 	@Override
-	public void addFlight(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+	public boolean addFlight(Flight flight, Aircraft aircraft) throws ServiceException {
 		try {
-			flightDAO.addFlight(request, response);
+			return flightDAO.addFlight(flight, aircraft);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while adding new flight", e);
 		}
@@ -40,10 +41,10 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
-	public Flight updateFlight(int idFlight, HttpServletRequest request, HttpServletResponse response)
+	public Flight updateFlight(int idFlight,Flight flight )
 			throws ServiceException {
 		try {
-			return flightDAO.updateFlight(idFlight, request, response);
+			return flightDAO.updateFlight(idFlight, flight);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while updation flight", e);
 		}

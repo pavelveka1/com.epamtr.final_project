@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import by.epamtr.airline.controller.ConstantController;
 import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
@@ -14,22 +15,14 @@ import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class ChangeFlightStatusCommand implements Command {
-	private static final String NEW_STATUS_PARAM = "flight_new_status";
-	private static final String ID_FLIGHT_PARAM = "id_flight";
-	private static final String SELECTED_FLIGHT_STATUS_FOR_FLIGHTS_ATTR = "selected_flight_status_attr";
-	private static final String FLIGHT_STATUS_ATTR = "flight_status_attr";
-	private static final String SELECTED_FLIGHT_STATUS_ATTR = "selected_flight_status_attr";
-	private static final String FLIGHTS_ATTR = "flights";
-	private static final String PATH_TO_DELETE_FLIGHT = "/WEB-INF/jsp/administrator_action/delete_flight.jsp";
-	private static final String PATH_TO_MAIN_PAGE="/WEB-INF/jsp/main_page.jsp";
-	private static final String CURRENT_PAGE = "current_page";
-
+	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		request.setAttribute(CURRENT_PAGE, PATH_TO_DELETE_FLIGHT);
-		String newStatus = request.getParameter(NEW_STATUS_PARAM);
+		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_DELETE_FLIGHT);
+		String newStatus = request.getParameter(ConstantController.Parameter.NEW_STATUS);
+		request.getSession().setAttribute(ConstantController.Attribute.SELECTED_FLIGHT_STATUS_FOR_FLIGHTS, newStatus);
 		FlightStatus flightStatus = FlightStatus.valueOf(newStatus);
-		String idFlightParam = request.getParameter(ID_FLIGHT_PARAM);
+		String idFlightParam = request.getParameter(ConstantController.Parameter.ID_FLIGHT);
 		int idFlight = Integer.parseInt(idFlightParam);
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		try {
@@ -39,14 +32,14 @@ public class ChangeFlightStatusCommand implements Command {
 			e.printStackTrace();
 		}
 		String selectedFlightStatusForFlights = (String) request.getSession()
-				.getAttribute(SELECTED_FLIGHT_STATUS_FOR_FLIGHTS_ATTR);
+				.getAttribute(ConstantController.Attribute.SELECTED_FLIGHT_STATUS_FOR_FLIGHTS);
 		try {
 			List<Flight> flights = serviceFactory.getFlightService()
 					.getFlights(FlightStatus.valueOf(selectedFlightStatusForFlights));
-			request.getSession().setAttribute(FLIGHTS_ATTR, flights);
-			request.getSession().setAttribute(FLIGHT_STATUS_ATTR, flightStatus);
+			request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
+			request.getSession().setAttribute(ConstantController.Attribute.FLIGHT_STATUS, flightStatus);
 			try {
-				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
+				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
 				rootLogger.error(e);
 			}

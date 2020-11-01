@@ -17,6 +17,7 @@ import by.epamtr.airline.dao.connection_pool.ConnectionPool;
 import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
 import by.epamtr.airline.dao.connection_pool.impl.ConnectionPoolImpl;
 import by.epamtr.airline.dao.exception.DAOException;
+import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.CrewPosition;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
@@ -48,14 +49,14 @@ public class SQLFlightDAO implements FlightDAO {
 	private static final String ID_AIRCRAFT_ATTR = "id_iarcraft";
 
 	@Override
-	public void addFlight(HttpServletRequest request, HttpServletResponse response) throws DAOException {
-		String currentCity = request.getParameter(CURRENT_CITY_PARAM);
-		String destinationCity = request.getParameter(DESTINATION_CITY_PARAM);
-		int flightRange = Integer.parseInt(request.getParameter(FLIGHT_RANGE_PARAM));
-		int flightTime = Integer.parseInt(request.getParameter(FLIGHT_TIME_PARAM));
-		String timeDeparture = request.getParameter(TIME_DEPARTURE_PARAM);
-		String status = request.getParameter(STATUS_PARAM);
-		int idAircraft = (Integer) request.getSession().getAttribute(ID_AIRCRAFT_ATTR);
+	public boolean addFlight(Flight flight, Aircraft aircraft) throws DAOException {
+		String currentCity = flight.getCurrentCity();
+		String destinationCity = flight.getDestinationCity();
+		int flightRange = flight.getFlightRange();
+		int flightTime =flight.getFlightTime();
+		String timeDeparture = flight.getTimeDeparture();
+		String status = flight.getStatus();
+		int idAircraft = aircraft.getIdAircraft();
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -70,7 +71,12 @@ public class SQLFlightDAO implements FlightDAO {
 				statement.setString(5, timeDeparture);
 				statement.setInt(6, idAircraft);
 				statement.setString(7, status);
-				statement.executeUpdate();
+				int row=statement.executeUpdate();
+				if(row==1) {
+					return true;
+				}else {
+					return false;
+				}
 
 			} catch (SQLException e) {
 				throw new DAOException("error while adding aircraft", e);
@@ -134,16 +140,17 @@ public class SQLFlightDAO implements FlightDAO {
 	}
 
 	@Override
-	public Flight updateFlight(int idFlight, HttpServletRequest request, HttpServletResponse response)
+	public Flight updateFlight(int idFlight, Flight flight)
 			throws DAOException {
-		String currentCity = request.getParameter(CURRENT_CITY_PARAM);
-		String destinationCity = request.getParameter(DESTINATION_CITY_PARAM);
-		int flightRange = Integer.parseInt(request.getParameter(FLIGHT_RANGE_PARAM));
-		int flightTime = Integer.parseInt(request.getParameter(FLIGHT_TIME_PARAM));
-		String aircraftNumber = request.getParameter(REGISTRATION_NUMBER_AIRCRAFT_PARAM);
-		String timeDeparture = request.getParameter(TIME_DEPARTURE_PARAM);
-		String flightStatus = request.getParameter(STATUS_PARAM);
-		Flight flight;
+		
+		String currentCity = flight.getCurrentCity();
+		String destinationCity = flight.getDestinationCity();
+		int flightRange = flight.getFlightRange();
+		int flightTime = flight.getFlightTime();
+		String aircraftNumber = flight.getAircraftNumber();
+		String timeDeparture = flight.getTimeDeparture();
+		String flightStatus = flight.getStatus();
+		Flight updatedFlight;
 		Connection connection = null;
 		PreparedStatement statement = null;
 		PreparedStatement updatedFlightStatement = null;
@@ -161,7 +168,7 @@ public class SQLFlightDAO implements FlightDAO {
 						.prepareStatement(String.format(SQLQueryConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
 				rs = updatedFlightStatement.executeQuery();
 				rs.next();
-				flight = createFlight(rs);
+				updatedFlight = createFlight(rs);
 				// connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE).executeQuery();
 			} catch (SQLException e) {
 				throw new DAOException("error while updating user", e);
@@ -194,7 +201,7 @@ public class SQLFlightDAO implements FlightDAO {
 				}
 			}
 		}
-		return flight;
+		return updatedFlight;
 	}
 
 	@Override

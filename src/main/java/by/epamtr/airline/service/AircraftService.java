@@ -12,15 +12,15 @@ import by.epamtr.airline.entity.AircraftType;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public interface AircraftService {
-	void addAircraft(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
+	boolean addAircraft(Aircraft aircraft, AircraftType aircraftType) throws ServiceException;
 
 	void deleteAircraft(String registrationNumber) throws ServiceException;
 
-	void updateAircraft(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
+	boolean updateAircraft(String registrationNumber, String newRegistrationNumber) throws ServiceException;
 
 	void changeAircraftStatus(int idAircraft, String status) throws ServiceException;
 
-	void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws ServiceException;
+	boolean addAircraftType(AircraftType aircraftType) throws ServiceException;
 
 	void deliteAircraftType(int idAircraftType) throws ServiceException;
 	

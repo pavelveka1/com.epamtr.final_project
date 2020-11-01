@@ -19,6 +19,15 @@ public class AircraftType implements Serializable {
 		this.rangeFlight = rangeFlight;
 		this.numberPassenger = numberPassenger;
 	}
+	
+	public AircraftType() {
+		
+	}
+	
+
+	public void setAircraftType(String aircraftType) {
+		this.aircraftType = aircraftType;
+	}
 
 	public int getRangeFlight() {
 		return rangeFlight;

@@ -9,15 +9,15 @@ import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.AircraftType;
 
 public interface AircraftDAO {
-	void addAircraft(HttpServletRequest request, HttpServletResponse response) throws DAOException;
+	boolean addAircraft(Aircraft aircraft, AircraftType aircraftType) throws DAOException;
 
 	void deleteAircraft(String registrationNumber) throws DAOException;
 
-	void updateAircraft(HttpServletRequest request, HttpServletResponse response) throws DAOException;
+	boolean updateAircraft(String registrationNumber, String newRegistrationNumber) throws DAOException;
 
 	void changeAircraftStatus(int idAircraft, String status) throws DAOException;
 
-	void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws DAOException;
+	boolean addAircraftType(AircraftType aircraftType) throws DAOException;
 
 	void deliteAircraftType(int idAircraftType) throws DAOException;
 	

@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import by.epamtr.airline.controller.ConstantController;
 import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.dao.exception.DAOException;
 import by.epamtr.airline.entity.User;
@@ -14,32 +16,19 @@ import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class SignIn implements Command {
-	private final String CURRENT_PAGE="current_page";
-	
-	private final String FLIGHTS_BY_STATUS_PAGE="/WEB-INF/jsp/user_action/get_flights_by_status.jsp";
-
-	private final String PATH_TO_CONTROLLER = "/Controller?command=GO_TO_LOGIN_PAGE";
-	private final String PATH_TO_ADD_USER_PAGE = "/WEB-INF/jsp/administrator_action/add_user.jsp";
-	private static final String GO_TO_MAIN_PAGE_COMMAND = "/Controller?command=GO_TO_MAIN_PAGE";
-	private static final String PATH_TO_ADMIN_PAGE="/WEB-INF/jsp/administrator_page.jsp";
-	private static final String PATH_TO_UPDATE_USER="/WEB-INF/jsp/administrator_action/update_user.jsp";
 	private static final String CURRENT_MENU="menu";
 	private static final String ADMIN_MENU="admin_menu";
 	private static final String DISPATCHER_MENU="dispatcher_menu";
 	private static final String MANAGER_MENU="manager_menu";
 	private static final String CREW_MENU="crew_menu";
-	private final String SIGNED_IN_USER_ATTRIBUTE = "user";
-	private final String PASSWORD_PARAM = "password";
-	private final String LOGIN_PARAM = "login";
-	private final String SIGN_IN_FAIL_ATTR="sign_in_fail_attr";
-	private final String SIGN_IN_FAIL="sign_in_fail";
+	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)  {
 		User user = null;
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		UserService userService = serviceFactory.getUserService();
-		String login=request.getParameter(LOGIN_PARAM);
-		String password=request.getParameter(PASSWORD_PARAM);
+		String login=request.getParameter(ConstantController.Parameter.LOGIN);
+		String password=request.getParameter(ConstantController.Parameter.PASSWORD);
 		try {
 			user=userService.signIn(login, password);
 		} catch (ServiceException e2) {
@@ -47,16 +36,16 @@ public class SignIn implements Command {
 			e2.printStackTrace();
 		}
 		if(user==null) {
-			request.setAttribute(SIGN_IN_FAIL_ATTR, SIGN_IN_FAIL);
+			request.setAttribute(ConstantController.Attribute.SIGN_IN_FAIL_ATTR, ConstantController.Attribute.SIGN_IN_FAIL);
 			try {
-				request.getRequestDispatcher(PATH_TO_CONTROLLER).forward(request, response);
+				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_CONTROLLER).forward(request, response);
 			} catch (ServletException | IOException e) {
 				// rootLogger.error(e);
 				e.printStackTrace();
 			}
 		}else {
-			request.getSession().setAttribute(SIGNED_IN_USER_ATTRIBUTE, user);
-			request.getSession().setAttribute(CURRENT_PAGE, FLIGHTS_BY_STATUS_PAGE);
+			request.getSession().setAttribute(ConstantController.Attribute.SIGNED_IN_USER, user);
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.FLIGHTS_BY_STATUS_PAGE);
 			sendCommandToController(user.getRole(), request, response);
 		}
 		
@@ -81,7 +70,7 @@ public class SignIn implements Command {
 				break;
 			}
 			try {
-				request.getRequestDispatcher(GO_TO_MAIN_PAGE_COMMAND).forward(request, response);
+				request.getRequestDispatcher(ConstantController.PathToPage.GO_TO_MAIN_PAGE_COMMAND).forward(request, response);
 			} catch (ServletException | IOException e) {
 				// rootLogger.error(e);
 				e.printStackTrace();

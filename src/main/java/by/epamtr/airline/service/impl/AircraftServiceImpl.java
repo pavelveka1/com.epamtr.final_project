@@ -16,9 +16,9 @@ public class AircraftServiceImpl implements AircraftService{
 	private AircraftDAO aircraftDAO = DAOFactory.getInstance().getSqlAircraftImpl();
 
 	@Override
-	public void addAircraft(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+	public boolean addAircraft(Aircraft aircraft, AircraftType aircraftType) throws ServiceException {
 		try {
-			aircraftDAO.addAircraft(request, response);
+			return aircraftDAO.addAircraft(aircraft, aircraftType);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while adding new aircraft",e);
 		}
@@ -36,9 +36,9 @@ public class AircraftServiceImpl implements AircraftService{
 	}
 
 	@Override
-	public void updateAircraft(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+	public boolean updateAircraft(String registrationNumber, String newRegistrationNumber) throws ServiceException {
 		try {
-			aircraftDAO.updateAircraft(request, response);
+			return aircraftDAO.updateAircraft(registrationNumber, newRegistrationNumber);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while updating aircraft",e);
 		}
@@ -56,9 +56,9 @@ public class AircraftServiceImpl implements AircraftService{
 	}
 
 	@Override
-	public void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+	public boolean addAircraftType(AircraftType aircraftType) throws ServiceException {
 		try {
-			aircraftDAO.addAircraftType(request, response);
+			return aircraftDAO.addAircraftType(aircraftType);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while adding new type of aircraft",e);
 		}

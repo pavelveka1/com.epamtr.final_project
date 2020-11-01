@@ -30,21 +30,12 @@ public class SQLAircraftDAO implements AircraftDAO {
 	private static final String ID_AIRCRAFT_COLUMN="id_aircraft";
 	private static final String STATUS_COLUMN="status";
 	private static final String REGISTER_NUMBER_COLUMN = "registration_number";
-	
-	private static final String ID_AIRCRAFT_TYPE = "id_iarcraft_type";
-	private static final String REGISTER_NUMBER_PARAM = "register_number";
-	private static final String AIRCRAFT_STATUS_PARAM = "aircraft_status";
-	private static final String AIRCRAFT_NUMBER_ATTR="aircraft_number";
-	
-	
-	
-	
 
 	@Override
-	public void addAircraft(HttpServletRequest request, HttpServletResponse response) throws DAOException {
-		int idTypeAircraft = (Integer) request.getSession().getAttribute(ID_AIRCRAFT_TYPE);
-		String registerNumber = request.getParameter(REGISTER_NUMBER_PARAM);
-		String statusAircraft = request.getParameter(AIRCRAFT_STATUS_PARAM);
+	public boolean addAircraft(Aircraft aircraft, AircraftType aircraftType) throws DAOException {
+		int idTypeAircraft = aircraftType.getIdAircraftType();
+		String registerNumber = aircraft.getRegisterNumber();
+		String statusAircraft=aircraft.getStatus();
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -55,7 +46,12 @@ public class SQLAircraftDAO implements AircraftDAO {
 				statement.setInt(1, idTypeAircraft);
 				statement.setString(2, registerNumber);
 				statement.setString(3, statusAircraft);
-				statement.executeUpdate();
+				int row=statement.executeUpdate();
+				if(row==1) {
+					return true;
+				}else {
+					return false;
+				}
 
 			} catch (SQLException e) {
 				throw new DAOException("error while adding aircraft", e);
@@ -77,7 +73,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			try {
 				statement = connection.prepareStatement(
 						String.format(SQLQueryConstant.AircraftConstant.DELETE_AIRCRAFT, registrationNumber));
-				statement.executeUpdate();
+				 statement.executeUpdate();
 
 			} catch (SQLException e) {
 				throw new DAOException("error while deletion aircraft", e);
@@ -90,9 +86,8 @@ public class SQLAircraftDAO implements AircraftDAO {
 	}
 
 	@Override
-	public void updateAircraft(HttpServletRequest request, HttpServletResponse response) throws DAOException {
-		String registrationNumber = request.getParameter("aircraft_numbers");
-		String newRegistrationNumber = request.getParameter(REGISTER_NUMBER_PARAM);
+	public boolean updateAircraft(String registrationNumber, String newRegistrationNumber) throws DAOException {
+		
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -101,8 +96,13 @@ public class SQLAircraftDAO implements AircraftDAO {
 			try {
 				connection.prepareStatement(SQLQueryConstant.CONSTRAINT_DISABLE).executeQuery();
 				statement = connection.prepareStatement(String.format(SQLQueryConstant.AircraftConstant.UPDATE_AIRCRAFT, newRegistrationNumber, registrationNumber ));
-				statement.executeUpdate();
+				int row=statement.executeUpdate();
 				connection.prepareStatement(SQLQueryConstant.CONSTRAINT_ENABLE).executeQuery();
+				if(row==1) {
+					return true;
+				}else {
+					return false;
+				}
 			} catch (SQLException e) {
 				throw new DAOException("error while updating user", e);
 			}
@@ -156,21 +156,26 @@ public class SQLAircraftDAO implements AircraftDAO {
 	}
 
 	@Override
-	public void addAircraftType(HttpServletRequest request, HttpServletResponse response) throws DAOException {
+	public boolean addAircraftType(AircraftType aircraftType) throws DAOException {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		String aircraftType = request.getParameter("aircraft_type");
-		int flightRange = Integer.parseInt(request.getParameter("range_flight"));
-		int numberPassenger = Integer.parseInt(request.getParameter("number_passengers"));
+		String typeAircraft = aircraftType.getAircraftType();
+		int flightRange = aircraftType.getRangeFlight();
+		int numberPassenger = aircraftType.getNumberPassenger();
 		try {
 			connection = connectionPool.getConnection();
 			try {
 				statement = connection.prepareStatement(SQLQueryConstant.AircraftConstant.ADD_AIRCRAFT_TYPES);
-				statement.setString(1, aircraftType);
+				statement.setString(1, typeAircraft);
 				statement.setInt(2, flightRange);
 				statement.setInt(3, numberPassenger);
-				statement.executeUpdate();
+				int row=statement.executeUpdate();
+				if(row==1) {
+					return true;
+				}else {
+					return false;
+				}
 
 			} catch (SQLException e) {
 				throw new DAOException("error while adding user", e);

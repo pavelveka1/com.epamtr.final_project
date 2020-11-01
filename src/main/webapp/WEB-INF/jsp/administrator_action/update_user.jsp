@@ -35,7 +35,7 @@
 			<tr>
 			<td> <label>Email </label>    </td>
 			<td>  <input
-			type="text" name="email" value="${selected_user.email}">   </td>
+			type="text" name="e_mail" value="${selected_user.email}">   </td>
 			</tr>
 			<tr>
 			<td>  <label>Current user role </label>   </td>

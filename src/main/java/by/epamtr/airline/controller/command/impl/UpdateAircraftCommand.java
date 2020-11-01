@@ -6,19 +6,18 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import by.epamtr.airline.controller.ConstantController;
 import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.AircraftType;
 import by.epamtr.airline.service.AircraftService;
 import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
+import by.epamtr.airline.service.validator.AircraftValidation;
 
 public class UpdateAircraftCommand implements Command {
-	private static final String PATH_TO_UPDATE_AIRCRAFT = "/WEB-INF/jsp/administrator_action/update_aircraft.jsp";
-	private static final String PATH_TO_MAIN_PAGE="/WEB-INF/jsp/main_page.jsp";
-	private static final String CURRENT_PAGE="current_page";
-	private static final String AIRCRAFT_NUMBER_PARAM="aircraft_numbers";
-	private static final String AIRCRAFTS_ATTR="aircrafts";
+
 	ServiceFactory serviceFactory = ServiceFactory.getInstance();
 	AircraftService aircraftService = serviceFactory.getAircraftService();
 	List<Aircraft> aircrafts = new ArrayList<Aircraft>();
@@ -28,24 +27,34 @@ public class UpdateAircraftCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 
-		String aircraftsParameter = request.getParameter(AIRCRAFT_NUMBER_PARAM);
-		request.setAttribute(CURRENT_PAGE, PATH_TO_UPDATE_AIRCRAFT);
+		String aircraftsParameter = request.getParameter(ConstantController.Parameter.AIRCRAFT_NUMBER);
+		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_UPDATE_AIRCRAFT);
 		if (aircraftsParameter == null) {
 			try {
 				aircrafts = aircraftService.getAircraftrs();
-				request.getSession().setAttribute(AIRCRAFTS_ATTR, aircrafts);
-				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
+				request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
+				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException | ServiceException e) {
 				// rootLogger.error(e);
 				e.printStackTrace();
 			}
 		} else {
 			try {
-				
-				aircraftService.updateAircraft(request, response);
+				String registrationNumber = request.getParameter(ConstantController.Parameter.AIRCRAFT_NUMBER);
+				String newRegistrationNumber = request.getParameter(ConstantController.Parameter.REGISTER_NUMBER_PARAM);
+				if(AircraftValidation.validateRegistrationNumber(newRegistrationNumber)) {
+					boolean result=aircraftService.updateAircraft(registrationNumber, newRegistrationNumber);
+					if (result) {
+						request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.SUCCESSFUL_OPERATION);
+					} else {
+						request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.FAILED_OPERATION);
+					}
+				}else {
+					request.setAttribute(ConstantController.Attribute.DATA_IS_VALID, false);
+				}
 				aircrafts = aircraftService.getAircraftrs();
-				request.getSession().setAttribute(AIRCRAFTS_ATTR, aircrafts);
-				request.getRequestDispatcher(PATH_TO_MAIN_PAGE).forward(request, response);
+				request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
+				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException | ServiceException e) {
 				// rootLogger.error(e);
 				e.printStackTrace();

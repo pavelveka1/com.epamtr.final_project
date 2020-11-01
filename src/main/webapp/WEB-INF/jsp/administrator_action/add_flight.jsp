@@ -1,10 +1,15 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Add flight</title>
+<fmt:setLocale value="${sessionScope.local}" />
+<fmt:setBundle basename="by.epamtr.airline.localization.local" var="loc" />
+<fmt:message bundle="${loc}" key="flight.add.ok" var="flight_add_ok" />
+<fmt:message bundle="${loc}" key="flight.add.fail" var="flight_add_fail" />
 </head>
 <body>
 	<form action="Controller" method="POST">
@@ -62,5 +67,14 @@
 
 		<br> <input type="submit" value="Add flight" />
 	</form>
+	<br>
+	<c:choose>
+		<c:when test="${result_attr=='success'}">
+			<c:out value="${flight_add_ok}" />
+		</c:when>
+		<c:when test="${result_attr=='fail'}">
+			<c:out value="${flight_add_fail}" />
+		</c:when>
+	</c:choose>
 </body>
 </html>
