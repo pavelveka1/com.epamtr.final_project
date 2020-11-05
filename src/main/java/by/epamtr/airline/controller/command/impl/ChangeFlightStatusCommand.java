@@ -7,7 +7,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import by.epamtr.airline.controller.ConstantController;
+import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
@@ -15,6 +18,7 @@ import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class ChangeFlightStatusCommand implements Command {
+	private static final Logger LOGGER = Logger.getLogger(ChangeFlightStatusCommand.class);
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -26,10 +30,14 @@ public class ChangeFlightStatusCommand implements Command {
 		int idFlight = Integer.parseInt(idFlightParam);
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		try {
-			serviceFactory.getFlightService().changeFlightStatus(idFlight, flightStatus);
+			boolean result=serviceFactory.getFlightService().changeFlightStatus(idFlight, flightStatus);
+			if(result) {
+				LOGGER.info(LoggerMessageConstant.FLIGHT_STATUS_CHANGED);
+			}else {
+				LOGGER.info(LoggerMessageConstant.FLIGHT_STATUS_NOT_CHANGED);
+			}
 		} catch (ServiceException e) {
-			// rootLogger.error(e);
-			e.printStackTrace();
+			LOGGER.error(LoggerMessageConstant.ERROR_SHANGE_FLIGHT_STATUS, e);
 		}
 		String selectedFlightStatusForFlights = (String) request.getSession()
 				.getAttribute(ConstantController.Attribute.SELECTED_FLIGHT_STATUS_FOR_FLIGHTS);
@@ -41,10 +49,10 @@ public class ChangeFlightStatusCommand implements Command {
 			try {
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
-				rootLogger.error(e);
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
 		} catch (ServiceException e) {
-			rootLogger.error(e);
+			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 
 	}

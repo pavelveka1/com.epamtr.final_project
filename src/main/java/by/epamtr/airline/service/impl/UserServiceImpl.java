@@ -106,9 +106,9 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public void deliteCrewFromFlight(int flightId, int userId) throws ServiceException {
+	public boolean deliteCrewFromFlight(int flightId, int userId) throws ServiceException {
 		try {
-			userDAO.deliteCrewFromFlight(flightId, userId);
+			return userDAO.deliteCrewFromFlight(flightId, userId);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while deletion crew from flight", e);
 		}
@@ -116,9 +116,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void addCrewToFlight(int idCrewPosition, int flightId, int userId) throws ServiceException {
+	public boolean addCrewToFlight(int idCrewPosition, int flightId, int userId) throws ServiceException {
 		try {
-			userDAO.addCrewToFlight(idCrewPosition, flightId, userId);
+			return userDAO.addCrewToFlight(idCrewPosition, flightId, userId);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while adding user to crew", e);
 		}

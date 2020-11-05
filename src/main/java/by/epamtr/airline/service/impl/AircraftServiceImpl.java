@@ -26,9 +26,9 @@ public class AircraftServiceImpl implements AircraftService{
 	}
 
 	@Override
-	public void deleteAircraft(String registrationNumber) throws ServiceException {
+	public boolean deleteAircraft(String registrationNumber) throws ServiceException {
 		try {
-			aircraftDAO.deleteAircraft(registrationNumber);
+			return aircraftDAO.deleteAircraft(registrationNumber);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while deletion aircraft",e);
 		}
@@ -46,9 +46,9 @@ public class AircraftServiceImpl implements AircraftService{
 	}
 
 	@Override
-	public void changeAircraftStatus(int idAircraft, String status) throws ServiceException {
+	public boolean changeAircraftStatus(int idAircraft, String status) throws ServiceException {
 		try {
-			aircraftDAO.changeAircraftStatus(idAircraft, status);;
+			return aircraftDAO.changeAircraftStatus(idAircraft, status);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while changing status of aircraft",e);
 		}
@@ -66,9 +66,9 @@ public class AircraftServiceImpl implements AircraftService{
 	}
 
 	@Override
-	public void deliteAircraftType(int idAircraftType) throws ServiceException {
+	public boolean deliteAircraftType(int idAircraftType) throws ServiceException {
 		try {
-			aircraftDAO.deliteAircraftType(idAircraftType);
+			return aircraftDAO.deliteAircraftType(idAircraftType);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while deleting type of aircraft",e);
 		}

@@ -6,7 +6,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import by.epamtr.airline.controller.ConstantController;
+import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.entity.UserInfo;
@@ -14,8 +17,10 @@ import by.epamtr.airline.entity.UserRole;
 import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
+import by.epamtr.airline.service.validator.UserValidation;
 
 public class AddUserCommand implements Command {
+	private static final Logger LOGGER = Logger.getLogger(AddUserCommand.class);
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)  {
@@ -35,22 +40,54 @@ public class AddUserCommand implements Command {
 			userInfo.setPassword(request.getParameter(ConstantController.Parameter.PASSWORD));
 			boolean result=false;
 			try {
-				result=userService.addUser(user, userInfo);
-				if (result) {
-					request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.SUCCESSFUL_OPERATION);
-				} else {
-					request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.FAILED_OPERATION);
-				}
+				 boolean dataIsValid=true;
+				 if(!UserValidation.nameValidation(user.getName())) {
+					 request.setAttribute(ConstantController.Attribute.NAME_VALID, false);
+					 dataIsValid=false;
+				 }
+				 if(!UserValidation.nameValidation(user.getSurname())) {
+					 request.setAttribute(ConstantController.Attribute.SURNAME_VALID, false);
+					 dataIsValid=false;
+				 }
+				 if(!UserValidation.nameValidation(user.getPatronimic())) {
+					 request.setAttribute(ConstantController.Attribute.PATRONIMIC_VALID, false);
+					 dataIsValid=false;
+				 }
+				
+				 if(!UserValidation.emailValidation(user.getEmail())) {
+					 request.setAttribute(ConstantController.Attribute.EMAIL_VALID, false);
+					 dataIsValid=false;
+				 }
+				 if(!UserValidation.loginValidation(userInfo.getLogin())) {
+					 request.setAttribute(ConstantController.Attribute.LOGIN_VALID, false);
+					 dataIsValid=false;
+				 }
+				 if(!UserValidation.passwordValidation(userInfo.getPassword())) {
+					 request.setAttribute(ConstantController.Attribute.PASSWORD_VALID, false);
+					 dataIsValid=false;
+				 }
+				 if(dataIsValid==true) {
+						result=userService.addUser(user, userInfo);
+						if (result) {
+							LOGGER.info(LoggerMessageConstant.USER_ADDED);
+							request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.SUCCESSFUL_OPERATION);
+						} else {
+							LOGGER.info(LoggerMessageConstant.USER_NOT_ADDED);
+							request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.FAILED_OPERATION);
+						}
+				 }else {
+					 LOGGER.info(LoggerMessageConstant.USER_NOT_VALID);
+				 }
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServiceException | ServletException | IOException e2) {
-			//	rootLogger.error(e2);
-				e2.printStackTrace();
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e2);
 			}
 		}else {
 			try {
+				LOGGER.info(LoggerMessageConstant.GO_TO_ADD_USER_PAGE);
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
-				rootLogger.error(e);
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
 		}
 	}

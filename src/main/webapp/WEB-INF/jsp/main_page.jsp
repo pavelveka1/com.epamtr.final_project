@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
- <fmt:setLocale value="${sessionScope.local}" />
+<fmt:setLocale value="${sessionScope.local}" />
 <fmt:setBundle basename="by.epamtr.airline.localization.local" var="loc" />
 <fmt:message bundle="${loc}" key="user" var="button_ru" />
 <fmt:message bundle="${loc}" key="button.name.en" var="button_en" />
@@ -53,6 +53,8 @@ body {
 }
 
 .content {
+
+	overflow-y: scroll;
 	grid-column: 2/6;
 	grid-row: 2/8;
 	background-image:
@@ -79,25 +81,25 @@ body {
 			</header>
 		</div>
 		<div class="menu">
-		<c:choose>
-		<c:when test="${menu=='admin_menu'}">
-		<jsp:include page="fragment/admin_menu.jsp"></jsp:include>
-		</c:when>
-		<c:when test="${menu=='dispatcher_menu'}">
-		<jsp:include page="fragment/dispatcher_menu.jsp"></jsp:include>
-		</c:when>
-		<c:when test="${menu=='manager_menu'}">
-		<jsp:include page="fragment/manager_menu.jsp"></jsp:include>
-		</c:when>
-		<c:when test="${menu=='crew_menu'}">
-		<jsp:include page="fragment/crew_menu.jsp"></jsp:include>
-		</c:when>
-		</c:choose>
+			<c:choose>
+				<c:when test="${menu=='admin_menu'}">
+					<jsp:include page="fragment/admin_menu.jsp"></jsp:include>
+				</c:when>
+				<c:when test="${menu=='dispatcher_menu'}">
+					<jsp:include page="fragment/dispatcher_menu.jsp"></jsp:include>
+				</c:when>
+				<c:when test="${menu=='manager_menu'}">
+					<jsp:include page="fragment/manager_menu.jsp"></jsp:include>
+				</c:when>
+				<c:when test="${menu=='crew_menu'}">
+					<jsp:include page="fragment/crew_menu.jsp"></jsp:include>
+				</c:when>
+			</c:choose>
 		</div>
 		<div class="content">
 			<main>
-		<jsp:include page="${current_page}" />
-	</main>
+				<jsp:include page="${current_page}" />
+			</main>
 		</div>
 		<div class="footer">
 			<footer>

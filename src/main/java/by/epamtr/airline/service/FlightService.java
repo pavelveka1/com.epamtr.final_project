@@ -15,11 +15,11 @@ import by.epamtr.airline.service.exception.ServiceException;
 public interface FlightService {
 	boolean addFlight(Flight flight, Aircraft aircraft) throws ServiceException;
 
-	void deliteFlight(int idFlight) throws ServiceException;
+	boolean deliteFlight(int idFlight) throws ServiceException;
 
 	Flight updateFlight(int idFlight, Flight flight) throws ServiceException;
 
-	void changeFlightStatus(int idFlight, FlightStatus flightStatus) throws ServiceException;
+	boolean changeFlightStatus(int idFlight, FlightStatus flightStatus) throws ServiceException;
 
 	Flight getFlight(int idFlight) throws ServiceException;
 
@@ -29,9 +29,9 @@ public interface FlightService {
 
 	List<Flight> getFlights(int idUser) throws ServiceException;
 
-	void addCrewToFlight(User user) throws ServiceException;
+	boolean addCrewToFlight(User user) throws ServiceException;
 
-	void updateFlightCrew(int idFlight) throws ServiceException;
+	boolean updateFlightCrew(int idFlight) throws ServiceException;
 	
 	List<CrewPosition> getFreeCrewPositions(int flightId) throws ServiceException;
 }

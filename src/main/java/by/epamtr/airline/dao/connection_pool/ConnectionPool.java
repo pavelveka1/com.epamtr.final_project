@@ -2,23 +2,66 @@ package by.epamtr.airline.dao.connection_pool;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
 
+/**
+ * Interface for connection to database
+ * 
+ * @author Pavel Veka
+ * @throws ConnectionPoolException if error while processing
+ */
 public interface ConnectionPool {
-	Connection getConnection() throws ConnectionPoolException ;
+	Connection getConnection() throws ConnectionPoolException;
 
-	boolean releaseConnection(Connection connection) ;
+	/**
+	 * Release Connection object
+	 * 
+	 * @param connection
+	 * @return true if Connection was returned to pool
+	 */
+	boolean releaseConnection(Connection connection);
 
-	List<Connection> getConnectionPool();
+	/**
+	 * Get list of Connection from pool
+	 * 
+	 * @return list of Connection from pool
+	 */
+	BlockingQueue<Connection> getConnectionPool();
 
+	/**
+	 * Get size of pool (number of Connection objects)
+	 * 
+	 * @return bumber of Connection objects
+	 */
 	int getSize();
 
+	/**
+	 * Get database url
+	 * 
+	 * @return url of database
+	 */
 	String getUrl();
 
+	/**
+	 * Get user of database
+	 * 
+	 * @return name of user for database
+	 */
 	String getUser();
 
+	/**
+	 * Get password for database
+	 * 
+	 * @return password for database
+	 */
 	String getPassword();
 
+	/**
+	 * Shut down connection pool (close all Connections)
+	 * 
+	 * @throws ConnectionPoolException
+	 */
 	void shutdown() throws ConnectionPoolException;
 }

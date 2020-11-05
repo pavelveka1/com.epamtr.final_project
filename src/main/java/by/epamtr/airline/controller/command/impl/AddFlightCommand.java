@@ -8,7 +8,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import by.epamtr.airline.controller.ConstantController;
+import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.Flight;
@@ -16,6 +19,7 @@ import by.epamtr.airline.service.AircraftService;
 import by.epamtr.airline.service.FlightService;
 import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
+import by.epamtr.airline.service.validator.FlightValidation;
 
 public class AddFlightCommand implements Command {
 	
@@ -23,6 +27,7 @@ public class AddFlightCommand implements Command {
 	private final AircraftService aircraftService=serviceFactory.getAircraftService();
 	private final FlightService flightService = serviceFactory.getFlightService();
 	private  List<Aircraft> aircrafts=new ArrayList<Aircraft>();
+	private static final Logger LOGGER = Logger.getLogger(AddFlightCommand.class);
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -32,13 +37,13 @@ public class AddFlightCommand implements Command {
 			try {
 				try {
 					aircrafts=aircraftService.getAircraftrs();
-					request.setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
+					request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
 				} catch (ServiceException e) {
-					rootLogger.error("Error while getting registration number of aircrafts", e);
+					LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
 				}
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
-				rootLogger.error("Error while going to add_flight.jsp page", e);
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
 		}else {
 			try {
@@ -58,15 +63,46 @@ public class AddFlightCommand implements Command {
 				flight.setStatus(status);
 				Aircraft aircraft=new Aircraft();
 				aircraft.setIdAircraft(idAircraft);
-				boolean result=flightService.addFlight(flight, aircraft);
-				if (result) {
-					request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.SUCCESSFUL_OPERATION);
-				} else {
-					request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.FAILED_OPERATION);
-				}
+				boolean result=false;
+				 boolean dataIsValid=true;
+				 if(!FlightValidation.cityValidation(flight.getCurrentCity())) {
+					 request.setAttribute(ConstantController.Attribute.CURRENT_CITY_VALID, false);
+					 dataIsValid=false;
+				 }
+				 if(!FlightValidation.cityValidation(flight.getDestinationCity())) {
+					 request.setAttribute(ConstantController.Attribute.DESTINATION_CITY_VALID, false);
+					 dataIsValid=false;
+				 }
+				 
+				 if(!FlightValidation.flightRangeValidation(flight.getFlightRange())) {
+					 request.setAttribute(ConstantController.Attribute.FLIGHT_RANGE_VALID, false);
+					 dataIsValid=false;
+				 }
+				 if(!FlightValidation.flightTimeValidation(flight.getFlightTime())) {
+					 request.setAttribute(ConstantController.Attribute.FLIGHT_TIME_VALID, false);
+					 dataIsValid=false;
+				 }
+				 if(!FlightValidation.dateValidation(flight.getTimeDeparture())) {
+					 request.setAttribute(ConstantController.Attribute.TIME_DEPARTURE_VALID, false);
+					 dataIsValid=false;
+				 }
+				
+				 if(dataIsValid==true) {
+					 result=flightService.addFlight(flight, aircraft);
+						if (result) {
+							LOGGER.info(LoggerMessageConstant.FLIGHT_ADDED);
+							request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.SUCCESSFUL_OPERATION);
+						} else {
+							request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.FAILED_OPERATION);
+						LOGGER.info(LoggerMessageConstant.FLIGHT_NOT_ADDED);
+						}
+				 }else {
+					 LOGGER.info(LoggerMessageConstant.FLIGHT_NOT_VALID);
+				 }
+				
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServiceException | ServletException | IOException e) {
-				rootLogger.error("Error while adding new flght",e);
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
 			
 		}

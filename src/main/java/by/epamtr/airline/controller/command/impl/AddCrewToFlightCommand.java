@@ -7,7 +7,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import by.epamtr.airline.controller.ConstantController;
+import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.entity.Crew;
 import by.epamtr.airline.entity.CrewPosition;
@@ -19,6 +22,7 @@ import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class AddCrewToFlightCommand implements Command {
+	private static final Logger LOGGER = Logger.getLogger(AddCrewToFlightCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -41,8 +45,7 @@ public class AddCrewToFlightCommand implements Command {
 			try {
 				freeCrewPositions = flightService.getFreeCrewPositions(idFlight);
 			} catch (ServiceException e1) {
-				// rootLogger.error(e1);
-				e1.printStackTrace();
+				LOGGER.error(LoggerMessageConstant.ERROR_GET_FREE_CREW_POSITIONS, e1);
 			}
 			request.getSession().setAttribute(ConstantController.Attribute.FREE_POSITIONS_BY_FLIGHT, freeCrewPositions);
 		} else {
@@ -57,7 +60,7 @@ public class AddCrewToFlightCommand implements Command {
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
 						response);
 			} catch (ServletException | IOException e) {
-				rootLogger.error(e);
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
 		} else {
 			String selectedPositionAttr = (String) request.getSession()
@@ -76,14 +79,19 @@ public class AddCrewToFlightCommand implements Command {
 					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
 							response);
 				} catch (ServiceException | ServletException | IOException e) {
-					// rootLogger.error(e);
-					e.printStackTrace();
+					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 				}
 			} else {
 				try {
 					request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 							ConstantController.PathToPage.PATH_TO_CREW_BY_FLIGHT);
-					userService.addCrewToFlight(idCrewPosition, idFlight, Integer.parseInt(selectedUserId));
+					boolean result=userService.addCrewToFlight(idCrewPosition, idFlight, Integer.parseInt(selectedUserId));
+					if(result) {
+						LOGGER.info(LoggerMessageConstant.USER_ADDED_TO_FLIGHT);
+					}else {
+						LOGGER.info(LoggerMessageConstant.USER_NOT_ADDED_TO_FLIGHT);
+					}
+					
 					request.getSession().removeAttribute(ConstantController.Attribute.SELECTED_POSITION);
 					Flight flight = flightService.getFlight(idFlight);
 					request.getSession().setAttribute(ConstantController.Attribute.SELECTED_FLIGHT, flight);
@@ -92,8 +100,7 @@ public class AddCrewToFlightCommand implements Command {
 					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
 							response);
 				} catch (ServiceException | ServletException | IOException e) {
-					// rootLogger.error(e);
-					e.printStackTrace();
+					LOGGER.error(LoggerMessageConstant.ERROR_ADD_CREW_TO_FLIGHT, e);
 				}
 
 			}

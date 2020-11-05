@@ -10,6 +10,12 @@
 <fmt:setBundle basename="by.epamtr.airline.localization.local" var="loc" />
 <fmt:message bundle="${loc}" key="user.add.ok" var="user_add_ok" />
 <fmt:message bundle="${loc}" key="user.add.fail" var="user_add_fail" />
+<fmt:message bundle="${loc}" key="user.name.not_valid" var="name_not_valid" />
+<fmt:message bundle="${loc}" key="user.surname.not_valid" var="surname_not_valid" />
+<fmt:message bundle="${loc}" key="user.patronimic.not_valid" var="patronimic_not_valid" />
+<fmt:message bundle="${loc}" key="user.email.not_valid" var="email_not_valid" />
+<fmt:message bundle="${loc}" key="user.login.not_valid" var="login_not_valid" />
+<fmt:message bundle="${loc}" key="user.password.not_valid" var="password_not_valid" />
 </head>
 <body>
 	<form action="Controller" method="POST">
@@ -19,22 +25,38 @@
 			<tr>
 			<td><label>Name </label></td>
 			<td><input
-			type="text" name="name" placeholder="name"></td>
+			type="text" name="name" placeholder="name"> <c:choose>
+		<c:when test="${name_valid==false}">
+			<c:out value="${name_not_valid}" />
+		</c:when>
+	</c:choose></td>
 			</tr>
 			<tr>
 			<td> <label>Surname </label>    </td>
 			<td>  <input
-			type="text" name="surname" placeholder="surname">    </td>
+			type="text" name="surname" placeholder="surname"> <c:choose>
+		<c:when test="${surname_valid==false}">
+			<c:out value="${surname_not_valid}" />
+		</c:when>
+	</c:choose>   </td>
 			</tr>
 			<tr>
 			<td> <label>Patronimic </label>    </td>
 			<td>   <input
-			type="text" name="patronimic" placeholder="patronimic">   </td>
+			type="text" name="patronimic" placeholder="patronimic"> <c:choose>
+		<c:when test="${patronimic_valid==false}">
+			<c:out value="${patronimic_not_valid}" />
+		</c:when>
+	</c:choose>  </td>
 			</tr>
 			<tr>
 			<td> <label>Email </label>    </td>
 			<td>  <input
-			type="text" name="e_mail" placeholder="email">   </td>
+			type="text" name="e_mail" placeholder="email"> <c:choose>
+		<c:when test="${email_valid==false}">
+			<c:out value="${email_not_valid}" />
+		</c:when>
+	</c:choose>  </td>
 			</tr>
 			<tr>
 			<td>  <label>Role<label>   </td>
@@ -49,12 +71,20 @@
 			</tr>
 			<tr>
 			<td>  <label>Login </label>   </td>
-			<td> <input type="text" name="login" placeholder="login">    </td>
+			<td> <input type="text" name="login" placeholder="login"> <c:choose>
+		<c:when test="${login_valid==false}">
+			<c:out value="${login_not_valid}" />
+		</c:when>
+	</c:choose>   </td>
 			</tr>
 			<tr> 
 			<td> <label>Password </label>  </td>
 			<td><input
-				type="text" name="password" placeholder="password">  </td>
+				type="text" name="password" placeholder="password"> <c:choose>
+		<c:when test="${password_valid==false}">
+			<c:out value="${password_not_valid}" />
+		</c:when>
+	</c:choose> </td>
 			</tr>
 			</table>
 			

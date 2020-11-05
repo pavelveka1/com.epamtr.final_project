@@ -6,14 +6,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import by.epamtr.airline.controller.ConstantController;
+import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class DeliteUserCommand implements Command {
-	
+	private static final Logger LOGGER = Logger.getLogger(DeliteUserCommand.class);
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -24,26 +27,27 @@ public class DeliteUserCommand implements Command {
 			try {
 				boolean result = userService.deliteUser(idUser);
 				if(result) {
+					LOGGER.info(LoggerMessageConstant.USER_IS_DELETED);
 					request.setAttribute(ConstantController.Attribute.DELETED_USER, ConstantController.Attribute.SUCCESSFUL_OPERATION);
 				}else {
+					LOGGER.info(LoggerMessageConstant.USER_IS_NOT_DELETED);
 					request.setAttribute(ConstantController.Attribute.DELETED_USER, ConstantController.Attribute.FAILED_OPERATION);
 				}
 			} catch (ServiceException e2) {
-				// rootLogger.error(e2);
-				e2.printStackTrace();
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e2);
 			}
 
 			try {
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
-				rootLogger.error(e);
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
 
 		} else {
 			try {
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
-				rootLogger.error(e);
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
 		}
 

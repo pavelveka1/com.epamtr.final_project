@@ -25,6 +25,7 @@ public class SQLTableConstant {
 		public static final String DAY_AND_TIME_DEPARTURE="day_and_time_departure";
 		public static final String AIRCRAFT="aircraft";
 		public static final String FLIGHT_STATUS="flight_status";
+		public static final String FLIGHT_ID = "flight_id";
 	}
 	
 	public static class Crew{

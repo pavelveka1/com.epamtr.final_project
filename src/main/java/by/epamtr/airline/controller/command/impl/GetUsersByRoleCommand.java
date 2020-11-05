@@ -7,7 +7,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import by.epamtr.airline.controller.ConstantController;
+import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.entity.UserRole;
@@ -16,18 +19,23 @@ import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class GetUsersByRoleCommand implements Command {
-	
+	private static final Logger LOGGER = Logger.getLogger(GetUsersByFlightIdCommand.class);
+
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		String role = request.getParameter(ConstantController.Parameter.ROLE);
-		String roleCurrentUser=((User)request.getSession().getAttribute(ConstantController.Attribute.SIGNED_IN_USER)).getRole().getRole();
-		if(roleCurrentUser.equalsIgnoreCase(UserRole.ADMINISTRATOR.getRole())) {
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.ADMIN_PATH_TO_GET_USERS_BY_ROLE);
-		}else {
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_GET_USERS_BY_ROLE);
+		String roleCurrentUser = ((User) request.getSession().getAttribute(ConstantController.Attribute.SIGNED_IN_USER))
+				.getRole().getRole();
+		if (roleCurrentUser.equalsIgnoreCase(UserRole.ADMINISTRATOR.getRole())) {
+			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+					ConstantController.PathToPage.ADMIN_PATH_TO_GET_USERS_BY_ROLE);
+		} else {
+			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+					ConstantController.PathToPage.PATH_TO_GET_USERS_BY_ROLE);
 		}
-		
+
 		if (role != null) {
+			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_USERS_BY_ROLE);
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			UserService userService = serviceFactory.getUserService();
 			UserRole userRole = UserRole.valueOf(request.getParameter(ConstantController.Parameter.ROLE));
@@ -36,19 +44,21 @@ public class GetUsersByRoleCommand implements Command {
 				request.setAttribute(ConstantController.Attribute.USER_BY_ROLE, users);
 				request.setAttribute(ConstantController.Attribute.CURRENT_ROLE, userRole);
 				try {
-					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
+							response);
 				} catch (ServletException | IOException e) {
-					rootLogger.error(e);
+					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 				}
 			} catch (ServiceException e2) {
-				// rootLogger.error(e2);
-				e2.printStackTrace();
+				LOGGER.error(LoggerMessageConstant.ERROR_GET_USERS_BY_ROLE, e2);
 			}
 		} else {
+			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_USERS_ROLE);
 			try {
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
+						response);
 			} catch (ServletException | IOException e) {
-				rootLogger.error(e);
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
 		}
 	}

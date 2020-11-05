@@ -17,7 +17,7 @@ public class ConstantController {
 		public static final String PATH_TO_DELETE_AIRCRAFT_TYPE = "/WEB-INF/jsp/administrator_action/delete_aircraft_type.jsp";
 		public static final String PATH_TO_GET_CREW_BY_FLIGHT = "/WEB-INF/jsp/administrator_action/crew_by_flight.jsp";
 		public static final String PATH_TO_UPDATE_FLIGHT = "/WEB-INF/jsp/dispatcher_action/update_flights.jsp";
-		public static final String PATH_TO_GET_USERS_BY_ROLE = "/WEB-INF/jsp/administrator_action/users_by_role.jsp";
+		public static final String PATH_TO_GET_USERS_BY_ROLE = "/WEB-INF/jsp/user_action/show_users_by_role.jsp";
 		public static final String PATH_FLIGHTS_BY_STATUS = "/WEB-INF/jsp/user_action/get_flights_by_status.jsp";
 		public static final String PATH_TO_USERS_BY_ROLE = "/WEB-INF/jsp/user_action/users_by_role.jsp";
 		public static final String PATH_TO_FLIGHTS_BY_USER = "/WEB-INF/jsp/user_action/flights_by_user.jsp";
@@ -112,6 +112,16 @@ public class ConstantController {
 		public static final String FLIGHT_RANGE_VALID="flight_range_valid";
 		public static final String PASSENGER_NUMBER_VALID="number_passengers_valid";
 		public static final String AIRCRAFT_TYPE_VALID="type_valid";
+		public static final String NAME_VALID="name_valid";
+		public static final String SURNAME_VALID="surname_valid";
+		public static final String PATRONIMIC_VALID="patronimic_valid";
+		public static final String EMAIL_VALID="email_valid";
+		public static final String LOGIN_VALID="login_valid";
+		public static final String PASSWORD_VALID="password_valid";
+		public static final String CURRENT_CITY_VALID="current_city_valid";
+		public static final String DESTINATION_CITY_VALID="destination_city_valid";
+		public static final String FLIGHT_TIME_VALID="flight_time_valid";
+		public static final String TIME_DEPARTURE_VALID="time_daparture_valid";
 		
 	}
 

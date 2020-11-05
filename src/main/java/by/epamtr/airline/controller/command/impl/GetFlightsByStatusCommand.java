@@ -6,7 +6,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import by.epamtr.airline.controller.ConstantController;
+import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.entity.Crew;
 import by.epamtr.airline.entity.Flight;
@@ -17,7 +20,7 @@ import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class GetFlightsByStatusCommand implements Command {
-
+	private static final Logger LOGGER = Logger.getLogger(GetFlightsByStatusCommand.class);
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -29,7 +32,7 @@ public class GetFlightsByStatusCommand implements Command {
 		
 		if(selectedFlight==null) {
 			if (flightStatus != null) {
-				
+				LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_FLIGHTS_BY_STATUS);
 				try {
 					flights = flightService.getFlights(FlightStatus.valueOf(request.getParameter(ConstantController.Parameter.STATUS)));
 					request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
@@ -37,21 +40,21 @@ public class GetFlightsByStatusCommand implements Command {
 					try {
 						request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 					} catch (ServletException | IOException e) {
-						rootLogger.error(e);
+						LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 					}
 				} catch (ServiceException e2) {
-					// rootLogger.error(e2);
-					e2.printStackTrace();
+					LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e2);
 				}
 
 			} else {
 				try {
 					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 				} catch (ServletException | IOException e) {
-					rootLogger.error(e);
+					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 				}
 			}
 		}else {
+			LOGGER.info(LoggerMessageConstant.GO_TO_CREW_BY_FLIGHT);
 			int idSelectedFlight=Integer.parseInt(selectedFlight);
 			UserService userService = serviceFactory.getUserService();
 			try {
@@ -62,8 +65,7 @@ public class GetFlightsByStatusCommand implements Command {
 				request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_GET_CREW_BY_FLIGHT);
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServiceException | ServletException | IOException e) {
-				// rootLogger.error(e2);
-				e.printStackTrace();
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
 		}
 		

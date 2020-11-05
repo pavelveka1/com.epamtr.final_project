@@ -31,9 +31,9 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
-	public void deliteFlight(int idFlight) throws ServiceException {
+	public boolean deliteFlight(int idFlight) throws ServiceException {
 		try {
-			flightDAO.deliteFlight(idFlight);
+			return flightDAO.deliteFlight(idFlight);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while deletion flight", e);
 		}
@@ -51,9 +51,9 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
-	public void changeFlightStatus(int idFlight, FlightStatus flightStatus) throws ServiceException {
+	public boolean changeFlightStatus(int idFlight, FlightStatus flightStatus) throws ServiceException {
 		try {
-			flightDAO.changeFlightStatus(idFlight, flightStatus);
+			return flightDAO.changeFlightStatus(idFlight, flightStatus);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while updation flight status", e);
 		}
@@ -100,13 +100,15 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
-	public void addCrewToFlight(User user) throws ServiceException {
+	public boolean addCrewToFlight(User user) throws ServiceException {
+		return false;
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void updateFlightCrew(int idFlight) throws ServiceException {
+	public boolean updateFlightCrew(int idFlight) throws ServiceException {
+		return false;
 		// TODO Auto-generated method stub
 
 	}

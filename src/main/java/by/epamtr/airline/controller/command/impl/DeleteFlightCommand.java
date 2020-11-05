@@ -5,7 +5,11 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
 import by.epamtr.airline.controller.ConstantController;
+import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
@@ -16,7 +20,7 @@ import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class DeleteFlightCommand implements Command {
-
+	private static final Logger LOGGER = Logger.getLogger(DeleteFlightCommand.class);
 	private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
 	private final FlightService flightService = serviceFactory.getFlightService();
 	
@@ -43,32 +47,34 @@ public class DeleteFlightCommand implements Command {
 					try {
 						request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 					} catch (ServletException | IOException e) {
-						//rootLogger.error(e);
-						e.printStackTrace();
+						LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 					}
 				} catch (ServiceException e2) {
-					// rootLogger.error(e2);
-					e2.printStackTrace();
+					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e2);
 				}
 
 			} else {
 				try {
 					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 				} catch (ServletException | IOException e) {
-					rootLogger.error(e);
+					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 				}
 			}
 		}else {
 			int idFlight=Integer.parseInt(idFlightParam);
 			
 			try {
-				flightService.deliteFlight(idFlight);
+				boolean result=flightService.deliteFlight(idFlight);
+				if(result) {
+					LOGGER.info(LoggerMessageConstant.FLIGHT_IS_DELETED);
+				}else {
+					LOGGER.info(LoggerMessageConstant.FLIGHT_IS_NOT_DELETED);
+				}
 				flights = flightService.getFlights(FlightStatus.valueOf((String)request.getSession().getAttribute(ConstantController.Attribute.SELECTED_FLIGHT_STATUS_FOR_FLIGHTS)));
 				request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 			} catch (ServiceException | ServletException | IOException e) {
-				// rootLogger.error(e);
-				e.printStackTrace();
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
 		}
 	}
