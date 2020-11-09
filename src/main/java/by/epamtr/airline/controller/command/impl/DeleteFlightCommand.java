@@ -27,7 +27,7 @@ public class DeleteFlightCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		
-		List<Flight> flights;
+		List<Flight> flights = null;
 		String flightStatus = request.getParameter(ConstantController.Parameter.STATUS);
 		String idFlightParam=request.getParameter(ConstantController.Parameter.ID_FLIGHT);
 		String currentUserRole=((User)request.getSession().getAttribute(ConstantController.Attribute.SIGNED_IN_USER)).getRole().getRole();
@@ -42,40 +42,42 @@ public class DeleteFlightCommand implements Command {
 				request.getSession().setAttribute(ConstantController.Attribute.SELECTED_FLIGHT_STATUS_FOR_FLIGHTS, flightStatus);
 				try {
 					flights = flightService.getFlights(FlightStatus.valueOf(request.getParameter(ConstantController.Parameter.STATUS)));
+				} catch (ServiceException e2) {
+					LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e2);
+					request.setAttribute(ConstantController.Attribute.ERROR, e2);
+				}
 					request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
 					request.getSession().setAttribute(ConstantController.Attribute.FLIGHT_STATUS, flightStatus);
-					try {
-						request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-					} catch (ServletException | IOException e) {
-						LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-					}
-				} catch (ServiceException e2) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e2);
-				}
-
-			} else {
-				try {
-					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-				} catch (ServletException | IOException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-				}
-			}
+				
+			} 
 		}else {
 			int idFlight=Integer.parseInt(idFlightParam);
 			
-			try {
-				boolean result=flightService.deliteFlight(idFlight);
+				boolean result = false;
+				try {
+					result = flightService.deliteFlight(idFlight);
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_DELETE_FLIGHT, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
+				}
 				if(result) {
 					LOGGER.info(LoggerMessageConstant.FLIGHT_IS_DELETED);
 				}else {
 					LOGGER.info(LoggerMessageConstant.FLIGHT_IS_NOT_DELETED);
 				}
-				flights = flightService.getFlights(FlightStatus.valueOf((String)request.getSession().getAttribute(ConstantController.Attribute.SELECTED_FLIGHT_STATUS_FOR_FLIGHTS)));
+				try {
+					flights = flightService.getFlights(FlightStatus.valueOf((String)request.getSession().getAttribute(ConstantController.Attribute.SELECTED_FLIGHT_STATUS_FOR_FLIGHTS)));
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
+				}
 				request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServiceException | ServletException | IOException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
+			
 		}
+		try {
+		request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+	} catch (ServletException | IOException e) {
+		LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+	}
 	}
 }

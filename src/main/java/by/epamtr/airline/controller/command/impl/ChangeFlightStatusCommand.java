@@ -29,21 +29,29 @@ public class ChangeFlightStatusCommand implements Command {
 		String idFlightParam = request.getParameter(ConstantController.Parameter.ID_FLIGHT);
 		int idFlight = Integer.parseInt(idFlightParam);
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
+		boolean result = false;
 		try {
-			boolean result=serviceFactory.getFlightService().changeFlightStatus(idFlight, flightStatus);
+			 result=serviceFactory.getFlightService().changeFlightStatus(idFlight, flightStatus);
+		} catch (ServiceException e) {
+			LOGGER.error(LoggerMessageConstant.ERROR_SHANGE_FLIGHT_STATUS, e);
+			request.setAttribute(ConstantController.Attribute.ERROR, e);
+		}
 			if(result) {
 				LOGGER.info(LoggerMessageConstant.FLIGHT_STATUS_CHANGED);
 			}else {
 				LOGGER.info(LoggerMessageConstant.FLIGHT_STATUS_NOT_CHANGED);
 			}
-		} catch (ServiceException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_SHANGE_FLIGHT_STATUS, e);
-		}
+		
 		String selectedFlightStatusForFlights = (String) request.getSession()
 				.getAttribute(ConstantController.Attribute.SELECTED_FLIGHT_STATUS_FOR_FLIGHTS);
+		List<Flight> flights = null;
 		try {
-			List<Flight> flights = serviceFactory.getFlightService()
+			 flights = serviceFactory.getFlightService()
 					.getFlights(FlightStatus.valueOf(selectedFlightStatusForFlights));
+		} catch (ServiceException e) {
+			LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e);
+			request.setAttribute(ConstantController.Attribute.ERROR, e);
+		}
 			request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
 			request.getSession().setAttribute(ConstantController.Attribute.FLIGHT_STATUS, flightStatus);
 			try {
@@ -51,9 +59,7 @@ public class ChangeFlightStatusCommand implements Command {
 			} catch (ServletException | IOException e) {
 				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
-		} catch (ServiceException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-		}
+		
 
 	}
 }

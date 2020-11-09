@@ -43,34 +43,34 @@ public class GetUsersByFlightIdCommand implements Command {
 						flights = flightService.getFlights(
 								FlightStatus.valueOf(request.getParameter(ConstantController.Parameter.STATUS)));
 						request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
-						try {
-							request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE)
-									.forward(request, response);
-						} catch (ServletException | IOException e) {
-							LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-						}
 					} catch (ServiceException e2) {
 						LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e2);
+						request.setAttribute(ConstantController.Attribute.ERROR, e2);
 					}
-
 				} else {
 					LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_FLIGHT_STATUS);
-					try {
 						request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
-								ConstantController.PathToPage.PATH_TO_GET_USERS_BY_FLIGHT);
-						request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
-								response);
-					} catch (ServletException | IOException e) {
-						LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-					}
+								ConstantController.PathToPage.PATH_TO_GET_USERS_BY_FLIGHT);	
 				}
 			} else {
 				int idSelectedFlight = Integer.parseInt(selectedFlight);
 				UserService userService = serviceFactory.getUserService();
-				try {
-					Flight flight = flightService.getFlight(idSelectedFlight);
-					request.setAttribute(ConstantController.Attribute.SELECTED_FLIGHT, flight);
-					List<Crew> team = userService.getUsers(idSelectedFlight);
+				
+					Flight flight = null;
+					try {
+						flight = flightService.getFlight(idSelectedFlight);
+					} catch (ServiceException e) {
+						LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHT, e);
+						request.setAttribute(ConstantController.Attribute.ERROR, e);
+					}
+					request.getSession().setAttribute(ConstantController.Attribute.SELECTED_FLIGHT, flight);
+					List<Crew> team = null;
+					try {
+						team = userService.getUsers(idSelectedFlight);
+					} catch (ServiceException e) {
+						LOGGER.error(LoggerMessageConstant.ERROR_GET_USERS_BY_FLIGHT_ID, e);
+						request.setAttribute(ConstantController.Attribute.ERROR, e);
+					}
 					request.setAttribute(ConstantController.Attribute.TEAM_BY_FLIGHT, team);
 
 					UserRole userCurrentRole = ((User) request.getSession()
@@ -89,24 +89,17 @@ public class GetUsersByFlightIdCommand implements Command {
 								ConstantController.PathToPage.PATH_TO_GET_CREW_BY_FLIGHT_FOR_CREW);
 						break;
 					}
-					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
-							response);
-				} catch (ServiceException | ServletException | IOException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-				}
 			}
 		} else {
-
-			try {
 				request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 						ConstantController.PathToPage.PATH_TO_GET_CREW_BY_FLIGHT);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
-						response);
-			} catch (ServletException | IOException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
 		}
-
+			try {
+			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
+					response);
+		} catch (ServletException | IOException e) {
+			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+		}
 	}
 
 }

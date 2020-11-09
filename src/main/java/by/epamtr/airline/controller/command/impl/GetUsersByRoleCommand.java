@@ -42,24 +42,19 @@ public class GetUsersByRoleCommand implements Command {
 			try {
 				List<User> users = userService.getUsers(userRole);
 				request.setAttribute(ConstantController.Attribute.USER_BY_ROLE, users);
-				request.setAttribute(ConstantController.Attribute.CURRENT_ROLE, userRole);
-				try {
-					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
-							response);
-				} catch (ServletException | IOException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-				}
+				request.getSession().setAttribute(ConstantController.Attribute.CURRENT_ROLE, userRole);
 			} catch (ServiceException e2) {
 				LOGGER.error(LoggerMessageConstant.ERROR_GET_USERS_BY_ROLE, e2);
+				request.setAttribute(ConstantController.Attribute.ERROR, e2);
 			}
 		} else {
 			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_USERS_ROLE);
-			try {
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
-						response);
-			} catch (ServletException | IOException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
+		}
+		try {
+			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
+					response);
+		} catch (ServletException | IOException e) {
+			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 	}
 }

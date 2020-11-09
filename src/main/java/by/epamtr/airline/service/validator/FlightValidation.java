@@ -2,7 +2,6 @@ package by.epamtr.airline.service.validator;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,8 +42,10 @@ public class FlightValidation {
 	}
 	
 	public static boolean dateValidation(String date) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
 		LocalDateTime currentDate= LocalDateTime.now();
+		if(date=="") {
+			return false;
+		}
 		LocalDateTime dateTime = LocalDateTime.parse(date);
 		int result=currentDate.compareTo(dateTime);
 		if(result>0) {

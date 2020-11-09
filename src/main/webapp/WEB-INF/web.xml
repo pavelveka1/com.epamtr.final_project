@@ -34,8 +34,6 @@
 	<servlet-class>by.epamtr.airline.controller.LocaleController</servlet-class>
 </servlet>
 
-
-
 <servlet-mapping>
 	<servlet-name>MainController</servlet-name>
 	<url-pattern>/Controller</url-pattern>
@@ -44,6 +42,11 @@
 	<servlet-name>LocaleController</servlet-name>
 	<url-pattern>/Locale</url-pattern>
 </servlet-mapping>
+
+ <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/page_not_found.jsp</location>
+    </error-page>
 
    <welcome-file-list>  
    <welcome-file>index.jsp</welcome-file>    

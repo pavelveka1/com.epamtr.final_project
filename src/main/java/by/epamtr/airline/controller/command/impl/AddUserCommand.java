@@ -39,7 +39,7 @@ public class AddUserCommand implements Command {
 			userInfo.setLogin(request.getParameter(ConstantController.Parameter.LOGIN));
 			userInfo.setPassword(request.getParameter(ConstantController.Parameter.PASSWORD));
 			boolean result=false;
-			try {
+		
 				 boolean dataIsValid=true;
 				 if(!UserValidation.nameValidation(user.getName())) {
 					 request.setAttribute(ConstantController.Attribute.NAME_VALID, false);
@@ -67,7 +67,12 @@ public class AddUserCommand implements Command {
 					 dataIsValid=false;
 				 }
 				 if(dataIsValid==true) {
-						result=userService.addUser(user, userInfo);
+						try {
+							result=userService.addUser(user, userInfo);
+						} catch (ServiceException e) {
+							LOGGER.error(LoggerMessageConstant.ERROR_ADD_USER, e);
+							request.setAttribute(ConstantController.Attribute.ERROR, e);
+						}
 						if (result) {
 							LOGGER.info(LoggerMessageConstant.USER_ADDED);
 							request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.SUCCESSFUL_OPERATION);
@@ -78,17 +83,14 @@ public class AddUserCommand implements Command {
 				 }else {
 					 LOGGER.info(LoggerMessageConstant.USER_NOT_VALID);
 				 }
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServiceException | ServletException | IOException e2) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e2);
-			}
+				
 		}else {
-			try {
-				LOGGER.info(LoggerMessageConstant.GO_TO_ADD_USER_PAGE);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServletException | IOException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
+				LOGGER.info(LoggerMessageConstant.GO_TO_ADD_USER_PAGE);	
 		}
+		try {
+		request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+	} catch (ServletException | IOException e) {
+		LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+	}
 	}
 }

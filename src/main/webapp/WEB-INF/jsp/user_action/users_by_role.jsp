@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="java-classes" uri="/WEB-INF/tag.tld"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,14 +8,21 @@
 <title>Users by role</title>
 </head>
 <body>
+<c:choose>
+		<c:when test="${error!=null}">
+			<java-classes:printErrorInformation errorType="${error}" />
+Error is not null
+</c:when>
+		<c:otherwise>
 	<form action="Controller" method="POST">
 		<input type="hidden" name="command" value="GET_FLIGHTS_BY_USER">
 		<input type="hidden" name="form" value="filled"> <label>
 			Choose role</label> <select name="role">
 			<option>PILOT</option>
-			<option>FLIGHT ATTENDANT</option>
+			<option>ATTENDANT</option>
 			<option>ENGINEER</option>
-		</select> <input type="submit" value="Find" /> <br> <br> <br>
+		</select> <input type="submit" value="Find" />
+		</form> <br> <br> <br>
 		<form action="Controller" method="POST">
 			<input type="hidden" name="command" value="GET_FLIGHTS_BY_USER">
 			<c:choose>
@@ -45,6 +53,8 @@
 						</c:forEach>
 					</table>
 				</c:when>
+			</c:choose>
+			</c:otherwise>
 			</c:choose>
 </body>
 </html>

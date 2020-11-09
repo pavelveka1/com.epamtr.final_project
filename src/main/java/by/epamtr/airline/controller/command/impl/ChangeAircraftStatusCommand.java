@@ -29,32 +29,44 @@ public class ChangeAircraftStatusCommand implements Command {
 		List<Aircraft> aircrafts = new ArrayList<Aircraft>();
 		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_CHANGE_AIRCRAFT_STATUS);
 		if (idAircraftParam == null) {
+			LOGGER.info(LoggerMessageConstant.GO_TO_CHANGE_AIRCRAFT_STATUS_PAGE);
 			try {
-				LOGGER.info(LoggerMessageConstant.GO_TO_CHANGE_AIRCRAFT_STATUS_PAGE);
 				aircrafts = aircraftService.getAircraftrs();
-				request.setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServletException | IOException | ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			} catch (ServiceException e) {
+				LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, e);
 			}
+			request.setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
 		} else {
-			try {
+			
 				String status=request.getParameter(ConstantController.Parameter.AIRCRAFT_STATUS);
 				int idAircraft=Integer.parseInt(idAircraftParam);
-				boolean result=aircraftService.changeAircraftStatus(idAircraft, status);
+				boolean result = false;
+				try {
+					result = aircraftService.changeAircraftStatus(idAircraft, status);
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_CHANGE_AIRCRAFT_STATUS, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
+				}
 				if(result) {
 					LOGGER.info(LoggerMessageConstant.AIRCRAFT_STATUS_CHANGED);
 				}else {
 					LOGGER.info(LoggerMessageConstant.AIRCRAFT_STATUS_NOT_CHANGED);
 				}
-				aircrafts = aircraftService.getAircraftrs();
+				try {
+					aircrafts = aircraftService.getAircraftrs();
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
+				}
 				request.setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServletException | IOException | ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
+			
 		}
-
+		try {
+		request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+	} catch (ServletException | IOException e) {
+		LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+	}
 	}
 
 }

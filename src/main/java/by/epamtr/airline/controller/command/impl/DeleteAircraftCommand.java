@@ -35,29 +35,41 @@ public class DeleteAircraftCommand implements Command {
 			try {
 				aircrafts = aircraftService.getAircraftrs();
 				request.setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
-						response);
-			} catch (ServletException | IOException | ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			} catch ( ServiceException e) {
+				LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, e);
 			}
 		} else {
-			try {
-				boolean result = aircraftService
-						.deleteAircraft(request.getParameter(ConstantController.Parameter.AIRCRAFT_NUMBER));
+			
+				boolean result = false;
+				try {
+					result = aircraftService
+							.deleteAircraft(request.getParameter(ConstantController.Parameter.AIRCRAFT_NUMBER));
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_DELETE_AIRCRAFT, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
+				}
 				if (result) {
 					LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_DELETED);
 				} else {
 					LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_NOT_DELETED);
 				}
-				aircrafts = aircraftService.getAircraftrs();
+				try {
+					aircrafts = aircraftService.getAircraftrs();
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
+				}
 				request.setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
-						response);
-			} catch (ServletException | IOException | ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
+				
+			
 		}
-
+		try {
+		request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
+				response);
+	} catch (ServletException | IOException e) {
+		LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+	}
 	}
 
 }

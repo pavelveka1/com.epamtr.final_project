@@ -34,23 +34,23 @@ public class AddFlightCommand implements Command {
 		String currentCity=request.getParameter(ConstantController.Parameter.CURRENT_CITY);
 		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_ADD_FLIGHT);
 		if(currentCity==null) {
-			try {
 				try {
 					aircrafts=aircraftService.getAircraftrs();
 					request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
 				} catch (ServiceException e) {
 					LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
 				}
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServletException | IOException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
 		}else {
 			try {
 				String currentTown = request.getParameter(ConstantController.Parameter.CURRENT_CITY);
 				String destinationCity = request.getParameter(ConstantController.Parameter.DESTINATION_CITY);
-				int flightRange = Integer.parseInt(request.getParameter(ConstantController.Parameter.FLIGHT_RANGE));
-				int flightTime = Integer.parseInt(request.getParameter(ConstantController.Parameter.FLIGHT_TIME));
+				int flightRange=0;
+				int flightTime=0;
+				if(request.getParameter(ConstantController.Parameter.FLIGHT_RANGE)!=""&& request.getParameter(ConstantController.Parameter.FLIGHT_TIME)!="") {
+					 flightRange = Integer.parseInt(request.getParameter(ConstantController.Parameter.FLIGHT_RANGE));
+					 flightTime = Integer.parseInt(request.getParameter(ConstantController.Parameter.FLIGHT_TIME));
+				}
 				String timeDeparture = request.getParameter(ConstantController.Parameter.TIME_DEPARTURE);
 				String status = request.getParameter(ConstantController.Parameter.STATUS);
 				int idAircraft = (Integer) request.getSession().getAttribute(ConstantController.Attribute.ID_AIRCRAFT);
@@ -98,14 +98,20 @@ public class AddFlightCommand implements Command {
 						}
 				 }else {
 					 LOGGER.info(LoggerMessageConstant.FLIGHT_NOT_VALID);
-				 }
-				
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServiceException | ServletException | IOException e) {
+					 
+				 }		
+			} catch (ServiceException e) {
 				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, e);
 			}
 			
 		}
+		
+		try {
+		request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+	} catch (ServletException | IOException e) {
+		LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+	}
 		
 	}
 

@@ -28,9 +28,26 @@ public class GetFlightsByUser implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		String userRole = request.getParameter(ConstantController.Parameter.USER_ROLE);
 		String selectedUserId = request.getParameter(ConstantController.Parameter.USER_ID);
-		if (selectedUserId != null) {
-			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_FLIGHTS_BY_USER);
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_FLIGHTS_BY_USER);
+
+		if (userRole != null) {
+
+			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_USERS_BY_ROLE);
+			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+					ConstantController.PathToPage.PATH_TO_USERS_BY_ROLE);
+			request.setAttribute(ConstantController.Attribute.SELECTED_ROLE, userRole);
+			try {
+				List<User> users = serviceFactory.getUserService().getUsers(UserRole.valueOf(userRole));
+				request.setAttribute(ConstantController.Attribute.USERS_BY_ROLE, users);
+			} catch (ServiceException e) {
+				LOGGER.error(LoggerMessageConstant.ERROR_GET_USERS_BY_ROLE, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, e);
+			}
+
+		} else {
+			if (selectedUserId != null) {
+				LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_FLIGHTS_BY_USER);
+				request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+						ConstantController.PathToPage.PATH_TO_FLIGHTS_BY_USER);
 				UserService userService = serviceFactory.getUserService();
 				FlightService flightService = serviceFactory.getFlightService();
 				try {
@@ -39,33 +56,21 @@ public class GetFlightsByUser implements Command {
 					List<Flight> flights = flightService.getFlights(idUser);
 					request.setAttribute(ConstantController.Attribute.SELECTED_USER, user);
 					request.setAttribute(ConstantController.Attribute.FLIGHTS, flights);
-					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-				} catch (NumberFormatException | ServiceException | ServletException | IOException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-				
-			}
-		} else {
-			if (userRole != null) {
-				LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_USERS_BY_ROLE);
-				request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_USERS_BY_ROLE);
-				request.setAttribute(ConstantController.Attribute.SELECTED_ROLE, userRole);
-				try {
-					List<User> users=serviceFactory.getUserService().getUsers(UserRole.valueOf(userRole));
-					request.setAttribute(ConstantController.Attribute.USERS_BY_ROLE, users);
-					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-				} catch (ServiceException |ServletException | IOException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS_BY_USER_ID, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
 				}
-			}else {
+			} else {
 				LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_USERS_ROLE);
-				request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_USERS_BY_ROLE);
-				try {
-					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-				} catch (ServletException | IOException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-				}
+				request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+						ConstantController.PathToPage.PATH_TO_USERS_BY_ROLE);
 			}
+
+		}
+		try {
+			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+		} catch (ServletException | IOException e) {
+			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 	}
-
 }

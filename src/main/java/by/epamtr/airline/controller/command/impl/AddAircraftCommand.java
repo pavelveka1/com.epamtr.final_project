@@ -24,13 +24,15 @@ public class AddAircraftCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		 ServiceFactory serviceFactory = ServiceFactory.getInstance();
-		 AircraftService aircraftService = serviceFactory.getAircraftService();
+		ServiceFactory serviceFactory = ServiceFactory.getInstance();
+		AircraftService aircraftService = serviceFactory.getAircraftService();
 		List<AircraftType> aircraftTypes = null;
+
 		try {
 			aircraftTypes = aircraftService.getAircraftTypes();
 		} catch (ServiceException e1) {
 			LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFT_TYPES, e1);
+			request.setAttribute(ConstantController.Attribute.ERROR, e1);
 		}
 
 		request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFT_TYPES, aircraftTypes);
@@ -38,46 +40,57 @@ public class AddAircraftCommand implements Command {
 		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 				ConstantController.PathToPage.PATH_TO_ADD_AIRCRAFT);
 		if (registerNumberParameter == null) {
-			try {
-				LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_ADD_AIRCRAFT);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
-						response);
-			} catch (ServletException | IOException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
+			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_ADD_AIRCRAFT);
 		} else {
-			try {
-				int idTypeAircraft = (Integer) request.getSession()
-						.getAttribute(ConstantController.Attribute.ID_AIRCRAFT_TYPE);
-				AircraftType aircraftType = new AircraftType();
-				aircraftType.setIdAircraftType(idTypeAircraft);
-				String registerNumber = request.getParameter(ConstantController.Parameter.REGISTER_NUMBER_PARAM);
-				String statusAircraft = request.getParameter(ConstantController.Parameter.AIRCRAFT_STATUS_PARAM);
-				Aircraft aircraft = new Aircraft();
-				aircraft.setRegisterNumber(registerNumber);
-				aircraft.setStatus(statusAircraft);
-				if (AircraftValidation.validateRegistrationNumber(registerNumber)) {
-					boolean result = aircraftService.addAircraft(aircraft, aircraftType);
-					if (result) {
-						LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_ADDED);
-						request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
-								ConstantController.Attribute.SUCCESSFUL_OPERATION);
-					} else {
-						LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_NOT_ADDED);
-						request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
-								ConstantController.Attribute.FAILED_OPERATION);
-					}
-				} else {
-					LOGGER.info(LoggerMessageConstant.AIRCRAFT_DATA_NOT_VALID);
-					request.setAttribute(ConstantController.Attribute.DATA_IS_VALID, false);
+
+			int idTypeAircraft = (Integer) request.getSession()
+					.getAttribute(ConstantController.Attribute.ID_AIRCRAFT_TYPE);
+			AircraftType aircraftType = new AircraftType();
+			aircraftType.setIdAircraftType(idTypeAircraft);
+			String registerNumber = request.getParameter(ConstantController.Parameter.REGISTER_NUMBER_PARAM);
+			String statusAircraft = request.getParameter(ConstantController.Parameter.AIRCRAFT_STATUS_PARAM);
+			Aircraft aircraft = new Aircraft();
+			aircraft.setRegisterNumber(registerNumber);
+			aircraft.setStatus(statusAircraft);
+			if (AircraftValidation.validateRegistrationNumber(registerNumber)) {
+				boolean result = false;
+				try {
+					result = aircraftService.addAircraft(aircraft, aircraftType);
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_ADD_AIRCRAFT, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
+					request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+							ConstantController.PathToPage.PATH_TO_ERROR_PAGE);
 				}
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
-						response);
-			} catch (ServletException | IOException | ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_ADD_AIRCRAFT, e);
+				if (result) {
+					LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_ADDED);
+					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+							ConstantController.Attribute.SUCCESSFUL_OPERATION);
+				} else {
+					LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_NOT_ADDED);
+					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+							ConstantController.Attribute.FAILED_OPERATION);
+				}
+			} else {
+				LOGGER.info(LoggerMessageConstant.AIRCRAFT_DATA_NOT_VALID);
+				request.setAttribute(ConstantController.Attribute.DATA_IS_VALID, false);
 			}
 		}
+		try {
 
+			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+		} catch (ServletException | IOException e) {
+			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			request.setAttribute(ConstantController.Attribute.ERROR, e);
+			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+					ConstantController.PathToPage.PATH_TO_ERROR_PAGE);
+			try {
+				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
+						response);
+			} catch (ServletException | IOException e1) {
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e1);
+			}
+		}
 	}
 
 }

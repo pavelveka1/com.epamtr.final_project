@@ -39,18 +39,20 @@ public class UpdateUserCommand implements Command {
 			}
 			if (idUser > 0) {
 				request.getSession().setAttribute(ConstantController.Attribute.ID_USER, String.valueOf(idUser));
-				try {
-					User user = userService.getUser(idUser);
-					UserInfo userInfo = userService.getUserInfo(idUser);
+					User user = null;
+					UserInfo userInfo = null;
+					try {
+						user = userService.getUser(idUser);
+						userInfo = userService.getUserInfo(idUser);
+					} catch (ServiceException e) {
+						LOGGER.error(LoggerMessageConstant.ERROR_GET_USER_DATA, e);
+						request.setAttribute(ConstantController.Attribute.ERROR, e);
+					}
+					
 					request.getSession().setAttribute(ConstantController.Attribute.SELECTED_USER, user);
 					request.getSession().setAttribute(ConstantController.Attribute.USER_INFO, userInfo);
-					request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-				} catch (ServletException | ServiceException | IOException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-				}
 			}
 		} else {
-			try {
 				String idUserAttr = (String) request.getSession().getAttribute(ConstantController.Attribute.ID_USER);
 				idUser = Integer.parseInt(idUserAttr);
 				User user=makeUser(request);
@@ -82,7 +84,13 @@ public class UpdateUserCommand implements Command {
 					 dataIsValid=false;
 				 }
 				 if(dataIsValid==true) {
-					 boolean result = userService.updateUser(user, userInfo);
+					 boolean result = false;
+					try {
+						result = userService.updateUser(user, userInfo);
+					} catch (ServiceException e) {
+						LOGGER.error(LoggerMessageConstant.ERROR_UPDATE_USER, e);
+						request.setAttribute(ConstantController.Attribute.ERROR, e);
+					}
 						if (result) {
 							LOGGER.info(LoggerMessageConstant.USER_IS_UPDATED);
 							request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.SUCCESSFUL_OPERATION);
@@ -94,15 +102,22 @@ public class UpdateUserCommand implements Command {
 					 LOGGER.info(LoggerMessageConstant.USER_UPDATE_DATA_NOT_VALID);
 				 }
 				
-				user = userService.getUser(idUser);
-				userInfo = userService.getUserInfo(idUser);
+				try {
+					user = userService.getUser(idUser);
+					userInfo = userService.getUserInfo(idUser);
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_GET_USER_DATA, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
+				}
+				
 				request.getSession().setAttribute(ConstantController.Attribute.SELECTED_USER, user);
 				request.getSession().setAttribute(ConstantController.Attribute.USER_INFO, userInfo);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServletException | IOException | ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
 		}
+		try {
+		request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+	} catch (ServletException | IOException e) {
+		LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+	}
 	}
 	
 	private User makeUser(HttpServletRequest request) {

@@ -30,6 +30,7 @@ public class ConstantController {
 		public static final String PATH_TO_UPDATE_AIRCRAFT = "/WEB-INF/jsp/administrator_action/update_aircraft.jsp";
 		public static final String PATH_TO_UPDATE_FLIGHT_DATA = "/WEB-INF/jsp/administrator_action/update_flight_data.jsp";
 		public static final String PATH_TO_UPDATE_USER_PAGE = "/WEB-INF/jsp/administrator_action/update_user.jsp";
+		public static final String PATH_TO_ERROR_PAGE="/WEB-INF/jsp/error_page.jsp";
 	}
 	
 	
@@ -122,6 +123,7 @@ public class ConstantController {
 		public static final String DESTINATION_CITY_VALID="destination_city_valid";
 		public static final String FLIGHT_TIME_VALID="flight_time_valid";
 		public static final String TIME_DEPARTURE_VALID="time_daparture_valid";
+		public static final String ERROR="error";
 		
 	}
 

@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.log4j.Logger;
+
+import by.epamtr.airline.controller.command.impl.AddFlightCommand;
 import by.epamtr.airline.dao.SQLQueryConstant;
 import by.epamtr.airline.dao.SQLTableConstant;
 import by.epamtr.airline.dao.UserDAO;
@@ -27,19 +30,20 @@ import by.epamtr.airline.entity.UserRole;
  *
  */
 public class SQLUserDAO implements UserDAO {
-
+	private static final Logger LOGGER = Logger.getLogger(SQLUserDAO.class);
 	/**
 	 * Constant which is used for comparing with number which return qls commands
 	 * (sql command return number of added/deleted/updated rows)
 	 */
 	private final int ZERO_USER_OPERATION = 0;
-/**
- * Instance of connection pool for database
- */
+	/**
+	 * Instance of connection pool for database
+	 */
 	private ConnectionPool connectionPool = ConnectionPoolImpl.getInstance();
 
 	/**
 	 * Sign in user
+	 * 
 	 * @param login
 	 * @param password
 	 * @return user if user with login and passwors is exist, otherwise null
@@ -72,13 +76,19 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection", e);
 		} finally {
-			releaseResourses(statement, rs, connection);
+			try {
+				connectionPool.releaseResourses(statement, rs, connection);
+			} catch (ConnectionPoolException e) {
+				LOGGER.error(e);
+			}
+
 		}
 		return user;
 	}
 
 	/**
 	 * Add new user in database
+	 * 
 	 * @param user
 	 * @param userInfo
 	 * @return true if user and userInfo were added
@@ -95,7 +105,7 @@ public class SQLUserDAO implements UserDAO {
 			connection = connectionPool.getConnection();
 			try {
 				statementUser = connection.prepareStatement(
-						String.format(SQLQueryConstant.UserConstant.ADD_USER_CHECK_LOGIN, userInfo.getLogin()));
+						String.format(SQLQueryConstant.UserConstant.CHECK_LOGIN, userInfo.getLogin()));
 				rs = statementUser.executeQuery();
 				if (rs.next()) {
 					statementUser.close();
@@ -105,7 +115,7 @@ public class SQLUserDAO implements UserDAO {
 					connection.setAutoCommit(false);
 					statementUser = connection.prepareStatement(SQLQueryConstant.CONSTRAINT_DISABLE);
 					statementUser.executeQuery();
-
+					statementUser.close();
 					statementUser = connection.prepareStatement(SQLQueryConstant.UserConstant.ADD_USER_INSERT_IN_USERS,
 							Statement.RETURN_GENERATED_KEYS);
 					statementUser.setString(1, user.getName());
@@ -121,7 +131,7 @@ public class SQLUserDAO implements UserDAO {
 					}
 
 					statementUserInfo = connection
-							.prepareStatement(SQLQueryConstant.UserConstant.ADD_USER_INSERT_IN_USERS_INFO);
+							.prepareStatement(SQLQueryConstant.UserConstant.ADD_USER_INFO_INSERT_IN_USERS_INFO);
 					statementUserInfo.setInt(1, idAddedUser);
 					statementUserInfo.setString(2, userInfo.getLogin());
 					statementUserInfo.setString(3, criptPassword(userInfo.getPassword()));
@@ -141,13 +151,18 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			releaseResourses(statementUser, statementUserInfo, rs, connection);
+			try {
+				connectionPool.releaseResourses(statementUser, statementUserInfo, rs, null, connection);
+			} catch (ConnectionPoolException e) {
+				LOGGER.error(e);
+			}
 		}
 
 	}
 
 	/**
 	 * Delete user from database
+	 * 
 	 * @param idUser
 	 * @return true if user was deleted
 	 * @throws DAOException if dao exception occurred while processing
@@ -164,7 +179,7 @@ public class SQLUserDAO implements UserDAO {
 				connection.setAutoCommit(false);
 				statement.executeUpdate(SQLQueryConstant.CONSTRAINT_DISABLE);
 				int deletedUsers = statement.executeUpdate(
-						String.format(SQLQueryConstant.UserConstant.DELETE_USER_FROM_USERS_INFO, idUser));
+						String.format(SQLQueryConstant.UserConstant.DELETE_USER_INFO_FROM_USERS_INFO, idUser));
 				int deletedInfo = statement
 						.executeUpdate(String.format(SQLQueryConstant.UserConstant.DELETE_USER_FROM_USERS, idUser));
 				statement.executeUpdate(SQLQueryConstant.CONSTRAINT_ENABLE);
@@ -180,12 +195,17 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			releaseResourses(statement, rs, connection);
+			try {
+				connectionPool.releaseResourses(statement, rs, connection);
+			} catch (ConnectionPoolException e) {
+				LOGGER.error(e);
+			}
 		}
 	}
 
 	/**
 	 * Update user's data in database
+	 * 
 	 * @param user
 	 * @param userInfo
 	 * @return true if user's data was updated
@@ -230,30 +250,17 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			// releaseResourses( statement, rs, connection);
-
-			connectionPool.releaseConnection(connection);
-
-			if (statementUser != null) {
-				try {
-					statementUser.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
+			try {
+				connectionPool.releaseResourses(statementUser, statementUserInfo, null, null, connection);
+			} catch (ConnectionPoolException e) {
+				LOGGER.error(e);
 			}
-			if (statementUserInfo != null) {
-				try {
-					statementUserInfo.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
-			}
-
 		}
 	}
 
 	/**
 	 * Get list of users by role of user from database
+	 * 
 	 * @param role
 	 * @return list of users by role
 	 * @throws DAOException if dao exception occurred while processing
@@ -283,7 +290,11 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			releaseResourses(statement, rs, connection);
+			try {
+				connectionPool.releaseResourses(statement, rs, connection);
+			} catch (ConnectionPoolException e) {
+				LOGGER.error(e);
+			}
 		}
 
 		return users;
@@ -291,6 +302,7 @@ public class SQLUserDAO implements UserDAO {
 
 	/**
 	 * Get list of users by flight id from database
+	 * 
 	 * @param idFlight
 	 * @return list of users by flight id
 	 * @throws DAOException if dao exception occurred while processing
@@ -318,13 +330,18 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			releaseResourses(statement, rs, connection);
+			try {
+				connectionPool.releaseResourses(statement, rs, connection);
+			} catch (ConnectionPoolException e) {
+				LOGGER.error(e);
+			}
 		}
 		return team;
 	}
 
 	/**
 	 * Get user by id of user from database
+	 * 
 	 * @param idUser
 	 * @return User object if user with such id is exist, otherwise false
 	 * @throws DAOException if dao exception occurred while processing
@@ -350,7 +367,11 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			releaseResourses(statement, rs, connection);
+			try {
+				connectionPool.releaseResourses(statement, rs, connection);
+			} catch (ConnectionPoolException e) {
+				LOGGER.error(e);
+			}
 		}
 
 		return user;
@@ -358,6 +379,7 @@ public class SQLUserDAO implements UserDAO {
 
 	/**
 	 * Get UserInfo object by id of user from database
+	 * 
 	 * @param idUser
 	 * @return UserInfo object if user with such id is exist, otherwise null
 	 * @throws DAOException if dao exception occurred while processing
@@ -383,7 +405,11 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			releaseResourses(statement, rs, connection);
+			try {
+				connectionPool.releaseResourses(statement, rs, connection);
+			} catch (ConnectionPoolException e) {
+				LOGGER.error(e);
+			}
 		}
 
 		return userInfo;
@@ -391,6 +417,7 @@ public class SQLUserDAO implements UserDAO {
 
 	/**
 	 * Delete crew member from flight by id of user in database
+	 * 
 	 * @param flightId
 	 * @param userId
 	 * @return true if crem member was deleted from flight, otherwise false
@@ -418,13 +445,19 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			releaseResourses(statement, rs, connection);
+			try {
+				connectionPool.releaseResourses(statement, rs, connection);
+			} catch (ConnectionPoolException e) {
+				LOGGER.error(e);
+			}
 		}
 		return result;
 	}
 
 	/**
-	 * Add crem member with id equals userId to flight with id equals flightid in database
+	 * Add crem member with id equals userId to flight with id equals flightid in
+	 * database
+	 * 
 	 * @param idCrewPosition
 	 * @param flightId
 	 * @param userId
@@ -441,6 +474,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				statement = connection.prepareStatement(SQLQueryConstant.CONSTRAINT_DISABLE);
 				statement.executeQuery();
+				statement.close();
 				statement = connection.prepareStatement(SQLQueryConstant.UserConstant.ADD_USER_TO_CREW_BY_FLIGHT_ID);
 				statement.setInt(1, idCrewPosition);
 				statement.setInt(2, flightId);
@@ -458,14 +492,10 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			// *********************************************
-			connectionPool.releaseConnection(connection);
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					throw new DAOException("erroe while closing statement", e);
-				}
+			try {
+				connectionPool.releaseResourses(statement, null, connection);
+			} catch (ConnectionPoolException e) {
+				LOGGER.error(e);
 			}
 		}
 		return result;
@@ -473,6 +503,7 @@ public class SQLUserDAO implements UserDAO {
 
 	/**
 	 * Get list of free crew positions for flight by id of flight
+	 * 
 	 * @param flightId
 	 * @param selectedPosition
 	 * @return list of free crew positions
@@ -501,13 +532,18 @@ public class SQLUserDAO implements UserDAO {
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("error while getting connection from ConnectionPool", e);
 		} finally {
-			releaseResourses(statement, rs, connection);
+			try {
+				connectionPool.releaseResourses(statement, rs, connection);
+			} catch (ConnectionPoolException e) {
+				LOGGER.error(e);
+			}
 		}
 		return users;
 	}
 
 	/**
 	 * Create User object using resultSet
+	 * 
 	 * @param resultSet
 	 * @return User object
 	 * @throws SQLException if sql exception occurred while processing
@@ -524,6 +560,7 @@ public class SQLUserDAO implements UserDAO {
 
 	/**
 	 * Create Crew object using resultSet
+	 * 
 	 * @param resultSet
 	 * @return Crew object
 	 * @throws SQLException if sql exception occurred while processing
@@ -538,6 +575,7 @@ public class SQLUserDAO implements UserDAO {
 
 	/**
 	 * Cript password
+	 * 
 	 * @param password
 	 * @return cripted password
 	 */
@@ -548,6 +586,7 @@ public class SQLUserDAO implements UserDAO {
 
 	/**
 	 * Create UserInfo object using resultSet
+	 * 
 	 * @param resultSet
 	 * @return UserInfo object
 	 * @throws DAOException if sql exception occurred while processing
@@ -568,6 +607,7 @@ public class SQLUserDAO implements UserDAO {
 
 	/**
 	 * Define id of user's role by UserRole
+	 * 
 	 * @param role
 	 * @return id of user's role
 	 */
@@ -588,100 +628,4 @@ public class SQLUserDAO implements UserDAO {
 		}
 		return 1;
 	}
-	
-	/**
-	 * Make user using resultSe
-	 * @param resultSet
-	 * @return
-	 * @throws DAOException
-	 */
-	private User makeUser(ResultSet resultSet) throws DAOException {
-		int id = 0;
-		String name = null;
-		String surname = null;
-		String patronimic = null;
-		String email = null;
-		UserRole role = UserRole.MANAGER;
-		try {
-			id = resultSet.getInt(SQLTableConstant.User.ID_USER);
-			name = resultSet.getString(SQLTableConstant.User.NAME);
-			surname = resultSet.getString(SQLTableConstant.User.SURNAME);
-			patronimic = resultSet.getString(SQLTableConstant.User.PATRONIMIC);
-			email = resultSet.getString(SQLTableConstant.User.E_MAIL);
-			int roleNumber = resultSet.getInt(SQLTableConstant.User.USER_ROLE);
-			role = convertNumberToUserRole(roleNumber);
-
-		} catch (SQLException e) {
-			throw new DAOException("Error while getting data from ResultSet", e);
-		}
-		return new User(id, name, surname, patronimic, email, role);
-	}
-
-	/**
-	 * Convert id user's role to UserRole
-	 * @param roleNumber
-	 * @return UserRole
-	 */
-	private UserRole convertNumberToUserRole(int roleNumber) {
-		switch (roleNumber) {
-		case 1:
-			return UserRole.MANAGER;
-		case 2:
-			return UserRole.DISPATCHER;
-		case 3:
-			return UserRole.ADMINISTRATOR;
-		case 4:
-			return UserRole.PILOT;
-		case 5:
-			return UserRole.ATTENDANT;
-		case 6:
-			return UserRole.ENGINEER;
-		}
-		return UserRole.MANAGER;
-	}
-
-	private void releaseResourses(Statement statement, ResultSet resultSet, Connection connection) throws DAOException {
-		if (resultSet != null) {
-			try {
-				resultSet.close();
-			} catch (SQLException e) {
-				throw new DAOException("erroe while closing resultSet", e);
-			}
-		}
-		if (statement != null) {
-			try {
-				statement.close();
-			} catch (SQLException e) {
-				throw new DAOException("erroe while closing statement", e);
-			}
-		}
-		connectionPool.releaseConnection(connection);
-	}
-
-	private void releaseResourses(Statement statementUser, Statement statementUserInfo, ResultSet resultSet,
-			Connection connection) throws DAOException {
-		if (resultSet != null) {
-			try {
-				resultSet.close();
-			} catch (SQLException e) {
-				throw new DAOException("erroe while closing resultSet", e);
-			}
-		}
-		if (statementUser != null) {
-			try {
-				statementUser.close();
-			} catch (SQLException e) {
-				throw new DAOException("erroe while closing statement", e);
-			}
-		}
-		if (statementUserInfo != null) {
-			try {
-				statementUserInfo.close();
-			} catch (SQLException e) {
-				throw new DAOException("erroe while closing statement", e);
-			}
-		}
-		connectionPool.releaseConnection(connection);
-	}
-
 }

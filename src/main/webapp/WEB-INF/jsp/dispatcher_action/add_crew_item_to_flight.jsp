@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="java-classes" uri="/WEB-INF/tag.tld"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +8,12 @@
 <title>Add crew to flight</title>
 </head>
 <body>
+<c:choose>
+		<c:when test="${error!=null}">
+			<java-classes:printErrorInformation errorType="${error}" />
+Error is not null
+</c:when>
+		<c:otherwise>
 	<strong> Flight: </strong>
 	<table>
 		<tr>
@@ -33,13 +40,11 @@
 		</select>
 		
 		 <input type="submit" value="Find" /> <br> <br> 
-		 
+		 </form>
 		 <c:choose>
 		<c:when test="${selected_position!=null}">
 		<label>Selected position: <c:out value="${selected_position}" /></label>
 		 <br>
-			<br>
-				value="${selected_flight.idFlight}">
 			<table border="1">
 				<tr>
 					<th>Name</th>
@@ -69,7 +74,8 @@
 		
 		</c:when>
 	</c:choose>
-		 
-		 
+		 </c:otherwise>
+		 </c:choose>
+	 
 </body>
 </html>

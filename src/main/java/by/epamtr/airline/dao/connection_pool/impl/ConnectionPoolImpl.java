@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -18,6 +20,7 @@ import org.apache.log4j.Logger;
 import by.epamtr.airline.controller.command.impl.AddFlightCommand;
 import by.epamtr.airline.dao.connection_pool.ConnectionPool;
 import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
+import by.epamtr.airline.dao.exception.DAOException;
 
 /**
  * Class for connection to database
@@ -234,5 +237,75 @@ public class ConnectionPoolImpl implements ConnectionPool {
 	 */
 	public static ConnectionPool getInstance() {
 		return instance;
+	}
+
+	/**
+	 * Overloaded Method for close resources. Method close ResultSet and Statement and return to pool Connection
+	 * @param statement
+	 * @param resultSet
+	 * @param connection
+	 * @throws ConnectionPoolException 
+	 */
+	@Override
+	public void releaseResourses(Statement statement, ResultSet resultSet, Connection connection) throws ConnectionPoolException {
+		if (resultSet != null) {
+			try {
+				resultSet.close();
+			} catch (SQLException e) {
+				throw new ConnectionPoolException("erroe while closing resultSet", e);
+			}
+		}
+		if (statement!= null) {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				throw new ConnectionPoolException("erroe while closing statement", e);
+			}
+		}
+		this.releaseConnection(connection);	
+	}
+
+	/**
+	 * Overloaded method for close resources. Method close ResultSet and Statement and return to pool Connection
+	 * @param firstStatement
+	 * @param secondStatement
+	 * @param firsrResultSet
+	 * @param secondResultSet
+	 * @param connection
+	 * @throws ConnectionPoolException 
+	 */
+	@Override
+	public void releaseResourses(Statement firstStatement, Statement secondStatement, ResultSet firstResultSet,
+			ResultSet secondResultSet, Connection connection) throws ConnectionPoolException {
+		if (firstResultSet != null) {
+			try {
+				firstResultSet.close();
+			} catch (SQLException e) {
+				throw new ConnectionPoolException("erroe while closing resultSet", e);
+			}
+		}
+		if (secondResultSet != null) {
+			try {
+				secondResultSet.close();
+			} catch (SQLException e) {
+				throw new ConnectionPoolException("erroe while closing resultSet", e);
+			}
+		}
+		if (firstStatement!= null) {
+			try {
+				firstStatement.close();
+			} catch (SQLException e) {
+				throw new ConnectionPoolException("erroe while closing statement", e);
+			}
+		}
+		if (secondStatement!= null) {
+			try {
+				secondStatement.close();
+			} catch (SQLException e) {
+				throw new ConnectionPoolException("erroe while closing statement", e);
+			}
+		}
+		this.releaseConnection(connection);	
+		
 	}
 }

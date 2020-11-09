@@ -24,35 +24,50 @@ public class DeleteAircraftTypeCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		List<AircraftType> aircraftTypes;
+		List<AircraftType> aircraftTypes = null;
 		String deleteParameter = request.getParameter(ConstantController.Parameter.DELETE_AIRCRAFT_TYPE);
-		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_DELETE_AIRCRAFT_TYPE);
+		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+				ConstantController.PathToPage.PATH_TO_DELETE_AIRCRAFT_TYPE);
 		if (deleteParameter == null) {
+			LOGGER.info(LoggerMessageConstant.GO_TO_DELETE_AIRCRAFT_TYPE);
 			try {
-				LOGGER.info(LoggerMessageConstant.GO_TO_DELETE_AIRCRAFT_TYPE);
 				aircraftTypes = aircraftService.getAircraftTypes();
 				request.setAttribute(ConstantController.Attribute.AIRCRAFT_TYPES, aircraftTypes);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServletException | IOException | ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			} catch (ServiceException e) {
+				LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFT_TYPES, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, e);
 			}
 		} else {
-			 try {
-				 int id=(Integer)request.getSession().getAttribute(ConstantController.Attribute.ID_AIRCRAFT_TYPE);
-				boolean result=aircraftService.deliteAircraftType(id);
-				if(result) {
-					LOGGER.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_DELETED);
-				}else {
-					LOGGER.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_NOT_DELETED);
-				}
-				aircraftTypes = aircraftService.getAircraftTypes();
-				request.setAttribute(ConstantController.Attribute.AIRCRAFT_TYPES, aircraftTypes);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (NumberFormatException | ServiceException | ServletException | IOException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+
+			int id = (Integer) request.getSession().getAttribute(ConstantController.Attribute.ID_AIRCRAFT_TYPE);
+			boolean result = false;
+			try {
+				result = aircraftService.deliteAircraftType(id);
+			} catch (ServiceException e) {
+				LOGGER.error(LoggerMessageConstant.ERROR_DELETE_AIRCRAFT_TYPE, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, e);
 			}
+			if (result) {
+				LOGGER.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_DELETED);
+				request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+						ConstantController.Attribute.SUCCESSFUL_OPERATION);
+			} else {
+				LOGGER.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_NOT_DELETED);
+				request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+						ConstantController.Attribute.FAILED_OPERATION);
+			}
+			try {
+				aircraftTypes = aircraftService.getAircraftTypes();
+			} catch (ServiceException e) {
+				LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFT_TYPES, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, e);
+			}
+			request.setAttribute(ConstantController.Attribute.AIRCRAFT_TYPES, aircraftTypes);
 		}
-
+		try {
+			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+		} catch (ServletException | IOException e) {
+			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+		}
 	}
-
 }

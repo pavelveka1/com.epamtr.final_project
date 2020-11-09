@@ -24,47 +24,61 @@ public class UpdateAircraftCommand implements Command {
 	ServiceFactory serviceFactory = ServiceFactory.getInstance();
 	AircraftService aircraftService = serviceFactory.getAircraftService();
 	List<Aircraft> aircrafts = new ArrayList<Aircraft>();
-	List<AircraftType> aircraftTypes=new ArrayList<AircraftType>();
-	
+	List<AircraftType> aircraftTypes = new ArrayList<AircraftType>();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 
 		String aircraftsParameter = request.getParameter(ConstantController.Parameter.AIRCRAFT_NUMBER);
-		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_UPDATE_AIRCRAFT);
+		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+				ConstantController.PathToPage.PATH_TO_UPDATE_AIRCRAFT);
 		if (aircraftsParameter == null) {
-			try {
 				LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_AIRCRAFT);
-				aircrafts = aircraftService.getAircraftrs();
-				request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServletException | IOException | ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
-		} else {
-			try {
-				String registrationNumber = request.getParameter(ConstantController.Parameter.AIRCRAFT_NUMBER);
-				String newRegistrationNumber = request.getParameter(ConstantController.Parameter.REGISTER_NUMBER_PARAM);
-				if(AircraftValidation.validateRegistrationNumber(newRegistrationNumber)) {
-					boolean result=aircraftService.updateAircraft(registrationNumber, newRegistrationNumber);
-					if (result) {
-						LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_UPDATED);
-						request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.SUCCESSFUL_OPERATION);
-					} else {
-						LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_NOT_UPDATED);
-						request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.FAILED_OPERATION);
-					}
-				}else {
-					request.setAttribute(ConstantController.Attribute.DATA_IS_VALID, false);
+				try {
+					aircrafts = aircraftService.getAircraftrs();
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
 				}
-				aircrafts = aircraftService.getAircraftrs();
 				request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServletException | IOException | ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
-		}
+		} else {
 
+			String registrationNumber = request.getParameter(ConstantController.Parameter.AIRCRAFT_NUMBER);
+			String newRegistrationNumber = request.getParameter(ConstantController.Parameter.REGISTER_NUMBER_PARAM);
+			if (AircraftValidation.validateRegistrationNumber(newRegistrationNumber)) {
+				boolean result = false;
+				try {
+					result = aircraftService.updateAircraft(registrationNumber, newRegistrationNumber);
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_UPDATE_AIRCRAFT, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
+				}
+				if (result) {
+					LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_UPDATED);
+					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+							ConstantController.Attribute.SUCCESSFUL_OPERATION);
+				} else {
+					LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_NOT_UPDATED);
+					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+							ConstantController.Attribute.FAILED_OPERATION);
+				}
+			} else {
+				request.setAttribute(ConstantController.Attribute.DATA_IS_VALID, false);
+			}
+			try {
+				aircrafts = aircraftService.getAircraftrs();
+			} catch (ServiceException e) {
+				LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, e);
+			}
+			request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
+
+		}
+		try {
+			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+		} catch (ServletException | IOException e) {
+			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+		}
 	}
 
 }

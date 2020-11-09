@@ -1,17 +1,13 @@
 package by.epamtr.airline.controller.command.impl;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-
 import by.epamtr.airline.controller.ConstantController;
 import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
-import by.epamtr.airline.dao.exception.DAOException;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.entity.UserRole;
 import by.epamtr.airline.service.ServiceFactory;
@@ -37,13 +33,14 @@ public class SignIn implements Command {
 			user=userService.signIn(login, password);
 		} catch (ServiceException e2) {
 			LOGGER.error(LoggerMessageConstant.ERROR_SIGN_IN, e2);
+			request.setAttribute(ConstantController.Attribute.ERROR, e2);
 		}
 		if(user==null) {
 			request.setAttribute(ConstantController.Attribute.SIGN_IN_FAIL_ATTR, ConstantController.Attribute.SIGN_IN_FAIL);
 			try {
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_CONTROLLER).forward(request, response);
+				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_LOGIN_PAGE).forward(request, response);
 			} catch (ServletException | IOException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_CONTROLLER, e);
+				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_LOGIN_PAGE, e);
 			}
 		}else {
 			request.getSession().setAttribute(ConstantController.Attribute.SIGNED_IN_USER, user);

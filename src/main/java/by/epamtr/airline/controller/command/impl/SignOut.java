@@ -18,9 +18,9 @@ public class SignOut implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		request.getSession().invalidate();
 		try {
-			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_CONTROLLER).forward(request, response);
+			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_LOGIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_LOGIN_PAGE, e);
 		}
 	}
 
