@@ -33,8 +33,8 @@ public class AircraftValidation {
 		}
 	}
 	
-	public static boolean validateNumberPassenger(int numberPassenger) {
-		matcher=numberPassengerPattern.matcher(String.valueOf(numberPassenger));
+	public static boolean validateNumberPassenger(String numberPassenger) {
+		matcher=numberPassengerPattern.matcher(numberPassenger);
 		if(matcher.matches()) {
 			return true;
 		}else {
@@ -42,8 +42,8 @@ public class AircraftValidation {
 		}
 	}
 	
-	public static boolean validateFlightRange(int flightRange) {
-		matcher=flightRangePattern.matcher(String.valueOf(flightRange));
+	public static boolean validateFlightRange(String flightRange) {
+		matcher=flightRangePattern.matcher(flightRange);
 		if(matcher.matches()) {
 			return true;
 		}else {

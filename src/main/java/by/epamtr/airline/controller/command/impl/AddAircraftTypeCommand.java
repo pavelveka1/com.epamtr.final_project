@@ -28,31 +28,30 @@ public class AddAircraftTypeCommand implements Command {
 		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 				ConstantController.PathToPage.PATH_TO_ADD_AIRCRAFT_TYPE);
 		if (page != null) {
-			
 				String aircraftType = request.getParameter(ConstantController.Parameter.AIRCRAFT_TYPE);
-				int flightRange = Integer.parseInt(request.getParameter(ConstantController.Parameter.RANGE_FLIGHT));
-				int numberPassenger = Integer
-						.parseInt(request.getParameter(ConstantController.Parameter.NUMBER_PASSENGERS));
-				AircraftType typeAircraft = new AircraftType();
-				typeAircraft.setAircraftType(aircraftType);
-				typeAircraft.setRangeFlight(flightRange);
-				typeAircraft.setNumberPassenger(numberPassenger);
+				String flightRangeParam = request.getParameter(ConstantController.Parameter.RANGE_FLIGHT);
+				String numberPassengerParam =request.getParameter(ConstantController.Parameter.NUMBER_PASSENGERS);
+				
 				boolean dataIsValid = true;
 				if (!AircraftValidation.validateAircraftType(aircraftType)) {
 					request.setAttribute(ConstantController.Attribute.AIRCRAFT_TYPE_VALID, false);
 					dataIsValid = false;
 				}
-				if (!AircraftValidation.validateNumberPassenger(numberPassenger)) {
+				if (!AircraftValidation.validateNumberPassenger(numberPassengerParam)) {
 					request.setAttribute(ConstantController.Attribute.PASSENGER_NUMBER_VALID, false);
 					dataIsValid = false;
 				}
-				if (!AircraftValidation.validateFlightRange(flightRange)) {
+				if (!AircraftValidation.validateFlightRange(flightRangeParam)) {
 					request.setAttribute(ConstantController.Attribute.FLIGHT_RANGE_VALID, false);
 					dataIsValid = false;
 				}
 				boolean result = false;
 				if (dataIsValid == true) {
 					try {
+						AircraftType typeAircraft = new AircraftType();
+						typeAircraft.setAircraftType(aircraftType);
+						typeAircraft.setRangeFlight(Integer.parseInt(flightRangeParam));
+						typeAircraft.setNumberPassenger(Integer.parseInt(numberPassengerParam));
 					 result = aircraftService.addAircraftType(typeAircraft);
 					} catch (ServiceException e) {
 						LOGGER.error(LoggerMessageConstant.ERROR_ADD_AIRCRAFT_TYPE, e);

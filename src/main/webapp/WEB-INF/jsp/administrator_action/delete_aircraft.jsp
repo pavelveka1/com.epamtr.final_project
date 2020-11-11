@@ -1,10 +1,17 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="java-classes" uri="/WEB-INF/tag.tld"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<fmt:setLocale value="${sessionScope.local}" />
+<fmt:setBundle basename="by.epamtr.airline.localization.local" var="loc" />
+<fmt:message bundle="${loc}" key="aircraft.delete.ok"
+	var="aircraft_delete_ok" />
+<fmt:message bundle="${loc}" key="aircraft.delete.fail"
+	var="aircraft_delete_fail" />
+<meta charset="UTF-8">
 <title>Delete aircraft</title>
 </head>
 <body>
@@ -25,6 +32,14 @@ Error is not null
 					</c:forEach>
 				</select> <input type="submit" value="delete aircraft" />
 			</form>
+			<c:choose>
+				<c:when test="${result_attr=='success'}">
+					<c:out value="${aircraft_delete_ok}" />
+				</c:when>
+				<c:when test="${result_attr=='fail'}">
+					<c:out value="${aircraft_delete_fail}" />
+				</c:when>
+			</c:choose>
 		</c:otherwise>
 	</c:choose>
 </body>

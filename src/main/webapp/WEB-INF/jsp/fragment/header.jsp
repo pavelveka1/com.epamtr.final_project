@@ -92,7 +92,7 @@ a:active {
   <div>
 	<form action="Locale" method="POST">
 			<input type="hidden" name="local" value="ru"> <input
-				type="hidden" name="jsp" value="/WEB-INF/jsp/administrator_page.jsp">
+				type="hidden" name="jsp" value="/WEB-INF/jsp/main_page.jsp">
 			<input type="image"
 				src="https://v1.iconsearch.ru/uploads/icons/finalflags/48x48/russia-flag.png"
 				alt="Russian" />
@@ -101,7 +101,7 @@ a:active {
 	<div>
 	<form action="Locale" method="POST">
 			<input type="hidden" name="local" value="en"> <input
-				type="hidden" name="jsp" value="/WEB-INF/jsp/administrator_page.jsp">
+				type="hidden" name="jsp" value="/WEB-INF/jsp/main_page.jsp">
 			<input type="image"
 				src="https://v1.iconsearch.ru/uploads/icons/finalflags/48x48/united-kingdom-flag.png"
 				alt="English" />

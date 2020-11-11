@@ -51,8 +51,12 @@ public class DeleteAircraftCommand implements Command {
 				}
 				if (result) {
 					LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_DELETED);
+					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+							ConstantController.Attribute.SUCCESSFUL_OPERATION);
 				} else {
 					LOGGER.info(LoggerMessageConstant.AIRCRAFT_IS_NOT_DELETED);
+					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+							ConstantController.Attribute.FAILED_OPERATION);
 				}
 				try {
 					aircrafts = aircraftService.getAircraftrs();
