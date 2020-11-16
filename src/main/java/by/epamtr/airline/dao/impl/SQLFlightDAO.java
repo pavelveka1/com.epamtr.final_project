@@ -46,44 +46,48 @@ public class SQLFlightDAO implements FlightDAO {
 	 */
 	@Override
 	public boolean addFlight(Flight flight, Aircraft aircraft) throws DAOException {
-		String currentCity = flight.getCurrentCity();
-		String destinationCity = flight.getDestinationCity();
-		int flightRange = flight.getFlightRange();
-		int flightTime = flight.getFlightTime();
-		String timeDeparture = flight.getTimeDeparture();
-		String status = flight.getStatus();
-		int idAircraft = aircraft.getIdAircraft();
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet rs = null;
-		try {
-			connection = connectionPool.getConnection();
+		if (flight == null || aircraft == null) {
+			return false;
+		} else {
+			String currentCity = flight.getCurrentCity();
+			String destinationCity = flight.getDestinationCity();
+			int flightRange = flight.getFlightRange();
+			int flightTime = flight.getFlightTime();
+			String timeDeparture = flight.getTimeDeparture();
+			String status = flight.getStatus();
+			int idAircraft = aircraft.getIdAircraft();
+			Connection connection = null;
+			PreparedStatement statement = null;
+			ResultSet rs = null;
 			try {
-				statement = connection.prepareStatement(SQLQueryConstant.FlightConstant.ADD_FLIGHT);
-				statement.setString(1, currentCity);
-				statement.setString(2, destinationCity);
-				statement.setInt(3, flightRange);
-				statement.setInt(4, flightTime);
-				statement.setString(5, timeDeparture);
-				statement.setInt(6, idAircraft);
-				statement.setString(7, status);
-				int row = statement.executeUpdate();
-				if (row == 1) {
-					return true;
-				} else {
-					return false;
-				}
+				connection = connectionPool.getConnection();
+				try {
+					statement = connection.prepareStatement(SQLQueryConstant.FlightConstant.ADD_FLIGHT);
+					statement.setString(1, currentCity);
+					statement.setString(2, destinationCity);
+					statement.setInt(3, flightRange);
+					statement.setInt(4, flightTime);
+					statement.setString(5, timeDeparture);
+					statement.setInt(6, idAircraft);
+					statement.setString(7, status);
+					int row = statement.executeUpdate();
+					if (row == 1) {
+						return true;
+					} else {
+						return false;
+					}
 
-			} catch (SQLException e) {
-				throw new DAOException("error while adding aircraft", e);
-			}
-		} catch (ConnectionPoolException e) {
-			throw new DAOException("error while getting connection from ConnectionPool", e);
-		} finally {
-			try {
-				connectionPool.releaseResourses(statement, rs, connection);
+				} catch (SQLException e) {
+					throw new DAOException("error while adding aircraft", e);
+				}
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				throw new DAOException("error while getting connection from ConnectionPool", e);
+			} finally {
+				try {
+					connectionPool.releaseResourses(statement, rs, connection);
+				} catch (ConnectionPoolException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 
@@ -132,6 +136,7 @@ public class SQLFlightDAO implements FlightDAO {
 
 	/**
 	 * Update flight in detabase
+	 * 
 	 * @param idFlight
 	 * @param flight
 	 * @return true if flight was updated, otherwise false
@@ -139,51 +144,55 @@ public class SQLFlightDAO implements FlightDAO {
 	 */
 	@Override
 	public Flight updateFlight(int idFlight, Flight flight) throws DAOException {
+		Flight updatedFlight = null;
+		if (flight != null) {
+			String currentCity = flight.getCurrentCity();
+			String destinationCity = flight.getDestinationCity();
+			int flightRange = flight.getFlightRange();
+			int flightTime = flight.getFlightTime();
+			String aircraftNumber = flight.getAircraftNumber();
+			String timeDeparture = flight.getTimeDeparture();
+			String flightStatus = flight.getStatus();
+			Connection connection = null;
+			PreparedStatement statement = null;
+			PreparedStatement updatedFlightStatement = null;
+			ResultSet rs = null;
 
-		String currentCity = flight.getCurrentCity();
-		String destinationCity = flight.getDestinationCity();
-		int flightRange = flight.getFlightRange();
-		int flightTime = flight.getFlightTime();
-		String aircraftNumber = flight.getAircraftNumber();
-		String timeDeparture = flight.getTimeDeparture();
-		String flightStatus = flight.getStatus();
-		Flight updatedFlight;
-		Connection connection = null;
-		PreparedStatement statement = null;
-		PreparedStatement updatedFlightStatement = null;
-		ResultSet rs = null;
-
-		try {
-			connection = connectionPool.getConnection();
 			try {
-				// connection.prepareStatement(SQLConstant.CONSTRAINT_DISABLE).executeQuery();
-				statement = connection.prepareStatement(
-						String.format(SQLQueryConstant.FlightConstant.UPDATE_FLIGHT, currentCity, destinationCity,
-								flightRange, flightTime, timeDeparture, aircraftNumber, flightStatus, idFlight));
-				statement.executeUpdate();
-				updatedFlightStatement = connection
-						.prepareStatement(String.format(SQLQueryConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
-				rs = updatedFlightStatement.executeQuery();
-				rs.next();
-				updatedFlight = createFlight(rs);
-				// connection.prepareStatement(SQLConstant.CONSTRAINT_ENABLE).executeQuery();
-			} catch (SQLException e) {
-				throw new DAOException("error while updating user", e);
-			}
-		} catch (ConnectionPoolException e) {
-			throw new DAOException("error while getting connection from ConnectionPool", e);
-		} finally {
-			try {
-				connectionPool.releaseResourses(updatedFlightStatement, rs, connection);
+				connection = connectionPool.getConnection();
+				try {
+					statement = connection.prepareStatement(
+							String.format(SQLQueryConstant.FlightConstant.UPDATE_FLIGHT, currentCity, destinationCity,
+									flightRange, flightTime, timeDeparture, aircraftNumber, flightStatus, idFlight));
+					statement.executeUpdate();
+					updatedFlightStatement = connection
+							.prepareStatement(String.format(SQLQueryConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
+					rs = updatedFlightStatement.executeQuery();
+					if(rs.next()) {
+						updatedFlight = createFlight(rs);
+					}
+				} catch (SQLException e) {
+					throw new DAOException("error while updating user", e);
+				}
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				throw new DAOException("error while getting connection from ConnectionPool", e);
+			} finally {
+				try {
+					connectionPool.releaseResourses(updatedFlightStatement, rs, connection);
+				} catch (ConnectionPoolException e) {
+					LOGGER.error(e);
+				}
 			}
+		} else {
+			throw new DAOException("Parameter Flight is null");
 		}
+		
 		return updatedFlight;
 	}
 
 	/**
 	 * Change status of flight
+	 * 
 	 * @param idFlight
 	 * @param flightStatus new status
 	 * @return true if status was updated, otherwise false
@@ -221,6 +230,7 @@ public class SQLFlightDAO implements FlightDAO {
 
 	/**
 	 * Get flight by if of flight
+	 * 
 	 * @param idFlight
 	 * @return flight if found, otherwise null
 	 * @throws DAOException if dao exception occurred while processing
@@ -230,15 +240,16 @@ public class SQLFlightDAO implements FlightDAO {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		Flight flight;
+		Flight flight = null;
 		try {
 			connection = connectionPool.getConnection();
 			try {
 				statement = connection
 						.prepareStatement(String.format(SQLQueryConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
 				rs = statement.executeQuery();
-				rs.next();
-				flight = createFlight(rs);
+				if(rs.next()) {
+					flight = createFlight(rs);
+				}
 			} catch (SQLException e) {
 				throw new DAOException("error while getting flight by id", e);
 			}
@@ -257,6 +268,7 @@ public class SQLFlightDAO implements FlightDAO {
 
 	/**
 	 * Get list of flights
+	 * 
 	 * @return list of flights
 	 * @throws DAOException if dao exception occurred while processing
 	 */
@@ -268,9 +280,11 @@ public class SQLFlightDAO implements FlightDAO {
 
 	/**
 	 * Get flights by id of user
+	 * 
 	 * @param idUser
 	 * @return list of flights where user with idUser occuped any position
-	 * @throws DAOException list of flights where user with idUser occuped any position
+	 * @throws DAOException list of flights where user with idUser occuped any
+	 *                      position
 	 */
 	@Override
 	public List<Flight> getFlights(int idUser) throws DAOException {
@@ -306,6 +320,7 @@ public class SQLFlightDAO implements FlightDAO {
 
 	/**
 	 * Add user to flight as crew member
+	 * 
 	 * @param user
 	 * @return true if user was added to flight
 	 * @throws DAOException
@@ -319,9 +334,11 @@ public class SQLFlightDAO implements FlightDAO {
 
 	/**
 	 * Update crew of flight by flight's id
+	 * 
 	 * @param idFlight
 	 * @return true if crew of flight was updated, otherwise false
-	 * @throws DAOException list of flights where user with idUser occuped any position
+	 * @throws DAOException list of flights where user with idUser occuped any
+	 *                      position
 	 */
 	@Override
 	public boolean updateFlightCrew(int idFlight) throws DAOException {
@@ -332,6 +349,7 @@ public class SQLFlightDAO implements FlightDAO {
 
 	/**
 	 * Get flights by status of flight
+	 * 
 	 * @param flightStatus -FlightStatus object which contains name of status
 	 * @return list of flights where status like in parameter flightStatus
 	 * @throws DAOException
@@ -372,6 +390,7 @@ public class SQLFlightDAO implements FlightDAO {
 
 	/**
 	 * Get free crew positions by flight id
+	 * 
 	 * @param flightId
 	 * @return list of free crew positions
 	 * @throws DAOException
@@ -410,6 +429,7 @@ public class SQLFlightDAO implements FlightDAO {
 
 	/**
 	 * Create flight using resultSet
+	 * 
 	 * @param resultSet
 	 * @return Flight object
 	 * @throws SQLException if sql exception occurred while processing
@@ -433,6 +453,7 @@ public class SQLFlightDAO implements FlightDAO {
 
 	/**
 	 * Create CrewPosition object using resultSet
+	 * 
 	 * @param resultSet
 	 * @return CrewPosition object
 	 * @throws SQLException if sql exception occurred while processing

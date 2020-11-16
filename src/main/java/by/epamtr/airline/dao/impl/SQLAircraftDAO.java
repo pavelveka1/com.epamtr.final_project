@@ -43,6 +43,9 @@ public class SQLAircraftDAO implements AircraftDAO {
 	 */
 	@Override
 	public boolean addAircraft(Aircraft aircraft, AircraftType aircraftType) throws DAOException {
+		if (aircraft == null || aircraftType == null) {
+			return false;
+		}
 		int idTypeAircraft = aircraftType.getIdAircraftType();
 		String registerNumber = aircraft.getRegisterNumber();
 		String statusAircraft = aircraft.getStatus();
@@ -86,6 +89,9 @@ public class SQLAircraftDAO implements AircraftDAO {
 	 */
 	@Override
 	public boolean deleteAircraft(String registrationNumber) throws DAOException {
+		if (registrationNumber == null) {
+			return false;
+		}
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -124,17 +130,19 @@ public class SQLAircraftDAO implements AircraftDAO {
 	 */
 	@Override
 	public boolean updateAircraft(String registrationNumber, String newRegistrationNumber) throws DAOException {
-
+		if (registrationNumber == null || newRegistrationNumber == null) {
+			return false;
+		}
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				//connection.prepareStatement(SQLQueryConstant.CONSTRAINT_DISABLE).executeQuery();
+				// connection.prepareStatement(SQLQueryConstant.CONSTRAINT_DISABLE).executeQuery();
 				statement = connection.prepareStatement(String.format(SQLQueryConstant.AircraftConstant.UPDATE_AIRCRAFT,
 						newRegistrationNumber, registrationNumber));
 				int row = statement.executeUpdate();
-				//connection.prepareStatement(SQLQueryConstant.CONSTRAINT_ENABLE).executeQuery();
+				// connection.prepareStatement(SQLQueryConstant.CONSTRAINT_ENABLE).executeQuery();
 				if (row == 1) {
 					return true;
 				} else {
@@ -164,6 +172,9 @@ public class SQLAircraftDAO implements AircraftDAO {
 	 */
 	@Override
 	public boolean changeAircraftStatus(int idAircraft, String status) throws DAOException {
+		if (status == null) {
+			return false;
+		}
 		Connection connection = null;
 		PreparedStatement statement = null;
 		boolean result = false;
@@ -201,6 +212,9 @@ public class SQLAircraftDAO implements AircraftDAO {
 	 */
 	@Override
 	public boolean addAircraftType(AircraftType aircraftType) throws DAOException {
+		if (aircraftType == null) {
+			return false;
+		}
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;

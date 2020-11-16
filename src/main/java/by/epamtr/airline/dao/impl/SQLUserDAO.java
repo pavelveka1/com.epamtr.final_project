@@ -51,23 +51,21 @@ public class SQLUserDAO implements UserDAO {
 	 */
 	@Override
 	public User signIn(String login, String password) throws DAOException {
+		User user = null;
+		if (login == null || password == null) {
+			return user;
+		}
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		int idUser = 0;
-		User user = null;
 		try {
 			connection = connectionPool.getConnection();
 			try {
 				statement = connection.prepareStatement(
-						String.format(SQLQueryConstant.UserConstant.SIGN_IN_GET_ID, login, criptPassword(password)));
+						String.format(SQLQueryConstant.UserConstant.SIGN_IN_GET_USER, login, criptPassword(password)));
 				rs = statement.executeQuery();
 				password = null;
 				if (rs.next()) {
-					idUser = rs.getInt(SQLTableConstant.UserInfo.USER_ID);
-					rs.close();
-					rs = statement.executeQuery(String.format(SQLQueryConstant.UserConstant.SIGN_IN_GET_USER, idUser));
-					rs.next();
 					user = createUser(rs);
 				}
 			} catch (SQLException e) {
@@ -81,7 +79,6 @@ public class SQLUserDAO implements UserDAO {
 			} catch (ConnectionPoolException e) {
 				LOGGER.error(e);
 			}
-
 		}
 		return user;
 	}
@@ -96,6 +93,9 @@ public class SQLUserDAO implements UserDAO {
 	 */
 	@Override
 	public boolean addUser(User user, UserInfo userInfo) throws DAOException {
+		if (user == null || userInfo == null) {
+			return false;
+		}
 		Connection connection = null;
 		PreparedStatement statementUser = null;
 		PreparedStatement statementUserInfo = null;
@@ -213,6 +213,9 @@ public class SQLUserDAO implements UserDAO {
 	 */
 	@Override
 	public boolean updateUser(User user, UserInfo userInfo) throws DAOException {
+		if (user == null || userInfo == null) {
+			return false;
+		}
 		String name = user.getName();
 		String surname = user.getSurname();
 		String patronimic = user.getPatronimic();
@@ -267,10 +270,14 @@ public class SQLUserDAO implements UserDAO {
 	 */
 	@Override
 	public List<User> getUsers(UserRole role) throws DAOException {
+		List<User> users = null;
+		if (role == null) {
+			return users;
+		}
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		List<User> users = new ArrayList<User>();
+		users = new ArrayList<User>();
 		try {
 			connection = connectionPool.getConnection();
 			try {
@@ -280,7 +287,6 @@ public class SQLUserDAO implements UserDAO {
 					if (role == UserRole.valueOf(rs.getString("user_roles.user_role"))) {
 						users.add(createUser(rs));
 					}
-
 				}
 
 			} catch (SQLException e) {
@@ -351,15 +357,17 @@ public class SQLUserDAO implements UserDAO {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		User user;
+		User user = null;
 		try {
 			connection = connectionPool.getConnection();
 			try {
 				statement = connection
 						.prepareStatement(String.format(SQLQueryConstant.UserConstant.GET_USERS_BY_USER_ID, idUser));
 				rs = statement.executeQuery();
-				rs.next();
-				user = createUser(rs);
+				if (rs.next()) {
+					user = createUser(rs);
+				}
+
 			} catch (SQLException e) {
 				throw new DAOException("error while getting users by UserRole", e);
 			}
@@ -389,15 +397,16 @@ public class SQLUserDAO implements UserDAO {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		UserInfo userInfo;
+		UserInfo userInfo = null;
 		try {
 			connection = connectionPool.getConnection();
 			try {
 				statement = connection
 						.prepareStatement(String.format(SQLQueryConstant.UserConstant.GET_USER_INFO_BY_ID, idUser));
 				rs = statement.executeQuery();
-				rs.next();
-				userInfo = makeUserInfo(rs);
+				if (rs.next()) {
+					userInfo = makeUserInfo(rs);
+				}
 			} catch (SQLException e) {
 				throw new DAOException("error while getting users by UserRole", e);
 			}
@@ -511,10 +520,14 @@ public class SQLUserDAO implements UserDAO {
 	 */
 	@Override
 	public List<User> getFreeUsers(int flightId, String selectedPosition) throws DAOException {
+		List<User> users = null;
+		if (selectedPosition == null) {
+			return users;
+		}
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
-		List<User> users = new ArrayList<User>();
+		users = new ArrayList<User>();
 		try {
 			connection = connectionPool.getConnection();
 			try {

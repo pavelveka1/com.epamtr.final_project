@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class LocaleController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String LOCAL="local";
+	private static final String JSP="jsp";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -32,10 +34,8 @@ public class LocaleController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request,response);
-		String local=request.getParameter("local");
-		String jsp=request.getParameter("jsp");
-		request.getSession(true).setAttribute("local", request.getParameter("local"));
-		request.getRequestDispatcher(request.getParameter("jsp")).forward(request, response);
+		request.getSession(true).setAttribute(LOCAL, request.getParameter(LOCAL));
+		request.getRequestDispatcher(request.getParameter(JSP)).forward(request, response);
 		
 	}
 
