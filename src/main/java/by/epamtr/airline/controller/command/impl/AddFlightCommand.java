@@ -22,97 +22,101 @@ import by.epamtr.airline.service.exception.ServiceException;
 import by.epamtr.airline.service.validator.FlightValidation;
 
 public class AddFlightCommand implements Command {
-	
+
 	private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
-	private final AircraftService aircraftService=serviceFactory.getAircraftService();
+	private final AircraftService aircraftService = serviceFactory.getAircraftService();
 	private final FlightService flightService = serviceFactory.getFlightService();
-	private  List<Aircraft> aircrafts=new ArrayList<Aircraft>();
+	private List<Aircraft> aircrafts = new ArrayList<Aircraft>();
 	private static final Logger LOGGER = Logger.getLogger(AddFlightCommand.class);
-	
+
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		String currentCity=request.getParameter(ConstantController.Parameter.CURRENT_CITY);
-		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE, ConstantController.PathToPage.PATH_TO_ADD_FLIGHT);
-		if(currentCity==null) {
-				try {
-					aircrafts=aircraftService.getAircraftrs();
-					request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
-				} catch (ServiceException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, e);
-				}
-		}else {
+		String currentCity = request.getParameter(ConstantController.Parameter.CURRENT_CITY);
+		request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+				ConstantController.PathToPage.PATH_TO_ADD_FLIGHT);
+		if (currentCity == null) {
+			try {
+				aircrafts = aircraftService.getAircraftrs();
+				request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
+			} catch (ServiceException e) {
+				LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, e);
+			}
+		} else {
 			try {
 				String currentTown = request.getParameter(ConstantController.Parameter.CURRENT_CITY);
 				String destinationCity = request.getParameter(ConstantController.Parameter.DESTINATION_CITY);
-				int flightRange=0;
-				int flightTime=0;
-				if(request.getParameter(ConstantController.Parameter.FLIGHT_RANGE)!=""&& request.getParameter(ConstantController.Parameter.FLIGHT_TIME)!="") {
-					 flightRange = Integer.parseInt(request.getParameter(ConstantController.Parameter.FLIGHT_RANGE));
-					 flightTime = Integer.parseInt(request.getParameter(ConstantController.Parameter.FLIGHT_TIME));
+				int flightRange = 0;
+				int flightTime = 0;
+				if (request.getParameter(ConstantController.Parameter.FLIGHT_RANGE) != ""
+						&& request.getParameter(ConstantController.Parameter.FLIGHT_TIME) != "") {
+					flightRange = Integer.parseInt(request.getParameter(ConstantController.Parameter.FLIGHT_RANGE));
+					flightTime = Integer.parseInt(request.getParameter(ConstantController.Parameter.FLIGHT_TIME));
 				}
 				String timeDeparture = request.getParameter(ConstantController.Parameter.TIME_DEPARTURE);
 				String status = request.getParameter(ConstantController.Parameter.STATUS);
 				int idAircraft = (Integer) request.getSession().getAttribute(ConstantController.Attribute.ID_AIRCRAFT);
-				Flight flight=new Flight();
+				Flight flight = new Flight();
 				flight.setCurrentCity(currentTown);
 				flight.setDestinationCity(destinationCity);
 				flight.setFlightRange(flightRange);
 				flight.setFlightTime(flightTime);
 				flight.setTimeDeparture(timeDeparture);
 				flight.setStatus(status);
-				Aircraft aircraft=new Aircraft();
+				Aircraft aircraft = new Aircraft();
 				aircraft.setIdAircraft(idAircraft);
-				boolean result=false;
-				 boolean dataIsValid=true;
-				 if(!FlightValidation.cityValidation(flight.getCurrentCity())) {
-					 request.setAttribute(ConstantController.Attribute.CURRENT_CITY_VALID, false);
-					 dataIsValid=false;
-				 }
-				 if(!FlightValidation.cityValidation(flight.getDestinationCity())) {
-					 request.setAttribute(ConstantController.Attribute.DESTINATION_CITY_VALID, false);
-					 dataIsValid=false;
-				 }
-				 
-				 if(!FlightValidation.flightRangeValidation(flight.getFlightRange())) {
-					 request.setAttribute(ConstantController.Attribute.FLIGHT_RANGE_VALID, false);
-					 dataIsValid=false;
-				 }
-				 if(!FlightValidation.flightTimeValidation(flight.getFlightTime())) {
-					 request.setAttribute(ConstantController.Attribute.FLIGHT_TIME_VALID, false);
-					 dataIsValid=false;
-				 }
-				 if(!FlightValidation.dateValidation(flight.getTimeDeparture())) {
-					 request.setAttribute(ConstantController.Attribute.TIME_DEPARTURE_VALID, false);
-					 dataIsValid=false;
-				 }
-				
-				 if(dataIsValid==true) {
-					 result=flightService.addFlight(flight, aircraft);
-						if (result) {
-							LOGGER.info(LoggerMessageConstant.FLIGHT_ADDED);
-							request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.SUCCESSFUL_OPERATION);
-						} else {
-							request.setAttribute(ConstantController.Attribute.RESULT_ATTR, ConstantController.Attribute.FAILED_OPERATION);
+				boolean result = false;
+				boolean dataIsValid = true;
+				if (!FlightValidation.cityValidation(flight.getCurrentCity())) {
+					request.setAttribute(ConstantController.Attribute.CURRENT_CITY_VALID, false);
+					dataIsValid = false;
+				}
+				if (!FlightValidation.cityValidation(flight.getDestinationCity())) {
+					request.setAttribute(ConstantController.Attribute.DESTINATION_CITY_VALID, false);
+					dataIsValid = false;
+				}
+
+				if (!FlightValidation.flightRangeValidation(flight.getFlightRange())) {
+					request.setAttribute(ConstantController.Attribute.FLIGHT_RANGE_VALID, false);
+					dataIsValid = false;
+				}
+				if (!FlightValidation.flightTimeValidation(flight.getFlightTime())) {
+					request.setAttribute(ConstantController.Attribute.FLIGHT_TIME_VALID, false);
+					dataIsValid = false;
+				}
+				if (!FlightValidation.dateValidation(flight.getTimeDeparture())) {
+					request.setAttribute(ConstantController.Attribute.TIME_DEPARTURE_VALID, false);
+					dataIsValid = false;
+				}
+
+				if (dataIsValid == true) {
+					result = flightService.addFlight(flight, aircraft);
+					if (result) {
+						LOGGER.info(LoggerMessageConstant.FLIGHT_ADDED);
+						request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+								ConstantController.Attribute.SUCCESSFUL_OPERATION);
+					} else {
+						request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+								ConstantController.Attribute.FAILED_OPERATION);
 						LOGGER.info(LoggerMessageConstant.FLIGHT_NOT_ADDED);
-						}
-				 }else {
-					 LOGGER.info(LoggerMessageConstant.FLIGHT_NOT_VALID);
-					 
-				 }		
+					}
+				} else {
+					LOGGER.info(LoggerMessageConstant.FLIGHT_NOT_VALID);
+
+				}
 			} catch (ServiceException e) {
 				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 				request.setAttribute(ConstantController.Attribute.ERROR, e);
 			}
-			
+
 		}
-		
+
 		try {
-		request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-	} catch (ServletException | IOException e) {
-		LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-	}
-		
+			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+		} catch (ServletException | IOException e) {
+			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+		}
+
 	}
 
 }

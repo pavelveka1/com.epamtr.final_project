@@ -37,7 +37,7 @@ public class AddAircraftCommand implements Command {
 
 		request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFT_TYPES, aircraftTypes);
 		String registerNumberParameter = request.getParameter(ConstantController.Parameter.REGISTER_NUMBER_PARAM);
-		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+		request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 				ConstantController.PathToPage.PATH_TO_ADD_AIRCRAFT);
 		if (registerNumberParameter == null) {
 			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_ADD_AIRCRAFT);
@@ -59,7 +59,7 @@ public class AddAircraftCommand implements Command {
 				} catch (ServiceException e) {
 					LOGGER.error(LoggerMessageConstant.ERROR_ADD_AIRCRAFT, e);
 					request.setAttribute(ConstantController.Attribute.ERROR, e);
-					request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+					request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 							ConstantController.PathToPage.PATH_TO_ERROR_PAGE);
 				}
 				if (result) {
@@ -82,7 +82,7 @@ public class AddAircraftCommand implements Command {
 		} catch (ServletException | IOException e) {
 			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			request.setAttribute(ConstantController.Attribute.ERROR, e);
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_ERROR_PAGE);
 			try {
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,

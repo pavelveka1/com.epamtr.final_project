@@ -23,20 +23,27 @@
 	var="login_not_valid" />
 <fmt:message bundle="${loc}" key="user.password.not_valid"
 	var="password_not_valid" />
+<fmt:message bundle="${loc}" key="user.name" var="name" />
+<fmt:message bundle="${loc}" key="user.surname" var="surname" />
+<fmt:message bundle="${loc}" key="user.patronimic" var="patronimic" />
+<fmt:message bundle="${loc}" key="user.email" var="email" />
+<fmt:message bundle="${loc}" key="user.role" var="role" />
+<fmt:message bundle="${loc}" key="user.login" var="login" />
+<fmt:message bundle="${loc}" key="user.password" var="password" />
+<fmt:message bundle="${loc}" key="user.add_user" var="add_user" />
 </head>
 <body>
 	<c:choose>
 		<c:when test="${error!=null}">
 			<java-classes:printErrorInformation errorType="${error}" />
-Error is not null
-</c:when>
+		</c:when>
 		<c:otherwise>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="ADD_USER"> <input
 					type="hidden" name="page" value="FULL_FORM">
 				<table>
 					<tr>
-						<td><label>Name </label></td>
+						<td><label><c:out value="${name}"/> </label></td>
 						<td><input type="text" name="name" placeholder="name">
 							<c:choose>
 								<c:when test="${name_valid==false}">
@@ -45,7 +52,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Surname </label></td>
+						<td><label><c:out value="${surname}"/> </label></td>
 						<td><input type="text" name="surname" placeholder="surname">
 							<c:choose>
 								<c:when test="${surname_valid==false}">
@@ -54,7 +61,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Patronimic </label></td>
+						<td><label><c:out value="${patronimic}"/> </label></td>
 						<td><input type="text" name="patronimic"
 							placeholder="patronimic"> <c:choose>
 								<c:when test="${patronimic_valid==false}">
@@ -63,7 +70,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Email </label></td>
+						<td><label><c:out value="${email}"/></label></td>
 						<td><input type="text" name="e_mail" placeholder="email">
 							<c:choose>
 								<c:when test="${email_valid==false}">
@@ -72,7 +79,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Role<label></td>
+						<td><label><c:out value="${role}"/><label></td>
 						<td><select name="role">
 								<option>ADMINISTRATOR</option>
 								<option>DISPATCHER</option>
@@ -83,7 +90,7 @@ Error is not null
 						</select></td>
 					</tr>
 					<tr>
-						<td><label>Login </label></td>
+						<td><label><c:out value="${login}"/> </label></td>
 						<td><input type="text" name="login" placeholder="login">
 							<c:choose>
 								<c:when test="${login_valid==false}">
@@ -92,7 +99,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Password </label></td>
+						<td><label><c:out value="${password}"/> </label></td>
 						<td><input type="text" name="password" placeholder="password">
 							<c:choose>
 								<c:when test="${password_valid==false}">
@@ -102,7 +109,7 @@ Error is not null
 					</tr>
 				</table>
 
-				<br> <input type="submit" value="add user" />
+				<br> <input type="submit" value="${add_user}" />
 			</form>
 			<br>
 			<br>

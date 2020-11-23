@@ -1,6 +1,7 @@
 package by.epamtr.airline.entity;
 
 import java.io.Serializable;
+
 /**
  * Class entity of Aircraft
  *
@@ -12,93 +13,104 @@ public class Aircraft implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-     * Unique identifier of aircraft
-     */
+	 * Unique identifier of aircraft
+	 */
 	private int idAircraft;
 	/**
-     * Type of aircraft
-     */
+	 * Type of aircraft
+	 */
 	private AircraftType type;
 	/**
-     * Registration number of aircraft
-     */
+	 * Registration number of aircraft
+	 */
 	private String registerNumber;
 	/**
-     * Status of aircraft
-     */
+	 * Status of aircraft
+	 */
 	private String status;
 
 	/**
-     * Constructor of Aircraft with all parameters
-     * @param idAircraft - unique identifier of aircraft
-     * @param type - type of aircraft
-     * @param registerNumber -  registration number of aircraft
-     * @param status - status of aircraft
-     */
+	 * Constructor of Aircraft with all parameters
+	 * 
+	 * @param idAircraft     - unique identifier of aircraft
+	 * @param type           - type of aircraft
+	 * @param registerNumber - registration number of aircraft
+	 * @param status         - status of aircraft
+	 */
 	public Aircraft(int idAircraft, AircraftType type, String registerNumber, String status) {
 		super();
-		this.idAircraft=idAircraft;
+		this.idAircraft = idAircraft;
 		this.type = type;
 		this.registerNumber = registerNumber;
 		this.status = status;
 	}
+
 	/**
-     * Constructor of Aircraft without parameters
-     */
+	 * Constructor of Aircraft without parameters
+	 */
 	public Aircraft() {
 
 	}
+
 	/**
-     * @return id aircraft
-     */
+	 * @return id aircraft
+	 */
 	public int getIdAircraft() {
 		return idAircraft;
 	}
+
 	/**
-     * @param new value of idAircraft
-     */
+	 * @param new value of idAircraft
+	 */
 	public void setIdAircraft(int idAircraft) {
 		this.idAircraft = idAircraft;
 	}
+
 	/**
-     * @return type of aircraft
-     */
+	 * @return type of aircraft
+	 */
 	public AircraftType getType() {
 		return type;
 	}
+
 	/**
-     * @param new value of type of aircraft
-     */
+	 * @param new value of type of aircraft
+	 */
 	public void setType(AircraftType type) {
 		this.type = type;
 	}
+
 	/**
-     * @return registration number of aircraft
-     */
+	 * @return registration number of aircraft
+	 */
 	public String getRegisterNumber() {
 		return registerNumber;
 	}
+
 	/**
-     * @param new value of registration number
-     */
+	 * @param new value of registration number
+	 */
 	public void setRegisterNumber(String registerNumber) {
 		this.registerNumber = registerNumber;
 	}
+
 	/**
-     * @return status of aircraft
-     */
+	 * @return status of aircraft
+	 */
 	public String getStatus() {
 		return status;
 	}
+
 	/**
-     * @param new value of status of aircraft
-     */
+	 * @param new value of status of aircraft
+	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
 	/**
-     * @return hash code of object Aircraft
-     */
+	 * @return hash code of object Aircraft
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -109,10 +121,11 @@ public class Aircraft implements Serializable {
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
+
 	/**
-     * @param obj - object with which is compared object this
-     * @return true - if objects are equals and false otherwise
-     */
+	 * @param obj - object with which is compared object this
+	 * @return true - if objects are equals and false otherwise
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -141,6 +154,7 @@ public class Aircraft implements Serializable {
 			return false;
 		return true;
 	}
+
 	/**
 	 * @return presentation of object as string
 	 */

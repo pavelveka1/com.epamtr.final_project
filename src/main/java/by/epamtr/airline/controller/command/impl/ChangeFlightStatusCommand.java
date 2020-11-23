@@ -21,13 +21,13 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class ChangeFlightStatusCommand implements Command {
 	private static final Logger LOGGER = Logger.getLogger(ChangeFlightStatusCommand.class);
-	
+
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		String currentUserRole = ((User) request.getSession().getAttribute(ConstantController.Attribute.SIGNED_IN_USER))
 				.getRole().getRole();
 		if (currentUserRole.equalsIgnoreCase(UserRole.ADMINISTRATOR.getRole())) {
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_DELETE_FLIGHT);
 		} else {
 			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
@@ -41,36 +41,35 @@ public class ChangeFlightStatusCommand implements Command {
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		boolean result = false;
 		try {
-			 result=serviceFactory.getFlightService().changeFlightStatus(idFlight, flightStatus);
+			result = serviceFactory.getFlightService().changeFlightStatus(idFlight, flightStatus);
 		} catch (ServiceException e) {
 			LOGGER.error(LoggerMessageConstant.ERROR_SHANGE_FLIGHT_STATUS, e);
 			request.setAttribute(ConstantController.Attribute.ERROR, e);
 		}
-			if(result) {
-				LOGGER.info(LoggerMessageConstant.FLIGHT_STATUS_CHANGED);
-			}else {
-				LOGGER.info(LoggerMessageConstant.FLIGHT_STATUS_NOT_CHANGED);
-			}
-		
+		if (result) {
+			LOGGER.info(LoggerMessageConstant.FLIGHT_STATUS_CHANGED);
+		} else {
+			LOGGER.info(LoggerMessageConstant.FLIGHT_STATUS_NOT_CHANGED);
+		}
+
 		String selectedFlightStatusForFlights = (String) request.getSession()
 				.getAttribute(ConstantController.Attribute.SELECTED_FLIGHT_STATUS_FOR_FLIGHTS);
 		List<Flight> flights = null;
 		try {
-			 flights = serviceFactory.getFlightService()
+			flights = serviceFactory.getFlightService()
 					.getFlights(FlightStatus.valueOf(selectedFlightStatusForFlights));
 		} catch (ServiceException e) {
 			LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e);
 			request.setAttribute(ConstantController.Attribute.ERROR, e);
 		}
-			request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
-			request.getSession().setAttribute(ConstantController.Attribute.FLIGHT_STATUS, flightStatus);
-			
-			try {
-				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
-			} catch (ServletException | IOException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			}
-		
+		request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
+		request.getSession().setAttribute(ConstantController.Attribute.FLIGHT_STATUS, flightStatus);
+
+		try {
+			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
+		} catch (ServletException | IOException e) {
+			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+		}
 
 	}
 }

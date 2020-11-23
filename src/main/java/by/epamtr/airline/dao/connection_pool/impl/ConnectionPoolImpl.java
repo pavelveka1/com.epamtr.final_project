@@ -30,67 +30,67 @@ import by.epamtr.airline.dao.exception.DAOException;
  */
 
 public class ConnectionPoolImpl implements ConnectionPool {
-	
+
 	/**
 	 * url of DB
 	 */
 	private final String url;
-	
+
 	/**
 	 * User name for DB
 	 */
 	private final String user;
-	
+
 	/**
 	 * password for DB
 	 */
 	private final String password;
-	
+
 	/**
 	 * Queue of free Conntections
 	 */
 	private final BlockingQueue<Connection> connectionPool;
-	
+
 	/**
 	 * Queue of used Connections
 	 */
 	private final BlockingQueue<Connection> usedConnections;
-	
+
 	/**
 	 * Max size of pool of Connections
 	 */
 	private static final int MAX_POOL_SIZE = 10;
-	
+
 	/**
 	 * Properties object for downloading settings of DB from db.properties file
 	 */
 	private static Properties dbProperties;
-	
+
 	/**
 	 * Nme of driver for DB
 	 */
 	private static final String NAME_JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-	
+
 	/**
 	 * Key by which get user's name of DB
 	 */
 	private static final String DB_USER = "db.user";
-	
+
 	/**
 	 * Key by which get url of DB
 	 */
 	private static final String DB_URL = "db.url";
-	
+
 	/**
 	 * Key by which get password of DB
 	 */
 	private static final String DB_PASSWORD = "db.password";
-	
-/**
- * Instance of Connection pool
- */
+
+	/**
+	 * Instance of Connection pool
+	 */
 	private static final ConnectionPool instance = new ConnectionPoolImpl();
-	
+
 	/**
 	 * Logger for logging events
 	 */
@@ -130,6 +130,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
 	/**
 	 * Get Connection from pool if there is free one
+	 * 
 	 * @return free Connection
 	 */
 	@Override
@@ -146,7 +147,9 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
 	/**
 	 * Return Connection to connection pool
-	 * @return true if Connection was returned to connection pool of free Connections
+	 * 
+	 * @return true if Connection was returned to connection pool of free
+	 *         Connections
 	 */
 	@Override
 	public boolean releaseConnection(Connection connection) {
@@ -156,11 +159,13 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
 	/**
 	 * Create Connection (Method create Conntections objects while initializing)
+	 * 
 	 * @param url
 	 * @param user
 	 * @param password
 	 * @return Connection which was created
-	 * @throws ConnectionPoolException if there is any problem while creating Connection
+	 * @throws ConnectionPoolException if there is any problem while creating
+	 *                                 Connection
 	 */
 	private static Connection createConnection(String url, String user, String password)
 			throws ConnectionPoolException {
@@ -233,6 +238,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
 	/**
 	 * Get instance of connection pool
+	 * 
 	 * @return connection pool
 	 */
 	public static ConnectionPool getInstance() {
@@ -240,14 +246,17 @@ public class ConnectionPoolImpl implements ConnectionPool {
 	}
 
 	/**
-	 * Overloaded Method for close resources. Method close ResultSet and Statement and return to pool Connection
+	 * Overloaded Method for close resources. Method close ResultSet and Statement
+	 * and return to pool Connection
+	 * 
 	 * @param statement
 	 * @param resultSet
 	 * @param connection
-	 * @throws ConnectionPoolException 
+	 * @throws ConnectionPoolException
 	 */
 	@Override
-	public void releaseResourses(Statement statement, ResultSet resultSet, Connection connection) throws ConnectionPoolException {
+	public void releaseResourses(Statement statement, ResultSet resultSet, Connection connection)
+			throws ConnectionPoolException {
 		if (resultSet != null) {
 			try {
 				resultSet.close();
@@ -255,24 +264,26 @@ public class ConnectionPoolImpl implements ConnectionPool {
 				throw new ConnectionPoolException("erroe while closing resultSet", e);
 			}
 		}
-		if (statement!= null) {
+		if (statement != null) {
 			try {
 				statement.close();
 			} catch (SQLException e) {
 				throw new ConnectionPoolException("erroe while closing statement", e);
 			}
 		}
-		this.releaseConnection(connection);	
+		this.releaseConnection(connection);
 	}
 
 	/**
-	 * Overloaded method for close resources. Method close ResultSet and Statement and return to pool Connection
+	 * Overloaded method for close resources. Method close ResultSet and Statement
+	 * and return to pool Connection
+	 * 
 	 * @param firstStatement
 	 * @param secondStatement
 	 * @param firsrResultSet
 	 * @param secondResultSet
 	 * @param connection
-	 * @throws ConnectionPoolException 
+	 * @throws ConnectionPoolException
 	 */
 	@Override
 	public void releaseResourses(Statement firstStatement, Statement secondStatement, ResultSet firstResultSet,
@@ -291,21 +302,21 @@ public class ConnectionPoolImpl implements ConnectionPool {
 				throw new ConnectionPoolException("erroe while closing resultSet", e);
 			}
 		}
-		if (firstStatement!= null) {
+		if (firstStatement != null) {
 			try {
 				firstStatement.close();
 			} catch (SQLException e) {
 				throw new ConnectionPoolException("erroe while closing statement", e);
 			}
 		}
-		if (secondStatement!= null) {
+		if (secondStatement != null) {
 			try {
 				secondStatement.close();
 			} catch (SQLException e) {
 				throw new ConnectionPoolException("erroe while closing statement", e);
 			}
 		}
-		this.releaseConnection(connection);	
-		
+		this.releaseConnection(connection);
+
 	}
 }

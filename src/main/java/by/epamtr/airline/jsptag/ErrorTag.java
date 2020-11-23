@@ -11,12 +11,13 @@ public class ErrorTag extends TagSupport {
 	 * 
 	 */
 	private static final long serialVersionUID = 5632579156390919340L;
-private Throwable errorType;
+	private Throwable errorType;
+
 	@Override
 	public int doStartTag() throws JspException {
 		JspWriter out = pageContext.getOut();
 		StackTraceElement[] arrayStackTrace = errorType.getStackTrace();
-		
+
 		try {
 			out.println("<h3>");
 			out.println("Error: " + errorType.getMessage());
@@ -32,9 +33,11 @@ private Throwable errorType;
 
 		return SKIP_BODY;
 	}
+
 	public Throwable getErrorType() {
 		return errorType;
 	}
+
 	public void setErrorType(Throwable errorType) {
 		this.errorType = errorType;
 	}

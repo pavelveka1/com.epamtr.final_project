@@ -66,24 +66,30 @@ public interface ConnectionPool {
 	 * @throws ConnectionPoolException
 	 */
 	void shutdown() throws ConnectionPoolException;
-	
+
 	/**
-	 * Overloaded Method for close resources. Method close ResultSet and Statement and return to pool Connection
+	 * Overloaded Method for close resources. Method close ResultSet and Statement
+	 * and return to pool Connection
+	 * 
 	 * @param statement
 	 * @param resultSet
 	 * @param connection
-	 * @throws ConnectionPoolException 
+	 * @throws ConnectionPoolException
 	 */
-	void releaseResourses(Statement statement, ResultSet resultSet, Connection connection) throws ConnectionPoolException;
-	
+	void releaseResourses(Statement statement, ResultSet resultSet, Connection connection)
+			throws ConnectionPoolException;
+
 	/**
-	 * Overloaded method for close resources. Method close ResultSet and Statement and return to pool Connection
+	 * Overloaded method for close resources. Method close ResultSet and Statement
+	 * and return to pool Connection
+	 * 
 	 * @param firstStatement
 	 * @param secondStatement
 	 * @param firsrResultSet
 	 * @param secondResultSet
 	 * @param connection
-	 * @throws ConnectionPoolException 
+	 * @throws ConnectionPoolException
 	 */
-	void releaseResourses(Statement firstStatement, Statement secondStatement, ResultSet firsrResultSet, ResultSet secondResultSet, Connection connection) throws ConnectionPoolException;
+	void releaseResourses(Statement firstStatement, Statement secondStatement, ResultSet firsrResultSet,
+			ResultSet secondResultSet, Connection connection) throws ConnectionPoolException;
 }

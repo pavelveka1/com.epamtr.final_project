@@ -23,15 +23,9 @@ public interface FlightService {
 
 	Flight getFlight(int idFlight) throws ServiceException;
 
-	List<Flight> getFlights() throws ServiceException;
-
 	List<Flight> getFlights(FlightStatus flightStatus) throws ServiceException;
 
 	List<Flight> getFlights(int idUser) throws ServiceException;
 
-	boolean addCrewToFlight(User user) throws ServiceException;
-
-	boolean updateFlightCrew(int idFlight) throws ServiceException;
-	
 	List<CrewPosition> getFreeCrewPositions(int flightId) throws ServiceException;
 }

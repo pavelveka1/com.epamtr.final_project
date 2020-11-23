@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 
-import by.epamtr.airline.controller.command.impl.AddFlightCommand;
 import by.epamtr.airline.dao.SQLQueryConstant;
 import by.epamtr.airline.dao.SQLTableConstant;
 import by.epamtr.airline.dao.UserDAO;

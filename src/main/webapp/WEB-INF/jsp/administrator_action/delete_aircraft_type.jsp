@@ -11,6 +11,9 @@
 	var="aircraft_type_deleted" />
 <fmt:message bundle="${loc}" key="aircraft_type.delete.fail"
 	var="aircraft_type_not_deleted" />
+<fmt:message bundle="${loc}" key="aircraft_type.delete" var="delete_type" />
+<fmt:message bundle="${loc}" key="aircraft_type.choose_type"
+	var="choose_type" />
 <meta charset="UTF-8">
 <title>Add flight</title>
 </head>
@@ -18,13 +21,12 @@
 	<c:choose>
 		<c:when test="${error!=null}">
 			<java-classes:printErrorInformation errorType="${error}" />
-Error is not null
-</c:when>
+		</c:when>
 		<c:otherwise>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="DELETE_AIRCRAFT_TYPE">
-				<input type="hidden" name="delete" value="delete"> <label>Choose
-					type of aircraft</label><br> <select name="aircraft_types">
+				<input type="hidden" name="delete" value="delete"> <label><c:out
+						value="${choose_type}" /></label><br> <select name="aircraft_types">
 					<c:forEach var="type_item" items="${aircraftTypes}">
 						<option>
 							<c:out value="${type_item.aircraftType}" />
@@ -32,7 +34,7 @@ Error is not null
 								value="${type_item.idAircraftType }" />
 						</option>
 					</c:forEach>
-				</select> <input type="submit" value="Delete" />
+				</select> <input type="submit" value="${delete_type}" />
 			</form>
 			<br>
 			<c:choose>

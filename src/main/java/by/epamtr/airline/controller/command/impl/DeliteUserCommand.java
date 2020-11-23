@@ -30,10 +30,10 @@ public class DeliteUserCommand implements Command {
 		String roleCurrentUser = ((User) request.getSession().getAttribute(ConstantController.Attribute.SIGNED_IN_USER))
 				.getRole().getRole();
 		if (roleCurrentUser.equalsIgnoreCase(UserRole.ADMINISTRATOR.getRole())) {
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.ADMIN_PATH_TO_GET_USERS_BY_ROLE);
 		} else {
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_GET_USERS_BY_ROLE);
 		}
 		if (idUser > 0) {
@@ -54,7 +54,7 @@ public class DeliteUserCommand implements Command {
 					LOGGER.error(LoggerMessageConstant.ERROR_GET_USERS_BY_USER_ROLE, e2);
 					request.setAttribute(ConstantController.Attribute.ERROR, e2);
 				}
-				request.setAttribute(ConstantController.Attribute.USER_BY_ROLE, users);
+				request.getSession().setAttribute(ConstantController.Attribute.USER_BY_ROLE, users);
 				LOGGER.info(LoggerMessageConstant.USER_IS_DELETED);
 				request.setAttribute(ConstantController.Attribute.DELETED_USER,
 						ConstantController.Attribute.SUCCESSFUL_OPERATION);

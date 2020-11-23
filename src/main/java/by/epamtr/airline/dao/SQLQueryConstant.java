@@ -9,10 +9,10 @@ public class SQLQueryConstant {
 
 	public static class UserConstant {
 		public static final String SIGN_IN_GET_ID = "SELECT user_id FROM users_info where (login ='%s') and (password = '%s');";
-		public static final String SIGN_IN_GET_USER = "SELECT id_user, name, surname, patronimic, e_mail, user_roles.user_role, users_info.login, users_info.password FROM users \r\n" + 
-				"      join user_roles on users.user_role = user_roles.id_user_role \r\n" + 
-				"      join users_info on users.id_user=users_info.user_id  \r\n" + 
-				"           where (users_info.login ='%s') and (users_info.password='%s');";
+		public static final String SIGN_IN_GET_USER = "SELECT id_user, name, surname, patronimic, e_mail, user_roles.user_role, users_info.login, users_info.password FROM users \r\n"
+				+ "      join user_roles on users.user_role = user_roles.id_user_role \r\n"
+				+ "      join users_info on users.id_user=users_info.user_id  \r\n"
+				+ "           where (users_info.login ='%s') and (users_info.password='%s');";
 		public static final String ADD_USER_INSERT_IN_USERS = "INSERT INTO `users` (`name`,`surname`,`patronimic`,`e_mail`,`user_role`) VALUES (?,?,?,?,?)";
 		public static final String ADD_USER_INFO_INSERT_IN_USERS_INFO = "INSERT INTO `users_info` (`user_id`,`login`,`password`) VALUES (?,?,?)";
 		public static final String CHECK_LOGIN = "select login from users_info where login ='%s' ;";

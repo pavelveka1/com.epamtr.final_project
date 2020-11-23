@@ -26,7 +26,7 @@ public class DeleteAircraftTypeCommand implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		List<AircraftType> aircraftTypes = null;
 		String deleteParameter = request.getParameter(ConstantController.Parameter.DELETE_AIRCRAFT_TYPE);
-		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+		request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 				ConstantController.PathToPage.PATH_TO_DELETE_AIRCRAFT_TYPE);
 		if (deleteParameter == null) {
 			LOGGER.info(LoggerMessageConstant.GO_TO_DELETE_AIRCRAFT_TYPE);

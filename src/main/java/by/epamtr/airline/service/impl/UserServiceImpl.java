@@ -17,14 +17,15 @@ import by.epamtr.airline.service.validator.SignInDataValidator;
 public class UserServiceImpl implements UserService {
 
 	private UserDAO userDAO = DAOFactory.getInstance().getSqlUserImpl();
+
 	@Override
 	public User signIn(String login, String password) throws ServiceException {
-		if(!SignInDataValidator.validate(login, password)) {
+		if (!SignInDataValidator.validate(login, password)) {
 			return null;
-			
-		}else {
+
+		} else {
 			try {
-			return	userDAO.signIn(login, password);
+				return userDAO.signIn(login, password);
 			} catch (DAOException e) {
 				throw new ServiceException("Error while signing in", e);
 			}
@@ -34,11 +35,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean addUser(User user, UserInfo userInfo) throws ServiceException {
 		try {
-		return	userDAO.addUser(user, userInfo);
+			return userDAO.addUser(user, userInfo);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while adding new user", e);
 		}
-		
+
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
 		} catch (DAOException e) {
 			throw new ServiceException("Error while deletion user", e);
 		}
-		
+
 	}
 
 	@Override
@@ -58,26 +59,26 @@ public class UserServiceImpl implements UserService {
 		} catch (DAOException e) {
 			throw new ServiceException("Error while updateing new user", e);
 		}
-		
+
 	}
 
 	@Override
 	public List<User> getUsers(UserRole role) throws ServiceException {
 		try {
-		return	userDAO.getUsers(role);
+			return userDAO.getUsers(role);
 		} catch (DAOException e) {
 			throw new ServiceException("Error while getting users by role", e);
-		}	
+		}
 	}
 
 	@Override
 	public List<Crew> getUsers(int idFlight) throws ServiceException {
 		List<Crew> crew;
 		try {
-			crew=userDAO.getUsers(idFlight);
-			} catch (DAOException e) {
-				throw new ServiceException("Error while getting users by role", e);
-			}	
+			crew = userDAO.getUsers(idFlight);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while getting users by role", e);
+		}
 		return crew;
 	}
 
@@ -85,25 +86,23 @@ public class UserServiceImpl implements UserService {
 	public User getUser(int idUser) throws ServiceException {
 		User user;
 		try {
-			user=userDAO.getUser(idUser);
-			} catch (DAOException e) {
-				throw new ServiceException("Error while getting user by id from DB", e);
-			}	
+			user = userDAO.getUser(idUser);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while getting user by id from DB", e);
+		}
 		return user;
 	}
-	
+
 	@Override
 	public UserInfo getUserInfo(int idUser) throws ServiceException {
 		UserInfo userInfo;
 		try {
-			userInfo=userDAO.getUserInfo(idUser);
-			} catch (DAOException e) {
-				throw new ServiceException("Error while getting user by id from DB", e);
-			}	
+			userInfo = userDAO.getUserInfo(idUser);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while getting user by id from DB", e);
+		}
 		return userInfo;
 	}
-
-
 
 	@Override
 	public boolean deliteCrewFromFlight(int flightId, int userId) throws ServiceException {
@@ -112,7 +111,7 @@ public class UserServiceImpl implements UserService {
 		} catch (DAOException e) {
 			throw new ServiceException("Error while deletion crew from flight", e);
 		}
-		
+
 	}
 
 	@Override
@@ -122,19 +121,18 @@ public class UserServiceImpl implements UserService {
 		} catch (DAOException e) {
 			throw new ServiceException("Error while adding user to crew", e);
 		}
-		
+
 	}
-	
+
 	@Override
 	public List<User> getFreeUsers(int flightId, String selectedPosition) throws ServiceException {
 		List<User> freeUsersByPosition;
 		try {
-			freeUsersByPosition=userDAO.getFreeUsers(flightId, selectedPosition);
-			} catch (DAOException e) {
-				throw new ServiceException("Error while getting free users by position", e);
-			}	
+			freeUsersByPosition = userDAO.getFreeUsers(flightId, selectedPosition);
+		} catch (DAOException e) {
+			throw new ServiceException("Error while getting free users by position", e);
+		}
 		return freeUsersByPosition;
 	}
 
-	
 }

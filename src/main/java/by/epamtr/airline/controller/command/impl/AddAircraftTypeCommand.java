@@ -25,52 +25,51 @@ public class AddAircraftTypeCommand implements Command {
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		AircraftService aircraftService = serviceFactory.getAircraftService();
 		String page = request.getParameter(ConstantController.Parameter.AIRCRAFT_TYPE);
-		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+		request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 				ConstantController.PathToPage.PATH_TO_ADD_AIRCRAFT_TYPE);
 		if (page != null) {
-				String aircraftType = request.getParameter(ConstantController.Parameter.AIRCRAFT_TYPE);
-				String flightRangeParam = request.getParameter(ConstantController.Parameter.RANGE_FLIGHT);
-				String numberPassengerParam =request.getParameter(ConstantController.Parameter.NUMBER_PASSENGERS);
-				
-				boolean dataIsValid = true;
-				if (!AircraftValidation.validateAircraftType(aircraftType)) {
-					request.setAttribute(ConstantController.Attribute.AIRCRAFT_TYPE_VALID, false);
-					dataIsValid = false;
-				}
-				if (!AircraftValidation.validateNumberPassenger(numberPassengerParam)) {
-					request.setAttribute(ConstantController.Attribute.PASSENGER_NUMBER_VALID, false);
-					dataIsValid = false;
-				}
-				if (!AircraftValidation.validateFlightRange(flightRangeParam)) {
-					request.setAttribute(ConstantController.Attribute.FLIGHT_RANGE_VALID, false);
-					dataIsValid = false;
-				}
-				boolean result = false;
-				if (dataIsValid == true) {
-					try {
-						AircraftType typeAircraft = new AircraftType();
-						typeAircraft.setAircraftType(aircraftType);
-						typeAircraft.setRangeFlight(Integer.parseInt(flightRangeParam));
-						typeAircraft.setNumberPassenger(Integer.parseInt(numberPassengerParam));
-					 result = aircraftService.addAircraftType(typeAircraft);
-					} catch (ServiceException e) {
-						LOGGER.error(LoggerMessageConstant.ERROR_ADD_AIRCRAFT_TYPE, e);
-						request.setAttribute(ConstantController.Attribute.ERROR, e);
-						
-					}
-					
-					if (result) {
-						LOGGER.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_ADDED);
-						request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
-								ConstantController.Attribute.SUCCESSFUL_OPERATION);
-					} else {
-						LOGGER.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_NOT_ADDED);
-						request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
-								ConstantController.Attribute.FAILED_OPERATION);
-					}
+			String aircraftType = request.getParameter(ConstantController.Parameter.AIRCRAFT_TYPE);
+			String flightRangeParam = request.getParameter(ConstantController.Parameter.RANGE_FLIGHT);
+			String numberPassengerParam = request.getParameter(ConstantController.Parameter.NUMBER_PASSENGERS);
+
+			boolean dataIsValid = true;
+			if (!AircraftValidation.validateAircraftType(aircraftType)) {
+				request.setAttribute(ConstantController.Attribute.AIRCRAFT_TYPE_VALID, false);
+				dataIsValid = false;
+			}
+			if (!AircraftValidation.validateNumberPassenger(numberPassengerParam)) {
+				request.setAttribute(ConstantController.Attribute.PASSENGER_NUMBER_VALID, false);
+				dataIsValid = false;
+			}
+			if (!AircraftValidation.validateFlightRange(flightRangeParam)) {
+				request.setAttribute(ConstantController.Attribute.FLIGHT_RANGE_VALID, false);
+				dataIsValid = false;
+			}
+			boolean result = false;
+			if (dataIsValid == true) {
+				try {
+					AircraftType typeAircraft = new AircraftType();
+					typeAircraft.setAircraftType(aircraftType);
+					typeAircraft.setRangeFlight(Integer.parseInt(flightRangeParam));
+					typeAircraft.setNumberPassenger(Integer.parseInt(numberPassengerParam));
+					result = aircraftService.addAircraftType(typeAircraft);
+				} catch (ServiceException e) {
+					LOGGER.error(LoggerMessageConstant.ERROR_ADD_AIRCRAFT_TYPE, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, e);
+
 				}
 
-			
+				if (result) {
+					LOGGER.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_ADDED);
+					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+							ConstantController.Attribute.SUCCESSFUL_OPERATION);
+				} else {
+					LOGGER.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_NOT_ADDED);
+					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
+							ConstantController.Attribute.FAILED_OPERATION);
+				}
+			}
+
 		} else {
 			LOGGER.info(LoggerMessageConstant.GO_TO_ADD_AIRCRAFT_TYPE);
 		}

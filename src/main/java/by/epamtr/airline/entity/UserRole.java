@@ -1,6 +1,8 @@
 package by.epamtr.airline.entity;
+
 /**
  * Enum roles of user
+ * 
  * @author Pavel Veka
  *
  */
@@ -23,31 +25,34 @@ public enum UserRole {
 	 */
 	PILOT("PILOT"),
 	/**
-	 * Role for flight attendants 
+	 * Role for flight attendants
 	 */
 	ATTENDANT("ATTENDANT"),
 	/**
 	 * Role for engineers
 	 */
 	ENGINEER("ENGINEER");
+
 	/**
 	 * Name of role
 	 */
 	private String role;
+
 	/**
 	 * Constructor
+	 * 
 	 * @param role
 	 */
-	UserRole(String role){
-		this.role=role;
+	UserRole(String role) {
+		this.role = role;
 	}
-/**
- * 
- * @return name of role
- */
+
+	/**
+	 * 
+	 * @return name of role
+	 */
 	public String getRole() {
 		return role;
 	}
-	
-	
+
 }

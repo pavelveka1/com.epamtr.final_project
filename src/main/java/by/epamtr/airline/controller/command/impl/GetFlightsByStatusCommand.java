@@ -43,7 +43,7 @@ public class GetFlightsByStatusCommand implements Command {
 					request.setAttribute(ConstantController.Attribute.ERROR, e);
 				}
 				request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
-				request.setAttribute(ConstantController.Attribute.SELECTED_STATUS, flightStatus);
+				request.getSession().setAttribute(ConstantController.Attribute.SELECTED_STATUS, flightStatus);
 			}
 		} else {
 			LOGGER.info(LoggerMessageConstant.GO_TO_CREW_BY_FLIGHT);
@@ -57,7 +57,7 @@ public class GetFlightsByStatusCommand implements Command {
 				LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHT, e);
 				request.setAttribute(ConstantController.Attribute.ERROR, e);
 			}
-			request.setAttribute(ConstantController.Attribute.SELECTED_FLIGHT, flight);
+			request.getSession().setAttribute(ConstantController.Attribute.SELECTED_FLIGHT, flight);
 			List<Crew> team = null;
 			try {
 				team = userService.getUsers(idSelectedFlight);
@@ -65,7 +65,7 @@ public class GetFlightsByStatusCommand implements Command {
 				LOGGER.error(LoggerMessageConstant.ERROR_GET_USERS_BY_FLIGHT_ID, e);
 				request.setAttribute(ConstantController.Attribute.ERROR, e);
 			}
-			request.setAttribute(ConstantController.Attribute.TEAM_BY_FLIGHT, team);
+			request.getSession().setAttribute(ConstantController.Attribute.TEAM_BY_FLIGHT, team);
 			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_GET_CREW_BY_FLIGHT);
 

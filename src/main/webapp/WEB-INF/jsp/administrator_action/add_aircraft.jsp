@@ -12,6 +12,10 @@
 	var="aircraft_add_fail" />
 <fmt:message bundle="${loc}" key="aircraft.reg.number.not_valid"
 	var="registration_number_not_valid" />
+<fmt:message bundle="${loc}" key="aircraft.add_aircraft" var="add_aircraft" />
+<fmt:message bundle="${loc}" key="aircraft.choose_type" var="choose_type" />
+<fmt:message bundle="${loc}" key="aircraft.registration_number" var="reg_number" />
+<fmt:message bundle="${loc}" key="aircraft.status" var="aircraft_status" />
 <meta charset="UTF-8">
 <title>Add aircraft</title>
 </head>
@@ -19,7 +23,6 @@
 	<c:choose>
 		<c:when test="${error!=null}">
 			<java-classes:printErrorInformation errorType="${error}" />
-Error is not null
 </c:when>
 		<c:otherwise>
 			<form action="Controller" method="POST">
@@ -27,7 +30,7 @@ Error is not null
 
 				<table>
 					<tr>
-						<td><label>Choose type of aircraft </label></td>
+						<td><label><c:out value="${choose_type}"/></label></td>
 						<td><select name="aircraft_types">
 								<c:forEach var="type_item" items="${aircraftTypes}">
 									<option>
@@ -39,7 +42,7 @@ Error is not null
 						</select></td>
 					</tr>
 					<tr>
-						<td><label>Enter registration number</label></td>
+						<td><label><c:out value="${reg_number}"/></label></td>
 						<td><input type="text" name="register_number"
 							placeholder="registration number"> <c:choose>
 								<c:when test="${data_is_valid==false}">
@@ -48,7 +51,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label> Choose aircraft status </label></td>
+						<td><label><c:out value="${aircraft_status}"/></label></td>
 						<td><select name="aircraft_status">
 								<option>MAINTENANCE</option>
 								<option>SERVICEABLE</option>
@@ -56,7 +59,7 @@ Error is not null
 						</select></td>
 					</tr>
 				</table>
-				<br> <input type="submit" value="add aircraft" />
+				<br> <input type="submit" value="${add_aircraft}" />
 			</form>
 			<br>
 			<c:choose>

@@ -20,20 +20,18 @@ public interface UserService {
 	boolean deliteUser(int idUser) throws ServiceException;
 
 	boolean updateUser(User user, UserInfo userInfo) throws ServiceException;
-	
-	
 
 	List<User> getUsers(UserRole role) throws ServiceException;
 
 	List<Crew> getUsers(int idFlight) throws ServiceException;
 
-	User getUser(int idUser) throws  ServiceException;
-	
+	User getUser(int idUser) throws ServiceException;
+
 	UserInfo getUserInfo(int idUser) throws ServiceException;
-	
+
 	boolean deliteCrewFromFlight(int flightId, int userId) throws ServiceException;
-	
+
 	boolean addCrewToFlight(int idCrewPosition, int flightId, int userId) throws ServiceException;
-	
+
 	List<User> getFreeUsers(int flightId, String selectedPosition) throws ServiceException;
 }

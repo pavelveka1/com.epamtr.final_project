@@ -4,10 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 
 import by.epamtr.airline.dao.FlightDAO;
@@ -165,10 +163,10 @@ public class SQLFlightDAO implements FlightDAO {
 							String.format(SQLQueryConstant.FlightConstant.UPDATE_FLIGHT, currentCity, destinationCity,
 									flightRange, flightTime, timeDeparture, aircraftNumber, flightStatus, idFlight));
 					statement.executeUpdate();
-					updatedFlightStatement = connection
-							.prepareStatement(String.format(SQLQueryConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
+					updatedFlightStatement = connection.prepareStatement(
+							String.format(SQLQueryConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
 					rs = updatedFlightStatement.executeQuery();
-					if(rs.next()) {
+					if (rs.next()) {
 						updatedFlight = createFlight(rs);
 					}
 				} catch (SQLException e) {
@@ -186,7 +184,7 @@ public class SQLFlightDAO implements FlightDAO {
 		} else {
 			throw new DAOException("Parameter Flight is null");
 		}
-		
+
 		return updatedFlight;
 	}
 
@@ -247,7 +245,7 @@ public class SQLFlightDAO implements FlightDAO {
 				statement = connection
 						.prepareStatement(String.format(SQLQueryConstant.FlightConstant.GET_FLIGHTS_BY_ID, idFlight));
 				rs = statement.executeQuery();
-				if(rs.next()) {
+				if (rs.next()) {
 					flight = createFlight(rs);
 				}
 			} catch (SQLException e) {
@@ -264,18 +262,6 @@ public class SQLFlightDAO implements FlightDAO {
 			}
 		}
 		return flight;
-	}
-
-	/**
-	 * Get list of flights
-	 * 
-	 * @return list of flights
-	 * @throws DAOException if dao exception occurred while processing
-	 */
-	@Override
-	public List<Flight> getFlights() throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**
@@ -316,35 +302,6 @@ public class SQLFlightDAO implements FlightDAO {
 			}
 		}
 		return flights;
-	}
-
-	/**
-	 * Add user to flight as crew member
-	 * 
-	 * @param user
-	 * @return true if user was added to flight
-	 * @throws DAOException
-	 */
-	@Override
-	public boolean addCrewToFlight(User user) throws DAOException {
-		return false;
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * Update crew of flight by flight's id
-	 * 
-	 * @param idFlight
-	 * @return true if crew of flight was updated, otherwise false
-	 * @throws DAOException list of flights where user with idUser occuped any
-	 *                      position
-	 */
-	@Override
-	public boolean updateFlightCrew(int idFlight) throws DAOException {
-		return false;
-		// TODO Auto-generated method stub
-
 	}
 
 	/**

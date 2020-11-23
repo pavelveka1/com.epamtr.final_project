@@ -33,10 +33,10 @@ public class DeleteFlightCommand implements Command {
 		String currentUserRole = ((User) request.getSession().getAttribute(ConstantController.Attribute.SIGNED_IN_USER))
 				.getRole().getRole();
 		if (currentUserRole.equalsIgnoreCase(UserRole.ADMINISTRATOR.getRole())) {
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_DELETE_FLIGHT);
 		} else {
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_UPDATE_FLIGHT);
 		}
 

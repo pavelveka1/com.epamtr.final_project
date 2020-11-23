@@ -11,8 +11,7 @@
 	<c:choose>
 		<c:when test="${error!=null}">
 			<java-classes:printErrorInformation errorType="${error}" />
-Error is not null
-</c:when>
+		</c:when>
 		<c:otherwise>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">

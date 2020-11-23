@@ -56,7 +56,7 @@ public class AddCrewToFlightCommand implements Command {
 		}
 
 		if (selectedPosition == null) {
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_ADD_CREW_TO_FLIGHT);
 		} else {
 			String selectedPositionAttr = (String) request.getSession()
@@ -74,12 +74,12 @@ public class AddCrewToFlightCommand implements Command {
 					request.setAttribute(ConstantController.Attribute.ERROR, e);
 				}
 				request.setAttribute(ConstantController.Attribute.FREE_USERS_BY_POSITION, freeUsers);
-				request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+				request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 						ConstantController.PathToPage.PATH_TO_ADD_CREW_TO_FLIGHT);
 
 			} else {
 
-				request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+				request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 						ConstantController.PathToPage.PATH_TO_CREW_BY_FLIGHT);
 				boolean result = false;
 				try {

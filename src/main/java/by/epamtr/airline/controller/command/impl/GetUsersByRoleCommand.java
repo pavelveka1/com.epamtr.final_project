@@ -27,10 +27,10 @@ public class GetUsersByRoleCommand implements Command {
 		String roleCurrentUser = ((User) request.getSession().getAttribute(ConstantController.Attribute.SIGNED_IN_USER))
 				.getRole().getRole();
 		if (roleCurrentUser.equalsIgnoreCase(UserRole.ADMINISTRATOR.getRole())) {
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.ADMIN_PATH_TO_GET_USERS_BY_ROLE);
 		} else {
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_GET_USERS_BY_ROLE);
 		}
 
@@ -41,7 +41,7 @@ public class GetUsersByRoleCommand implements Command {
 			UserRole userRole = UserRole.valueOf(request.getParameter(ConstantController.Parameter.ROLE));
 			try {
 				List<User> users = userService.getUsers(userRole);
-				request.setAttribute(ConstantController.Attribute.USER_BY_ROLE, users);
+				request.getSession().setAttribute(ConstantController.Attribute.USER_BY_ROLE, users);
 				request.getSession().setAttribute(ConstantController.Attribute.CURRENT_ROLE, userRole);
 			} catch (ServiceException e2) {
 				LOGGER.error(LoggerMessageConstant.ERROR_GET_USERS_BY_ROLE, e2);
@@ -51,8 +51,7 @@ public class GetUsersByRoleCommand implements Command {
 			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_USERS_ROLE);
 		}
 		try {
-			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
-					response);
+			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
 			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}

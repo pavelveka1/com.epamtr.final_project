@@ -1,8 +1,10 @@
 package by.epamtr.airline.entity;
 
 import java.io.Serializable;
+
 /**
  * Entity class User
+ * 
  * @author Pavel Veka
  *
  */
@@ -14,10 +16,10 @@ public class User implements Serializable {
 	/**
 	 * Unique identifier of user
 	 */
-    private int idUser;
-    /**
-     * Name of user
-     */
+	private int idUser;
+	/**
+	 * Name of user
+	 */
 	private String name;
 	/**
 	 * Surname of user
@@ -36,117 +38,131 @@ public class User implements Serializable {
 	 */
 	private UserRole role;
 
-/**
- * Constructor of User object with parameters
- * @param idUser
- * @param name
- * @param surname
- * @param patronimic
- * @param email
- * @param role
- */
-	public User(int idUser, String name, String surname, String patronimic,String email, UserRole role) {
+	/**
+	 * Constructor of User object with parameters
+	 * 
+	 * @param idUser
+	 * @param name
+	 * @param surname
+	 * @param patronimic
+	 * @param email
+	 * @param role
+	 */
+	public User(int idUser, String name, String surname, String patronimic, String email, UserRole role) {
 		super();
-		this.idUser=idUser;
+		this.idUser = idUser;
 		this.name = name;
 		this.surname = surname;
 		this.patronimic = patronimic;
-		this.email=email;
-		this.role=role;
+		this.email = email;
+		this.role = role;
 
 	}
-/**
- * Constructor of User object without parameters
- */
+
+	/**
+	 * Constructor of User object without parameters
+	 */
 	public User() {
 
 	}
-/**
- * 
- * @return name of user
- */
+
+	/**
+	 * 
+	 * @return name of user
+	 */
 	public String getName() {
 		return name;
 	}
-/**
- * 
- * @param name new value
- */
+
+	/**
+	 * 
+	 * @param name new value
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-/**
- * 
- * @return surname of user
- */
+
+	/**
+	 * 
+	 * @return surname of user
+	 */
 	public String getSurname() {
 		return surname;
 	}
-/**
- * 
- * @param surname new value
- */
+
+	/**
+	 * 
+	 * @param surname new value
+	 */
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
-/**
- * 
- * @return patronimic of user
- */
+
+	/**
+	 * 
+	 * @return patronimic of user
+	 */
 	public String getPatronimic() {
 		return patronimic;
 	}
-/**
- * 
- * @param patronimic new value
- */
+
+	/**
+	 * 
+	 * @param patronimic new value
+	 */
 	public void setPatronimic(String patronimic) {
 		this.patronimic = patronimic;
 	}
-/**
- * 
- * @return object UserRole which contains name of role of user in airline company
- */
+
+	/**
+	 * 
+	 * @return object UserRole which contains name of role of user in airline
+	 *         company
+	 */
 	public UserRole getRole() {
 		return role;
 	}
-/**
- * 
- * @param role new value
- */
+
+	/**
+	 * 
+	 * @param role new value
+	 */
 	public void setRole(UserRole role) {
 		this.role = role;
 	}
-	
-	
-/**
- * 
- * @return id of user
- */
+
+	/**
+	 * 
+	 * @return id of user
+	 */
 	public int getIdUser() {
 		return idUser;
 	}
-/**
- * 
- * @param idUser new value
- */
+
+	/**
+	 * 
+	 * @param idUser new value
+	 */
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
 	}
-/**
- * 
- * @return email of user
- */
+
+	/**
+	 * 
+	 * @return email of user
+	 */
 	public String getEmail() {
 		return email;
 	}
-/**
- * 
- * @param email new value
- */
+
+	/**
+	 * 
+	 * @param email new value
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	/**
 	 * @return hash code of object
 	 */
@@ -162,10 +178,11 @@ public class User implements Serializable {
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
 		return result;
 	}
+
 	/**
-     * @param obj - object with which is compared object this
-     * @return true - if objects are equals and false otherwise
-     */
+	 * @param obj - object with which is compared object this
+	 * @return true - if objects are equals and false otherwise
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -201,6 +218,7 @@ public class User implements Serializable {
 			return false;
 		return true;
 	}
+
 	/**
 	 * @return presentation of object as string
 	 */
@@ -209,7 +227,5 @@ public class User implements Serializable {
 		return "User [idUser=" + idUser + ", name=" + name + ", surname=" + surname + ", patronimic=" + patronimic
 				+ ", email=" + email + ", role=" + role + "]";
 	}
-
-	
 
 }

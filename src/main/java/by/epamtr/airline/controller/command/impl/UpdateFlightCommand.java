@@ -29,7 +29,7 @@ public class UpdateFlightCommand implements Command {
 		FlightService flightService = serviceFactory.getFlightService();
 		String selectedFlight = request.getParameter(ConstantController.Parameter.ID_FLIGHT);
 		String flightDataStatus = request.getParameter(ConstantController.Parameter.FLIGHT_DATA_STATUS);
-		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+		request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 				ConstantController.PathToPage.PATH_TO_UPDATE_FLIGHT_DATA);
 		if (flightDataStatus != null) {
 			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_UPDATE_FLIGHT);
@@ -79,7 +79,7 @@ public class UpdateFlightCommand implements Command {
 					LOGGER.error(LoggerMessageConstant.ERROR_UPDATE_FLIGHT, e);
 					request.setAttribute(ConstantController.Attribute.ERROR, e);
 				}
-				request.setAttribute(ConstantController.Attribute.SELECTED_FLIGHT, updatedFlight);
+				request.getSession().setAttribute(ConstantController.Attribute.SELECTED_FLIGHT, updatedFlight);
 				if (flight != null) {
 					LOGGER.info(LoggerMessageConstant.FLIGHT_IS_UPDATED);
 				} else {
@@ -92,7 +92,7 @@ public class UpdateFlightCommand implements Command {
 		} else {
 			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_FLIGHT_STATUS);
 			int idSelectedFlight = Integer.parseInt(selectedFlight);
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_UPDATE_FLIGHT_DATA);
 			Flight flight = null;
 			try {

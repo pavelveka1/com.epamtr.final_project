@@ -23,8 +23,8 @@ public interface AircraftService {
 	boolean addAircraftType(AircraftType aircraftType) throws ServiceException;
 
 	boolean deliteAircraftType(int idAircraftType) throws ServiceException;
-	
+
 	List<AircraftType> getAircraftTypes() throws ServiceException;
-	
+
 	List<Aircraft> getAircraftrs() throws ServiceException;
 }

@@ -30,17 +30,17 @@ public class UpdateAircraftCommand implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 
 		String aircraftsParameter = request.getParameter(ConstantController.Parameter.AIRCRAFT_NUMBER);
-		request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+		request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 				ConstantController.PathToPage.PATH_TO_UPDATE_AIRCRAFT);
 		if (aircraftsParameter == null) {
-				LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_AIRCRAFT);
-				try {
-					aircrafts = aircraftService.getAircraftrs();
-				} catch (ServiceException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, e);
-				}
-				request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
+			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_AIRCRAFT);
+			try {
+				aircrafts = aircraftService.getAircraftrs();
+			} catch (ServiceException e) {
+				LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, e);
+			}
+			request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
 		} else {
 
 			String registrationNumber = request.getParameter(ConstantController.Parameter.AIRCRAFT_NUMBER);

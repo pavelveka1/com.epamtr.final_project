@@ -21,6 +21,15 @@
 	var="flight_time_not_valid" />
 <fmt:message bundle="${loc}" key="flight.time_departure.not_valid"
 	var="time_daparture_not_valid" />
+<fmt:message bundle="${loc}" key="flight.add_flight" var="add_flight" />
+<fmt:message bundle="${loc}" key="flight.current_city" var="current_city" />
+<fmt:message bundle="${loc}" key="flight.destination_city" var="destination_city" />
+<fmt:message bundle="${loc}" key="flight.range" var="flight_range" />
+<fmt:message bundle="${loc}" key="flight.time" var="flight_time" />
+<fmt:message bundle="${loc}" key="flight.choose_aircraft" var="choose_aircraft" />
+<fmt:message bundle="${loc}" key="flight.choose_date" var="choose_date" />
+<fmt:message bundle="${loc}" key="flight.status" var="flight_status" />
+
 </head>
 <body>
 	<c:choose>
@@ -37,7 +46,7 @@ Error is not null
 
 				<table>
 					<tr>
-						<td><label>Current city </label></td>
+						<td><label><c:out value="${current_city}"/> </label></td>
 						<td><input type="text" name="current_city"
 							placeholder="Current city"> <c:choose>
 								<c:when test="${current_city_valid==false}">
@@ -46,7 +55,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Destination city</label></td>
+						<td><label><c:out value="${destination_city}"/> </label></td>
 						<td><input type="text" name="destination_city"
 							placeholder="Destination city"> <c:choose>
 								<c:when test="${destination_city_valid==false}">
@@ -55,7 +64,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label> Flight range in km </label></td>
+						<td><label> <c:out value="${flight_range}"/> </label></td>
 						<td><input type="number" name="flight_range"> <c:choose>
 								<c:when test="${flight_range_valid==false}">
 									<c:out value="${flight_range_not_valid}" />
@@ -64,7 +73,7 @@ Error is not null
 					</tr>
 
 					<tr>
-						<td><label> Flight time in min </label></td>
+						<td><label><c:out value="${flight_time}"/>  </label></td>
 						<td><input type="number" name="flight_time"> <c:choose>
 								<c:when test="${flight_time_valid==false}">
 									<c:out value="${flight_time_not_valid}" />
@@ -72,7 +81,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Choose aircraft </label></td>
+						<td><label><c:out value="${choose_aircraft}"/>  </label></td>
 						<td><select name="aircraft_numbers">
 								<c:forEach var="type_item" items="${aircrafts}">
 									<option>
@@ -84,7 +93,7 @@ Error is not null
 						</select></td>
 					</tr>
 					<tr>
-						<td><label>Choose date </label></td>
+						<td><label><c:out value="${choose_date}"/>  </label></td>
 						<td><input type="datetime-local" name="time_departure" /> <c:choose>
 								<c:when test="${time_daparture_valid==false}">
 									<c:out value="${time_daparture_not_valid}" />
@@ -92,7 +101,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Flight status</label></td>
+						<td><label><c:out value="${flight_status}"/> </label></td>
 						<td><select name="flight_status">
 								<option>RECRUITMENT</option>
 								<option>CREATED</option>
@@ -101,7 +110,7 @@ Error is not null
 					</tr>
 				</table>
 
-				<br> <input type="submit" value="Add flight" />
+				<br> <input type="submit" value="${add_flight}" />
 			</form>
 			<br>
 			<c:choose>

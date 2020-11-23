@@ -3,8 +3,10 @@ package by.epamtr.airline.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+
 /**
  * Entity class Flight
+ * 
  * @author Pavel Veka
  *
  */
@@ -53,18 +55,20 @@ public class Flight implements Serializable {
 	 * List of crew member for flight
 	 */
 	private List<Crew> crews;
-/**
- * Constructor of Flight object with all parameters
- * @param idFlight
- * @param currentCity
- * @param destinationCity
- * @param flightRange
- * @param flightTime
- * @param timeDeparture
- * @param aircraftType
- * @param aircraftNumber
- * @param status
- */
+
+	/**
+	 * Constructor of Flight object with all parameters
+	 * 
+	 * @param idFlight
+	 * @param currentCity
+	 * @param destinationCity
+	 * @param flightRange
+	 * @param flightTime
+	 * @param timeDeparture
+	 * @param aircraftType
+	 * @param aircraftNumber
+	 * @param status
+	 */
 	public Flight(int idFlight, String currentCity, String destinationCity, int flightRange, int flightTime,
 			String timeDeparture, String aircraftType, String aircraftNumber, String status) {
 		super();
@@ -78,18 +82,21 @@ public class Flight implements Serializable {
 		this.aircraftNumber = aircraftNumber;
 		this.status = status;
 	}
-/**
- * Constructor of Flight object with parameters (parameters aircraftType and idFlight have default value)
- * @param currentCity
- * @param destinationCity
- * @param flightRange
- * @param flightTime
- * @param timeDeparture
- * @param aircraftNumber
- * @param status
- */
-	public Flight(String currentCity, String destinationCity, int flightRange, int flightTime,
-			String timeDeparture,  String aircraftNumber, String status) {
+
+	/**
+	 * Constructor of Flight object with parameters (parameters aircraftType and
+	 * idFlight have default value)
+	 * 
+	 * @param currentCity
+	 * @param destinationCity
+	 * @param flightRange
+	 * @param flightTime
+	 * @param timeDeparture
+	 * @param aircraftNumber
+	 * @param status
+	 */
+	public Flight(String currentCity, String destinationCity, int flightRange, int flightTime, String timeDeparture,
+			String aircraftNumber, String status) {
 		super();
 		this.currentCity = currentCity;
 		this.destinationCity = destinationCity;
@@ -99,152 +106,174 @@ public class Flight implements Serializable {
 		this.aircraftNumber = aircraftNumber;
 		this.status = status;
 	}
+
 	/**
 	 * Constructor of Flight object without parameters
 	 */
 	public Flight() {
 
 	}
-/**
- * 
- * @return current city
- */
+
+	/**
+	 * 
+	 * @return current city
+	 */
 	public String getCurrentCity() {
 		return currentCity;
 	}
-/**
- * 
- * @param currentCity new value
- */
+
+	/**
+	 * 
+	 * @param currentCity new value
+	 */
 	public void setCurrentCity(String currentCity) {
 		this.currentCity = currentCity;
 	}
-/**
- * 
- * @return destination sity
- */
+
+	/**
+	 * 
+	 * @return destination sity
+	 */
 	public String getDestinationCity() {
 		return destinationCity;
 	}
-/**
- * 
- * @param destinationCity new value
- */
+
+	/**
+	 * 
+	 * @param destinationCity new value
+	 */
 	public void setDestinationCity(String destinationCity) {
 		this.destinationCity = destinationCity;
 	}
-/**
- * 
- * @return range of flight in km
- */
+
+	/**
+	 * 
+	 * @return range of flight in km
+	 */
 	public int getFlightRange() {
 		return flightRange;
 	}
-/**
- * 
- * @param flightRange new value
- */
+
+	/**
+	 * 
+	 * @param flightRange new value
+	 */
 	public void setFlightRange(int flightRange) {
 		this.flightRange = flightRange;
 	}
-/**
- * 
- * @return time in flight in minutes
- */
+
+	/**
+	 * 
+	 * @return time in flight in minutes
+	 */
 	public int getFlightTime() {
 		return flightTime;
 	}
-/**
- * 
- * @param flightTime new value
- */
+
+	/**
+	 * 
+	 * @param flightTime new value
+	 */
 	public void setFlightTime(int flightTime) {
 		this.flightTime = flightTime;
 	}
-/**
- * 
- * @return date of departure
- */
+
+	/**
+	 * 
+	 * @return date of departure
+	 */
 	public String getTimeDeparture() {
 		return timeDeparture;
 	}
-/**
- * 
- * @param timeDeparture new value
- */
+
+	/**
+	 * 
+	 * @param timeDeparture new value
+	 */
 	public void setTimeDeparture(String timeDeparture) {
 		this.timeDeparture = timeDeparture;
 	}
-/**
- * 
- * @return name of type of aircraft
- */
+
+	/**
+	 * 
+	 * @return name of type of aircraft
+	 */
 	public String getAircraftType() {
 		return aircraftType;
 	}
-/**
- * 
- * @param aircraftType new value
- */
+
+	/**
+	 * 
+	 * @param aircraftType new value
+	 */
 	public void setAircraftType(String aircraftType) {
 		this.aircraftType = aircraftType;
 	}
-/**
- * 
- * @return registration number of aircraft
- */
+
+	/**
+	 * 
+	 * @return registration number of aircraft
+	 */
 	public String getAircraftNumber() {
 		return aircraftNumber;
 	}
-/**
- * 
- * @param aircraftNumber new value
- */
+
+	/**
+	 * 
+	 * @param aircraftNumber new value
+	 */
 	public void setAircraftNumber(String aircraftNumber) {
 		this.aircraftNumber = aircraftNumber;
 	}
-/**
- * 
- * @return name of status of flight
- */
+
+	/**
+	 * 
+	 * @return name of status of flight
+	 */
 	public String getStatus() {
 		return status;
 	}
-/**
- * 
- * @param status new value
- */
+
+	/**
+	 * 
+	 * @param status new value
+	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
-/**
- * 
- * @return id of flight
- */
+
+	/**
+	 * 
+	 * @return id of flight
+	 */
 	public int getIdFlight() {
 		return idFlight;
 	}
-/**
- * 
- * @param idFlight new value
- */
+
+	/**
+	 * 
+	 * @param idFlight new value
+	 */
 	public void setIdFlight(int idFlight) {
 		this.idFlight = idFlight;
 	}
-/**
- * 
- * @return list of crew members
- */
+
+	/**
+	 * 
+	 * @return list of crew members
+	 */
 	public List<Crew> getCrews() {
 		return crews;
 	}
-/**
- * 
- * @param crews new list of crew members
- */
+
+	/**
+	 * 
+	 * @param crews new list of crew members
+	 */
 	public void setCrews(List<Crew> crews) {
 		this.crews = crews;
 	}
+
 	/**
 	 * @return hash code of object
 	 */
@@ -264,10 +293,11 @@ public class Flight implements Serializable {
 		result = prime * result + ((timeDeparture == null) ? 0 : timeDeparture.hashCode());
 		return result;
 	}
+
 	/**
-     * @param obj - object with which is compared object this
-     * @return true - if objects are equals and false otherwise
-     */
+	 * @param obj - object with which is compared object this
+	 * @return true - if objects are equals and false otherwise
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -320,6 +350,7 @@ public class Flight implements Serializable {
 			return false;
 		return true;
 	}
+
 	/**
 	 * @return presentation of object as string
 	 */
@@ -331,5 +362,4 @@ public class Flight implements Serializable {
 				+ ", crews=" + crews + "]";
 	}
 
-	
 }

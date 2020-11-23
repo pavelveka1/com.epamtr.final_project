@@ -14,14 +14,15 @@ import by.epamtr.airline.controller.command.Command;
 
 public class GoToLoginPage implements Command {
 	private static final Logger LOGGER = Logger.getLogger(GoToLoginPage.class);
+
 	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response)  {
+	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_LOGIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
 			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
-		
+
 	}
 
 }

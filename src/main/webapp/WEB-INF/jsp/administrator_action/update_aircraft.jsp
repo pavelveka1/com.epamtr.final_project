@@ -14,17 +14,20 @@
 	var="aircraft_update_fail" />
 <fmt:message bundle="${loc}" key="aircraft.reg.number.not_valid"
 	var="registration_number_not_valid" />
+<fmt:message bundle="${loc}" key="aircraft.choose_aircraft"
+	var="choose_aircraft" />
+	<fmt:message bundle="${loc}" key="airline.update"
+	var="update_aircraft" />
 </head>
 <body>
 	<c:choose>
 		<c:when test="${error!=null}">
 			<java-classes:printErrorInformation errorType="${error}" />
-Error is not null
 </c:when>
 		<c:otherwise>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="UPDATE_AIRCRAFT">
-				<label>Choose aircraft </label> <select name="aircraft_numbers">
+				<label><c:out value="${choose_aircraft}"></c:out></label> <select name="aircraft_numbers">
 					<c:forEach var="type_item" items="${aircrafts}">
 						<option>
 							<c:out value="${type_item.registerNumber}" />
@@ -32,7 +35,7 @@ Error is not null
 					</c:forEach>
 				</select> <input type="text" name="register_number"
 					placeholder="New registration number"> <input type="submit"
-					value="Update aircraft" />
+					value="${update_aircraft}" />
 			</form>
 
 			<br>

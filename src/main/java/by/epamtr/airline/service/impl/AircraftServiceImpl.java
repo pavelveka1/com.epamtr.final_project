@@ -12,7 +12,7 @@ import by.epamtr.airline.entity.AircraftType;
 import by.epamtr.airline.service.AircraftService;
 import by.epamtr.airline.service.exception.ServiceException;
 
-public class AircraftServiceImpl implements AircraftService{
+public class AircraftServiceImpl implements AircraftService {
 	private AircraftDAO aircraftDAO = DAOFactory.getInstance().getSqlAircraftImpl();
 
 	@Override
@@ -20,9 +20,9 @@ public class AircraftServiceImpl implements AircraftService{
 		try {
 			return aircraftDAO.addAircraft(aircraft, aircraftType);
 		} catch (DAOException e) {
-			throw new ServiceException("Error while adding new aircraft",e);
+			throw new ServiceException("Error while adding new aircraft", e);
 		}
-		
+
 	}
 
 	@Override
@@ -30,9 +30,9 @@ public class AircraftServiceImpl implements AircraftService{
 		try {
 			return aircraftDAO.deleteAircraft(registrationNumber);
 		} catch (DAOException e) {
-			throw new ServiceException("Error while deletion aircraft",e);
+			throw new ServiceException("Error while deletion aircraft", e);
 		}
-		
+
 	}
 
 	@Override
@@ -40,9 +40,9 @@ public class AircraftServiceImpl implements AircraftService{
 		try {
 			return aircraftDAO.updateAircraft(registrationNumber, newRegistrationNumber);
 		} catch (DAOException e) {
-			throw new ServiceException("Error while updating aircraft",e);
+			throw new ServiceException("Error while updating aircraft", e);
 		}
-		
+
 	}
 
 	@Override
@@ -50,9 +50,9 @@ public class AircraftServiceImpl implements AircraftService{
 		try {
 			return aircraftDAO.changeAircraftStatus(idAircraft, status);
 		} catch (DAOException e) {
-			throw new ServiceException("Error while changing status of aircraft",e);
+			throw new ServiceException("Error while changing status of aircraft", e);
 		}
-		
+
 	}
 
 	@Override
@@ -60,9 +60,9 @@ public class AircraftServiceImpl implements AircraftService{
 		try {
 			return aircraftDAO.addAircraftType(aircraftType);
 		} catch (DAOException e) {
-			throw new ServiceException("Error while adding new type of aircraft",e);
+			throw new ServiceException("Error while adding new type of aircraft", e);
 		}
-		
+
 	}
 
 	@Override
@@ -70,9 +70,9 @@ public class AircraftServiceImpl implements AircraftService{
 		try {
 			return aircraftDAO.deliteAircraftType(idAircraftType);
 		} catch (DAOException e) {
-			throw new ServiceException("Error while deleting type of aircraft",e);
+			throw new ServiceException("Error while deleting type of aircraft", e);
 		}
-		
+
 	}
 
 	@Override
@@ -80,9 +80,9 @@ public class AircraftServiceImpl implements AircraftService{
 		try {
 			return aircraftDAO.getAircraftTypes();
 		} catch (DAOException e) {
-			throw new ServiceException("Error while getting aircraft types from DB",e);
+			throw new ServiceException("Error while getting aircraft types from DB", e);
 		}
-		
+
 	}
 
 	@Override
@@ -90,10 +90,8 @@ public class AircraftServiceImpl implements AircraftService{
 		try {
 			return aircraftDAO.getAircrafts();
 		} catch (DAOException e) {
-			throw new ServiceException("Error while getting aircrafts from DB",e);
+			throw new ServiceException("Error while getting aircrafts from DB", e);
 		}
 	}
-
-
 
 }

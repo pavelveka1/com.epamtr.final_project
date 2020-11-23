@@ -11,7 +11,6 @@ import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import by.epamtr.airline.dao.AircraftStatusDAO;
@@ -106,9 +105,9 @@ public class SQLUserDAOTest {
 	private final static String REGISTRATION_NUMBER = "TEST-100";
 	private final static String FIRST_PILOT = "Командир ВС";
 	private final static String SECOND_PILOT = "Второй пилот";
-	private final static int CREW_POSITION=6;
-	private final static String UPDATED_NAME="updatedName";
-	private final static String UPDATED_PASSWORD="updatedPassword";
+	private final static int CREW_POSITION = 6;
+	private final static String UPDATED_NAME = "updatedName";
+	private final static String UPDATED_PASSWORD = "updatedPassword";
 
 	@BeforeClass
 	public static void initializeData() throws ConnectionPoolException, SQLException {
@@ -200,7 +199,7 @@ public class SQLUserDAOTest {
 		User actualUser = userDao.signIn(testUserInfoOne.getLogin(), testUserInfoOne.getPassword());
 		assertEquals(expectedUser, actualUser);
 	}
-	
+
 	@Test(timeout = 100)
 	public void signInParameterIsNull() throws DAOException {
 		User actualUser = userDao.signIn(null, testUserInfoOne.getPassword());
@@ -218,7 +217,7 @@ public class SQLUserDAOTest {
 		boolean result = userDao.addUser(testUserForAddOperation, testUserInfoForAddOperation);
 		assertTrue(result);
 	}
-	
+
 	@Test(timeout = 100)
 	public void addUserParameterIsNull() throws DAOException {
 		boolean result = userDao.addUser(null, testUserInfoForAddOperation);
@@ -249,7 +248,7 @@ public class SQLUserDAOTest {
 		boolean result = userDao.updateUser(null, testUserInfoOne);
 		assertFalse(result);
 	}
-	
+
 	@Test(timeout = 100)
 	public void getUsersByUserRole() throws DAOException, SQLException, ConnectionPoolException {
 		UserRole role = UserRole.PILOT;
@@ -264,7 +263,7 @@ public class SQLUserDAOTest {
 		connectionPool.releaseResourses(statement, rs, connection);
 		assertEquals(expectedUsers, users);
 	}
-	
+
 	@Test(timeout = 100)
 	public void getUsersByUserRoleParameterIsNull() throws DAOException, SQLException, ConnectionPoolException {
 		List<User> users = userDao.getUsers(null);

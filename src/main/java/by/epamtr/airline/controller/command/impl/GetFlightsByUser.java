@@ -32,7 +32,7 @@ public class GetFlightsByUser implements Command {
 		if (userRole != null) {
 
 			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_USERS_BY_ROLE);
-			request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_USERS_BY_ROLE);
 			request.setAttribute(ConstantController.Attribute.SELECTED_ROLE, userRole);
 			try {
@@ -54,15 +54,15 @@ public class GetFlightsByUser implements Command {
 					int idUser = Integer.parseInt(selectedUserId);
 					User user = userService.getUser(idUser);
 					List<Flight> flights = flightService.getFlights(idUser);
-					request.setAttribute(ConstantController.Attribute.SELECTED_USER, user);
-					request.setAttribute(ConstantController.Attribute.FLIGHTS, flights);
+					request.getSession().setAttribute(ConstantController.Attribute.SELECTED_USER, user);
+					request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
 				} catch (ServiceException e) {
 					LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS_BY_USER_ID, e);
 					request.setAttribute(ConstantController.Attribute.ERROR, e);
 				}
 			} else {
 				LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_USERS_ROLE);
-				request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+				request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 						ConstantController.PathToPage.PATH_TO_USERS_BY_ROLE);
 			}
 

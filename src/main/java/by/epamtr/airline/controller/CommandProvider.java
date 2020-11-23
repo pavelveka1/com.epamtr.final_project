@@ -39,38 +39,36 @@ public class CommandProvider {
 	private CommandProvider() {
 		commands.put(CommandName.SIGN_IN, new SignIn());
 		commands.put(CommandName.SIGN_OUT, new SignOut());
-		
+
 		commands.put(CommandName.GO_TO_LOGIN_PAGE, new GoToLoginPage());
 		commands.put(CommandName.GO_TO_MAIN_PAGE, new GoToMainPage());
 		commands.put(CommandName.WRONG_REQUEST, new GoToLoginPage());
-		
+
 		commands.put(CommandName.ADD_USER, new AddUserCommand());
 		commands.put(CommandName.DELITE_USER, new DeliteUserCommand());
 		commands.put(CommandName.UPDATE_USER, new UpdateUserCommand());
 		commands.put(CommandName.GET_USER, new GetUserCommand());
 		commands.put(CommandName.GET_USERS, new GetUsersCommand());
-		
+
 		commands.put(CommandName.GET_USERS_BY_ROLE, new GetUsersByRoleCommand());
 		commands.put(CommandName.GET_USERS_BY_FLIGHT_ID, new GetUsersByFlightIdCommand());
 		commands.put(CommandName.ADD_CREW_TO_FLIGHT, new AddCrewToFlightCommand());
 		commands.put(CommandName.DELETE_CREW_FROM_FLIGHT, new DeleteCrewFromFlightCommand());
-		
+
 		commands.put(CommandName.ADD_FLIGHT, new AddFlightCommand());
 		commands.put(CommandName.DELETE_FLIGHT, new DeleteFlightCommand());
 		commands.put(CommandName.UPDATE_FLIGHT, new UpdateFlightCommand());
 		commands.put(CommandName.GET_FLIGHTS_BY_STATUS, new GetFlightsByStatusCommand());
 		commands.put(CommandName.GET_FLIGHTS_BY_USER, new GetFlightsByUser());
 		commands.put(CommandName.CHANGE_FLIGHT_STATUS, new ChangeFlightStatusCommand());
-		
+
 		commands.put(CommandName.ADD_AIRCRAFT, new AddAircraftCommand());
 		commands.put(CommandName.DELETE_AIRCRAFT, new DeleteAircraftCommand());
 		commands.put(CommandName.UPDATE_AIRCRAFT, new UpdateAircraftCommand());
 		commands.put(CommandName.CHANGE_STATUS_AIRCRAFT, new ChangeAircraftStatusCommand());
 		commands.put(CommandName.ADD_AIRCRAFT_TYPE, new AddAircraftTypeCommand());
 		commands.put(CommandName.DELETE_AIRCRAFT_TYPE, new DeleteAircraftTypeCommand());
-		
-		
-		
+
 	}
 
 	public static CommandProvider getInstance() {

@@ -11,7 +11,6 @@
 	<c:choose>
 		<c:when test="${error!=null}">
 			<java-classes:printErrorInformation errorType="${error}" />
-Error is not null
 </c:when>
 		<c:otherwise>
 			<form action="Controller" method="POST">

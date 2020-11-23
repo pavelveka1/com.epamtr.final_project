@@ -21,7 +21,7 @@ import by.epamtr.airline.dao.exception.DAOException;
 public class MainController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String COMMAND = "command";
-	private static final String PATH_TO_LOGIN_PAGE="/WEB-INF/jsp/login_page.jsp";
+	private static final String PATH_TO_LOGIN_PAGE = "/WEB-INF/jsp/login_page.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()

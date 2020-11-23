@@ -41,8 +41,7 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
-	public Flight updateFlight(int idFlight,Flight flight )
-			throws ServiceException {
+	public Flight updateFlight(int idFlight, Flight flight) throws ServiceException {
 		try {
 			return flightDAO.updateFlight(idFlight, flight);
 		} catch (DAOException e) {
@@ -72,12 +71,6 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
-	public List<Flight> getFlights() throws ServiceException {
-		return null;
-
-	}
-
-	@Override
 	public List<Flight> getFlights(FlightStatus flightStatus) throws ServiceException {
 		List<Flight> flightsByStatus;
 		try {
@@ -97,20 +90,6 @@ public class FlightServiceImpl implements FlightService {
 			throw new ServiceException("Error while getting flights from DB", e);
 		}
 		return flightsByUserId;
-	}
-
-	@Override
-	public boolean addCrewToFlight(User user) throws ServiceException {
-		return false;
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean updateFlightCrew(int idFlight) throws ServiceException {
-		return false;
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

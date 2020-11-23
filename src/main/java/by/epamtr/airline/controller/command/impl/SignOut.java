@@ -14,6 +14,7 @@ import by.epamtr.airline.controller.command.Command;
 
 public class SignOut implements Command {
 	private static final Logger LOGGER = Logger.getLogger(SignOut.class);
+
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		request.getSession().invalidate();

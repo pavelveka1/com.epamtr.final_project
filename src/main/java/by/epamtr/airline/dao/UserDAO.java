@@ -6,8 +6,10 @@ import by.epamtr.airline.entity.Crew;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.entity.UserInfo;
 import by.epamtr.airline.entity.UserRole;
+
 /**
  * Interface actions with users
+ * 
  * @author Pavel Veka
  *
  */
@@ -15,6 +17,7 @@ public interface UserDAO {
 
 	/**
 	 * Sign in user
+	 * 
 	 * @param login
 	 * @param password
 	 * @return user if user with login and passwors is exist, otherwise null
@@ -24,6 +27,7 @@ public interface UserDAO {
 
 	/**
 	 * Add new user in database
+	 * 
 	 * @param user
 	 * @param userInfo
 	 * @return true if user and userInfo were added
@@ -33,6 +37,7 @@ public interface UserDAO {
 
 	/**
 	 * Delete user from database
+	 * 
 	 * @param idUser
 	 * @return true if user was deleted
 	 * @throws DAOException if dao exception occurred while processing
@@ -41,6 +46,7 @@ public interface UserDAO {
 
 	/**
 	 * Update user's data in database
+	 * 
 	 * @param user
 	 * @param userInfo
 	 * @return true if user's data was updated
@@ -50,6 +56,7 @@ public interface UserDAO {
 
 	/**
 	 * Get list of users by role of user from database
+	 * 
 	 * @param role
 	 * @return list of users by role
 	 * @throws DAOException if dao exception occurred while processing
@@ -58,6 +65,7 @@ public interface UserDAO {
 
 	/**
 	 * Get list of users by flight id from database
+	 * 
 	 * @param idFlight
 	 * @return list of users by flight id
 	 * @throws DAOException if dao exception occurred while processing
@@ -66,6 +74,7 @@ public interface UserDAO {
 
 	/**
 	 * Get user by id of user from database
+	 * 
 	 * @param idUser
 	 * @return User object if user with such id is exist, otherwise false
 	 * @throws DAOException if dao exception occurred while processing
@@ -74,6 +83,7 @@ public interface UserDAO {
 
 	/**
 	 * Get UserInfo object by id of user from database
+	 * 
 	 * @param idUser
 	 * @return UserInfo object if user with such id is exist, otherwise null
 	 * @throws DAOException if dao exception occurred while processing
@@ -82,6 +92,7 @@ public interface UserDAO {
 
 	/**
 	 * Delete crew member from flight by id of user in database
+	 * 
 	 * @param flightId
 	 * @param userId
 	 * @return true if crem member was deleted from flight, otherwise false
@@ -90,7 +101,9 @@ public interface UserDAO {
 	boolean deliteCrewFromFlight(int flightId, int userId) throws DAOException;
 
 	/**
-	 * Add crem member with id equals userId to flight with id equals flightid in database
+	 * Add crem member with id equals userId to flight with id equals flightid in
+	 * database
+	 * 
 	 * @param idCrewPosition
 	 * @param flightId
 	 * @param userId
@@ -101,6 +114,7 @@ public interface UserDAO {
 
 	/**
 	 * Get list of free crew positions for flight by id of flight
+	 * 
 	 * @param flightId
 	 * @param selectedPosition
 	 * @return list of free crew positions

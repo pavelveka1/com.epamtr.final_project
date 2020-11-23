@@ -32,6 +32,4 @@ public enum CommandName {
 	CHANGE_STATUS_AIRCRAFT,
 	ADD_AIRCRAFT_TYPE,
 	DELETE_AIRCRAFT_TYPE;
-	
-
 }

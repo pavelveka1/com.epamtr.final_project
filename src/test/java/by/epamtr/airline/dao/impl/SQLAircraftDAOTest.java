@@ -1,17 +1,14 @@
 package by.epamtr.airline.dao.impl;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import by.epamtr.airline.dao.AircraftDAO;
 import by.epamtr.airline.dao.AircraftStatusDAO;
-import by.epamtr.airline.dao.SQLQueryConstant;
 import by.epamtr.airline.dao.connection_pool.ConnectionPool;
 import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
 import by.epamtr.airline.dao.connection_pool.impl.ConnectionPoolImpl;
 import by.epamtr.airline.dao.exception.DAOException;
 import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.AircraftType;
-import by.epamtr.airline.entity.CrewPosition;
 
 import static org.junit.Assert.*;
 import java.sql.Connection;
@@ -21,7 +18,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -134,7 +130,7 @@ public class SQLAircraftDAOTest {
 		boolean result = aircraftDao.addAircraft(testAircraft, testAircraftTypeOne);
 		assertTrue(result);
 	}
-	
+
 	@Test(timeout = 100)
 	public void addAircrafParameterIsNull() throws DAOException {
 		boolean result = aircraftDao.addAircraft(null, testAircraftTypeOne);
@@ -152,7 +148,7 @@ public class SQLAircraftDAOTest {
 		boolean result = aircraftDao.addAircraftType(testAircraftType);
 		assertTrue(result);
 	}
-	
+
 	@Test(timeout = 100)
 	public void addAircraftTypeParameterIsNull() throws DAOException {
 		boolean result = aircraftDao.addAircraftType(null);
@@ -170,7 +166,7 @@ public class SQLAircraftDAOTest {
 		boolean result = aircraftDao.deleteAircraft(registrationNumber);
 		assertTrue(result);
 	}
-	
+
 	@Test(timeout = 100)
 	public void deleteAircraftParameterIsNull() throws DAOException {
 		boolean result = aircraftDao.deleteAircraft(null);
@@ -205,7 +201,7 @@ public class SQLAircraftDAOTest {
 		boolean result = aircraftDao.updateAircraft(registrationNumber, newRegistrationNumber);
 		assertTrue(result);
 	}
-	
+
 	@Test(timeout = 100)
 	public void updateAircraftParameterIsNull() throws DAOException {
 		String newRegistrationNumber = NEW_REGISTRATION_NUMBER;
@@ -221,10 +217,10 @@ public class SQLAircraftDAOTest {
 		boolean result = aircraftDao.changeAircraftStatus(testAircraftOne.getIdAircraft(), status);
 		assertTrue(result);
 	}
-	
+
 	@Test(timeout = 100)
 	public void changeAircraftStatusParameterIsNull() throws DAOException, ConnectionPoolException, SQLException {
-		boolean result = aircraftDao.changeAircraftStatus(testAircraftOne.getIdAircraft(),null);
+		boolean result = aircraftDao.changeAircraftStatus(testAircraftOne.getIdAircraft(), null);
 		assertFalse(result);
 	}
 

@@ -17,6 +17,14 @@
 	var="range_flight_not_valid" />
 <fmt:message bundle="${loc}" key="aircraft.number_passenger.not_valid"
 	var="number_passengers_not_valid" />
+<fmt:message bundle="${loc}" key="aircraft.flight_range"
+	var="flight_range" />
+<fmt:message bundle="${loc}" key="aircraft.type"
+	var="aircraft_type" />
+<fmt:message bundle="${loc}" key="aircraft.num_passengers"
+	var="num_passengers" />
+<fmt:message bundle="${loc}" key="airline.apply"
+	var="apply" />
 <meta charset="UTF-8">
 <title>Add flight</title>
 </head>
@@ -33,7 +41,7 @@ Error is not null
 
 				<table>
 					<tr>
-						<td><label>Enter new type of aircraft</label></td>
+						<td><label><c:out value="${aircraft_type}"/></label></td>
 						<td><input type="text" name="aircraft_type"
 							placeholder="aircraft type"> <c:choose>
 								<c:when test="${type_valid==false}">
@@ -42,7 +50,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Enter range of flight</label></td>
+						<td><label><c:out value="${flight_range}"/></label></td>
 						<td><input type="number" name="range_flight"
 							placeholder="range of flight"> <c:choose>
 								<c:when test="${flight_range_valid==false}">
@@ -51,7 +59,7 @@ Error is not null
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Enter number of passenger</label></td>
+						<td><label><c:out value="${num_passengers}"/></label></td>
 						<td><input type="number" name="number_passengers"
 							placeholder="passenger's number"> <c:choose>
 								<c:when test="${number_passengers_valid==false}">
@@ -61,7 +69,7 @@ Error is not null
 					</tr>
 				</table>
 
-				<br> <input type="submit" value="Apply" />
+				<br> <input type="submit" value="${apply}" />
 			</form>
 
 			<br>
