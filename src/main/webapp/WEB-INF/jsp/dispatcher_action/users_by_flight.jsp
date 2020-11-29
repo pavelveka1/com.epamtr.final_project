@@ -8,12 +8,9 @@
 <title>Users by flight</title>
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-Error is not null
-</c:when>
-		<c:otherwise>
+	<br>
+	<c:out value="${error}" />
+	<br>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">
 				<label> Choose flight status</label> <select name="flight_status"
@@ -66,7 +63,5 @@ Error is not null
 				</c:when>
 			</c:choose>
 
-		</c:otherwise>
-	</c:choose>
 </body>
 </html>

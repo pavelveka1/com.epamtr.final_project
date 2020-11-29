@@ -19,7 +19,7 @@ import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class DeleteCrewFromFlightCommand implements Command {
-	private static final Logger LOGGER = Logger.getLogger(DeleteCrewFromFlightCommand.class);
+	private static final Logger logger = Logger.getLogger(DeleteCrewFromFlightCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -35,27 +35,27 @@ public class DeleteCrewFromFlightCommand implements Command {
 			try {
 				result = userService.deliteCrewFromFlight(flightId, Integer.parseInt(userId));
 			} catch (NumberFormatException | ServiceException e1) {
-				LOGGER.error(LoggerMessageConstant.ERROR_DELETE_CREW_FROM_FLIGHT, e1);
-				request.setAttribute(ConstantController.Attribute.ERROR, e1);
+				logger.error(LoggerMessageConstant.ERROR_DELETE_CREW_FROM_FLIGHT, e1);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			if (result) {
-				LOGGER.info(LoggerMessageConstant.CREW_IS_DELETED_FROM_FLIGHT);
+				logger.info(LoggerMessageConstant.CREW_IS_DELETED_FROM_FLIGHT);
 			} else {
-				LOGGER.info(LoggerMessageConstant.CREW_IS_NOT_DELETED_FROM_FLIGHT);
+				logger.info(LoggerMessageConstant.CREW_IS_NOT_DELETED_FROM_FLIGHT);
 			}
 			List<Crew> team = null;
 			try {
 				team = userService.getUsers(flightId);
 			} catch (ServiceException e1) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GET_USERS_BY_FLIGHT_ID, e1);
-				request.setAttribute(ConstantController.Attribute.ERROR, e1);
+				logger.error(LoggerMessageConstant.ERROR_GET_USERS_BY_FLIGHT_ID, e1);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			Flight flight = null;
 			try {
 				flight = serviceFactory.getFlightService().getFlight(flightId);
 			} catch (ServiceException e1) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHT_BY_FLIGHT_ID, e1);
-				request.setAttribute(ConstantController.Attribute.ERROR, e1);
+				logger.error(LoggerMessageConstant.ERROR_GET_FLIGHT_BY_FLIGHT_ID, e1);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			request.getSession().setAttribute(ConstantController.Attribute.SELECTED_FLIGHT, flight);
 			request.getSession().setAttribute(ConstantController.Attribute.TEAM_BY_FLIGHT, team);
@@ -63,7 +63,7 @@ public class DeleteCrewFromFlightCommand implements Command {
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
 						response);
 			} catch (ServletException | IOException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+				logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 			}
 		}
 

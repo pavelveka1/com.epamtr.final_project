@@ -1,4 +1,4 @@
-package by.epamtr.airline.controller;
+package by.epamtr.airline.controller.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;

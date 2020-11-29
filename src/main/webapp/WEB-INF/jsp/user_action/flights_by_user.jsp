@@ -20,11 +20,9 @@
 <fmt:message bundle="${loc}" key="aircraft.reg_number" var="reg_number" />
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-</c:when>
-		<c:otherwise>
+	<br>
+	<c:out value="${error}" />
+	<br>
 			<strong> <c:out value="${selected_user.role}" /> :
 			</strong>
 			<table>
@@ -66,7 +64,6 @@
 					<br>
 				</c:when>
 			</c:choose>
-		</c:otherwise>
-	</c:choose>
+		
 </body>
 </html>

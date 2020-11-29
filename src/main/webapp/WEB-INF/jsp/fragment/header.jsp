@@ -28,18 +28,18 @@
   
   a:link {
   color: #FF00FF; 
-  border-bottom: 1px dashed; 
+  
 }
 a:visited {
   color: #00FF00;
 }
 a:hover {
   color: #FF0000; 
-  border-bottom: .07em solid;
+
 }
 a:active {
   color: #FF00FF; 
-  border-bottom: 1px dashed;
+ 
 }
   div{
   display: inline-block;

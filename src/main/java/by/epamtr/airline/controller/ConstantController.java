@@ -120,6 +120,7 @@ public class ConstantController {
 		public static final String FLIGHT_TIME_VALID = "flight_time_valid";
 		public static final String TIME_DEPARTURE_VALID = "time_daparture_valid";
 		public static final String ERROR = "error";
+		public static final String SOMETHING_GOES_WRONG="Something goes wrong! Try again!";
 
 	}
 

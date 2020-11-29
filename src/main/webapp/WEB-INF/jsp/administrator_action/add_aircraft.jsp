@@ -20,11 +20,6 @@
 <title>Add aircraft</title>
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-</c:when>
-		<c:otherwise>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="ADD_AIRCRAFT">
 
@@ -62,6 +57,8 @@
 				<br> <input type="submit" value="${add_aircraft}" />
 			</form>
 			<br>
+			<c:out value="${error}"/>
+			<br>
 			<c:choose>
 				<c:when test="${result_attr=='success'}">
 					<c:out value="${aircraft_add_ok}" />
@@ -70,8 +67,5 @@
 					<c:out value="${aircraft_add_fail}" />
 				</c:when>
 			</c:choose>
-		</c:otherwise>
-	</c:choose>
-
 </body>
 </html>

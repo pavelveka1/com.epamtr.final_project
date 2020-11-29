@@ -8,13 +8,9 @@
 <title>Users by role</title>
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-Error is not null
-</c:when>
-		<c:otherwise>
-
+	<br>
+	<c:out value="${error}" />
+	<br>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="GET_USERS_BY_ROLE">
 				<input type="hidden" name="form" value="filled"> <label>
@@ -65,9 +61,6 @@ Error is not null
 					</table>
 				</c:when>
 			</c:choose>
-
-		</c:otherwise>
-	</c:choose>
 
 </body>
 </html>

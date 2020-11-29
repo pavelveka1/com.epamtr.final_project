@@ -23,96 +23,91 @@
 <title>Delete user</title>
 </head>
 <body>
+	<br>
+	<c:out value="${error}" />
+	<br>
+	<form action="Controller" method="POST">
+		<input type="hidden" name="command" value="GET_USERS_BY_ROLE">
+		<input type="hidden" name="form" value="filled"> <label><c:out
+				value="${choose_role}" /> </label> <select name="role">
+			<option>MANAGER</option>
+			<option>ADMINISTRATOR</option>
+			<option>DISPATCHER</option>
+			<option>PILOT</option>
+			<option>FLIGHT ATTENDANT</option>
+			<option>ENGINEER</option>
+		</select> <input type="submit" value="${find}" />
+	</form>
+	<br>
+	<br>
 	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-</c:when>
-		<c:otherwise>
+		<c:when test="${current_role!=null}">
 
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="GET_USERS_BY_ROLE">
-				<input type="hidden" name="form" value="filled"> <label><c:out value="${choose_role}"/> </label> <select name="role">
-					<option>MANAGER</option>
-					<option>ADMINISTRATOR</option>
-					<option>DISPATCHER</option>
-					<option>PILOT</option>
-					<option>FLIGHT ATTENDANT</option>
-					<option>ENGINEER</option>
-				</select> <input type="submit" value="${find}" />
-			</form>
+			<label>Current role: <c:out value="${current_role.role}" /></label>
 			<br>
-			<br>
-			<c:choose>
-				<c:when test="${current_role!=null}">
+			<table border="1">
+				<tr>
+					<th><c:out value="${name}" /></th>
+					<th><c:out value="${surname}" /></th>
+					<th><c:out value="${patronimic}" /></th>
+					<th><c:out value="${email}" /></th>
+					<th><c:out value="${user_role}" /></th>
+					<th><c:out value="${delete_user}" /></th>
+					<th><c:out value="${update_user}" /></th>
+				</tr>
+				<c:forEach var="user_item" items="${users_by_role}">
 
-					<label>Current role: <c:out value="${current_role.role}" /></label>
-					<br>
-					<table border="1">
-						<tr>
-							<th><c:out value="${name}"/></th>
-							<th><c:out value="${surname}"/></th>
-							<th><c:out value="${patronimic}"/></th>
-							<th><c:out value="${email}"/></th>
-							<th><c:out value="${user_role}"/></th>
-							<th><c:out value="${delete_user}"/></th>
-							<th><c:out value="${update_user}"/></th>
-						</tr>
-						<c:forEach var="user_item" items="${users_by_role}">
-
-							<tr>
-								<td><c:out value="${user_item.name}" /></td>
-								<td><c:out value="${user_item.surname}" /></td>
-								<td><c:out value="${user_item.patronimic}" /></td>
-								<td><c:out value="${user_item.email}" /></td>
-								<td><c:out value="${user_item.role}" /></td>
-								<td><form action="Controller" method="POST">
-										<input type="hidden" name="command" value="DELITE_USER">
-										<input type="hidden" name="id_user"
-											value="${user_item.idUser}"> <input type="submit"
-											value="${delete_user}">
-									</form></td>
-								<td><form action="Controller" method="POST">
-										<input type="hidden" name="command" value="UPDATE_USER">
-										<input type="hidden" name="id_user"
-											value="${user_item.idUser}"> <input type="submit"
-											value="${update_user}">
-									</form></td>
-							</tr>
+					<tr>
+						<td><c:out value="${user_item.name}" /></td>
+						<td><c:out value="${user_item.surname}" /></td>
+						<td><c:out value="${user_item.patronimic}" /></td>
+						<td><c:out value="${user_item.email}" /></td>
+						<td><c:out value="${user_item.role}" /></td>
+						<td><form action="Controller" method="POST">
+								<input type="hidden" name="command" value="DELITE_USER">
+								<input type="hidden" name="id_user" value="${user_item.idUser}">
+								<input type="submit" value="${delete_user}">
+							</form></td>
+						<td><form action="Controller" method="POST">
+								<input type="hidden" name="command" value="UPDATE_USER">
+								<input type="hidden" name="id_user" value="${user_item.idUser}">
+								<input type="submit" value="${update_user}">
+							</form></td>
+					</tr>
 
 
-						</c:forEach>
+				</c:forEach>
 
 
 
-						<c:forEach var="user_item" items="${users_by_role}">
-							<tr>
-								<td><c:out value="${user_item.name}" /></td>
-								<td><c:out value="${user_item.surname}" /></td>
-								<td><c:out value="${user_item.patronimic}" /></td>
-								<td><c:out value="${user_item.email}" /></td>
-								<td><c:out value="${user_item.role}" /></td>
-							</tr>
-						</c:forEach>
-					</table>
-				</c:when>
-			</c:choose>
-
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="DELITE_USER"> <input
-					type="text" name="login" placeholder="Login name"> <input
-					type="submit" value="delite user" />
-			</form>
-			<br>
-			<br>
-			<c:choose>
-				<c:when test="${deleted_user=='success'}">
-					<c:out value="${deleted_user_ok}" />
-				</c:when>
-				<c:when test="${deleted_user=='fail'}">
-					<c:out value="${deleted_user_fail}" />
-				</c:when>
-			</c:choose>
-		</c:otherwise>
+				<c:forEach var="user_item" items="${users_by_role}">
+					<tr>
+						<td><c:out value="${user_item.name}" /></td>
+						<td><c:out value="${user_item.surname}" /></td>
+						<td><c:out value="${user_item.patronimic}" /></td>
+						<td><c:out value="${user_item.email}" /></td>
+						<td><c:out value="${user_item.role}" /></td>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:when>
 	</c:choose>
+
+	<form action="Controller" method="POST">
+		<input type="hidden" name="command" value="DELITE_USER"> <input
+			type="text" name="login" placeholder="Login name"> <input
+			type="submit" value="delite user" />
+	</form>
+	<br>
+	<br>
+	<c:choose>
+		<c:when test="${deleted_user=='success'}">
+			<c:out value="${deleted_user_ok}" />
+		</c:when>
+		<c:when test="${deleted_user=='fail'}">
+			<c:out value="${deleted_user_fail}" />
+		</c:when>
+	</c:choose>
+
 </body>
 </html>

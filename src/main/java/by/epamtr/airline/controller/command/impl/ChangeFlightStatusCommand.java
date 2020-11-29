@@ -20,7 +20,7 @@ import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class ChangeFlightStatusCommand implements Command {
-	private static final Logger LOGGER = Logger.getLogger(ChangeFlightStatusCommand.class);
+	private static final Logger logger = Logger.getLogger(ChangeFlightStatusCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -43,13 +43,13 @@ public class ChangeFlightStatusCommand implements Command {
 		try {
 			result = serviceFactory.getFlightService().changeFlightStatus(idFlight, flightStatus);
 		} catch (ServiceException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_SHANGE_FLIGHT_STATUS, e);
-			request.setAttribute(ConstantController.Attribute.ERROR, e);
+			logger.error(LoggerMessageConstant.ERROR_SHANGE_FLIGHT_STATUS, e);
+			request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 		}
 		if (result) {
-			LOGGER.info(LoggerMessageConstant.FLIGHT_STATUS_CHANGED);
+			logger.info(LoggerMessageConstant.FLIGHT_STATUS_CHANGED);
 		} else {
-			LOGGER.info(LoggerMessageConstant.FLIGHT_STATUS_NOT_CHANGED);
+			logger.info(LoggerMessageConstant.FLIGHT_STATUS_NOT_CHANGED);
 		}
 
 		String selectedFlightStatusForFlights = (String) request.getSession()
@@ -59,8 +59,8 @@ public class ChangeFlightStatusCommand implements Command {
 			flights = serviceFactory.getFlightService()
 					.getFlights(FlightStatus.valueOf(selectedFlightStatusForFlights));
 		} catch (ServiceException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e);
-			request.setAttribute(ConstantController.Attribute.ERROR, e);
+			logger.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e);
+			request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 		}
 		request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
 		request.getSession().setAttribute(ConstantController.Attribute.FLIGHT_STATUS, flightStatus);
@@ -68,7 +68,7 @@ public class ChangeFlightStatusCommand implements Command {
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 
 	}

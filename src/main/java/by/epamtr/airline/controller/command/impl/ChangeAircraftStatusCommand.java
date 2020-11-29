@@ -19,7 +19,7 @@ import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class ChangeAircraftStatusCommand implements Command {
-	private static final Logger LOGGER = Logger.getLogger(ChangeAircraftStatusCommand.class);
+	private static final Logger logger = Logger.getLogger(ChangeAircraftStatusCommand.class);
 	private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
 	private final AircraftService aircraftService = serviceFactory.getAircraftService();
 
@@ -30,12 +30,12 @@ public class ChangeAircraftStatusCommand implements Command {
 		request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 				ConstantController.PathToPage.PATH_TO_CHANGE_AIRCRAFT_STATUS);
 		if (idAircraftParam == null) {
-			LOGGER.info(LoggerMessageConstant.GO_TO_CHANGE_AIRCRAFT_STATUS_PAGE);
+			logger.info(LoggerMessageConstant.GO_TO_CHANGE_AIRCRAFT_STATUS_PAGE);
 			try {
 				aircrafts = aircraftService.getAircraftrs();
 			} catch (ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
-				request.setAttribute(ConstantController.Attribute.ERROR, e);
+				logger.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			request.setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
 		} else {
@@ -46,19 +46,19 @@ public class ChangeAircraftStatusCommand implements Command {
 			try {
 				result = aircraftService.changeAircraftStatus(idAircraft, status);
 			} catch (ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_CHANGE_AIRCRAFT_STATUS, e);
-				request.setAttribute(ConstantController.Attribute.ERROR, e);
+				logger.error(LoggerMessageConstant.ERROR_CHANGE_AIRCRAFT_STATUS, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			if (result) {
-				LOGGER.info(LoggerMessageConstant.AIRCRAFT_STATUS_CHANGED);
+				logger.info(LoggerMessageConstant.AIRCRAFT_STATUS_CHANGED);
 			} else {
-				LOGGER.info(LoggerMessageConstant.AIRCRAFT_STATUS_NOT_CHANGED);
+				logger.info(LoggerMessageConstant.AIRCRAFT_STATUS_NOT_CHANGED);
 			}
 			try {
 				aircrafts = aircraftService.getAircraftrs();
 			} catch (ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
-				request.setAttribute(ConstantController.Attribute.ERROR, e);
+				logger.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			request.setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
 
@@ -66,7 +66,7 @@ public class ChangeAircraftStatusCommand implements Command {
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 	}
 

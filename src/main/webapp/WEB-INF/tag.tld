@@ -4,14 +4,14 @@
 	<jsp-version>2.3</jsp-version>
 	<shortname>tags</shortname>
 	<tag>
-		<name>printErrorInformation</name>
+		<name>errorInformation</name>
 		<tag-class>by.epamtr.airline.jsptag.ErrorTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
-			<name>errorType</name>
+			<name>errorCode</name>
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>java.lang.Throwable</type>
+			<type>java.lang.String</type>
 		</attribute>
 	</tag>
 </taglib>

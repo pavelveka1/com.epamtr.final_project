@@ -19,7 +19,7 @@ import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class DeliteUserCommand implements Command {
-	private static final Logger LOGGER = Logger.getLogger(DeliteUserCommand.class);
+	private static final Logger logger = Logger.getLogger(DeliteUserCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -42,8 +42,8 @@ public class DeliteUserCommand implements Command {
 			try {
 				result = userService.deliteUser(idUser);
 			} catch (ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_DELETE_USER, e);
-				request.setAttribute(ConstantController.Attribute.ERROR, e);
+				logger.error(LoggerMessageConstant.ERROR_DELETE_USER, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			if (result) {
 				UserRole userRole = (UserRole) request.getSession()
@@ -51,15 +51,15 @@ public class DeliteUserCommand implements Command {
 				try {
 					users = userService.getUsers(userRole);
 				} catch (ServiceException e2) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GET_USERS_BY_USER_ROLE, e2);
-					request.setAttribute(ConstantController.Attribute.ERROR, e2);
+					logger.error(LoggerMessageConstant.ERROR_GET_USERS_BY_USER_ROLE, e2);
+					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 				request.getSession().setAttribute(ConstantController.Attribute.USER_BY_ROLE, users);
-				LOGGER.info(LoggerMessageConstant.USER_IS_DELETED);
+				logger.info(LoggerMessageConstant.USER_IS_DELETED);
 				request.setAttribute(ConstantController.Attribute.DELETED_USER,
 						ConstantController.Attribute.SUCCESSFUL_OPERATION);
 			} else {
-				LOGGER.info(LoggerMessageConstant.USER_IS_NOT_DELETED);
+				logger.info(LoggerMessageConstant.USER_IS_NOT_DELETED);
 				request.setAttribute(ConstantController.Attribute.DELETED_USER,
 						ConstantController.Attribute.FAILED_OPERATION);
 			}
@@ -68,7 +68,7 @@ public class DeliteUserCommand implements Command {
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 	}
 }

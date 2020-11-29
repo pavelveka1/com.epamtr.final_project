@@ -13,7 +13,7 @@ import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
 
 public class SignOut implements Command {
-	private static final Logger LOGGER = Logger.getLogger(SignOut.class);
+	private static final Logger logger = Logger.getLogger(SignOut.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -21,7 +21,7 @@ public class SignOut implements Command {
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_LOGIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_LOGIN_PAGE, e);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_LOGIN_PAGE, e);
 		}
 	}
 

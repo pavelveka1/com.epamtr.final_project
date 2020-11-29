@@ -26,12 +26,9 @@
 	var="password_not_valid" />
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-Error is not null
-</c:when>
-		<c:otherwise>
+	<br>
+	<c:out value="${error}" />
+	<br>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="UPDATE_USER"> <input
 					type="hidden" name="changes" value="made">
@@ -118,8 +115,6 @@ Error is not null
 					<c:out value="${user_update_fail}" />
 				</c:when>
 			</c:choose>
-		</c:otherwise>
-	</c:choose>
-
+		
 </body>
 </html>

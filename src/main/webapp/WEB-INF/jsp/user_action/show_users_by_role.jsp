@@ -19,57 +19,53 @@
 <fmt:message bundle="${loc}" key="user.role" var="role" />
 </head>
 <body>
+	<br>
+	<c:out value="${error}" />
+	<br>
+	<form action="Controller" method="POST">
+		<input type="hidden" name="command" value="GET_USERS_BY_ROLE">
+		<input type="hidden" name="form" value="filled"> <label>
+			<c:out value="${choose_role}" />
+		</label> <select name="role">
+			<option>MANAGER</option>
+			<option>ADMINISTRATOR</option>
+			<option>DISPATCHER</option>
+			<option>PILOT</option>
+			<option>ATTENDANT</option>
+			<option>ENGINEER</option>
+		</select> <input type="submit" value="${find_users}" />
+	</form>
+	<br>
+	<br>
+
+
 	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-</c:when>
-		<c:otherwise>
+		<c:when test="${current_role!=null}">
 
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="GET_USERS_BY_ROLE">
-				<input type="hidden" name="form" value="filled"> <label>
-					<c:out value="${choose_role}"/></label> <select name="role">
-					<option>MANAGER</option>
-					<option>ADMINISTRATOR</option>
-					<option>DISPATCHER</option>
-					<option>PILOT</option>
-					<option>ATTENDANT</option>
-					<option>ENGINEER</option>
-				</select> <input type="submit" value="${find_users}" />
-			</form>
+			<label><c:out value="${chose_role}" />: <c:out
+					value="${current_role.role}" /></label>
 			<br>
-			<br>
+			<table border="1">
+				<tr>
+					<th><c:out value="${name}" /></th>
+					<th><c:out value="${surname}" /></th>
+					<th><c:out value="${patronimic}" /></th>
+					<th><c:out value="${email}" /></th>
+					<th><c:out value="${role}" /></th>
+				</tr>
+				<c:forEach var="user_item" items="${users_by_role}">
 
-
-			<c:choose>
-				<c:when test="${current_role!=null}">
-
-					<label><c:out value="${chose_role}"/>: <c:out value="${current_role.role}" /></label>
-					<br>
-					<table border="1">
-						<tr>
-							<th><c:out value="${name}" /></th>
-							<th><c:out value="${surname}" /></th>
-							<th><c:out value="${patronimic}" /></th>
-							<th><c:out value="${email}" /></th>
-							<th><c:out value="${role}" /></th>
-						</tr>
-						<c:forEach var="user_item" items="${users_by_role}">
-
-							<tr>
-								<td><c:out value="${user_item.name}" /></td>
-								<td><c:out value="${user_item.surname}" /></td>
-								<td><c:out value="${user_item.patronimic}" /></td>
-								<td><c:out value="${user_item.email}" /></td>
-								<td><c:out value="${user_item.role}" /></td>
-							</tr>
-						</c:forEach>
-					</table>
-				</c:when>
-			</c:choose>
-
-
-		</c:otherwise>
+					<tr>
+						<td><c:out value="${user_item.name}" /></td>
+						<td><c:out value="${user_item.surname}" /></td>
+						<td><c:out value="${user_item.patronimic}" /></td>
+						<td><c:out value="${user_item.email}" /></td>
+						<td><c:out value="${user_item.role}" /></td>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:when>
 	</c:choose>
+
 </body>
 </html>

@@ -20,7 +20,7 @@ public class SignIn implements Command {
 	private static final String DISPATCHER_MENU = "dispatcher_menu";
 	private static final String MANAGER_MENU = "manager_menu";
 	private static final String CREW_MENU = "crew_menu";
-	private static final Logger LOGGER = Logger.getLogger(SignIn.class);
+	private static final Logger logger = Logger.getLogger(SignIn.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -32,8 +32,8 @@ public class SignIn implements Command {
 		try {
 			user = userService.signIn(login, password);
 		} catch (ServiceException e2) {
-			LOGGER.error(LoggerMessageConstant.ERROR_SIGN_IN, e2);
-			request.setAttribute(ConstantController.Attribute.ERROR, e2);
+			logger.error(LoggerMessageConstant.ERROR_SIGN_IN, e2);
+			request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 		}
 		if (user == null) {
 			request.setAttribute(ConstantController.Attribute.SIGN_IN_FAIL_ATTR,
@@ -42,7 +42,7 @@ public class SignIn implements Command {
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_LOGIN_PAGE).forward(request,
 						response);
 			} catch (ServletException | IOException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_LOGIN_PAGE, e);
+				logger.error(LoggerMessageConstant.ERROR_GO_TO_LOGIN_PAGE, e);
 			}
 		} else {
 			request.getSession().setAttribute(ConstantController.Attribute.SIGNED_IN_USER, user);
@@ -74,7 +74,7 @@ public class SignIn implements Command {
 			request.getRequestDispatcher(ConstantController.PathToPage.GO_TO_MAIN_PAGE_COMMAND).forward(request,
 					response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 	}
 

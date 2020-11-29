@@ -25,12 +25,9 @@
 <title>Update flight data</title>
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-Error is not null
-</c:when>
-		<c:otherwise>
+	<br>
+	<c:out value="${error}" />
+	<br>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="UPDATE_FLIGHT"> <input
 					type="hidden" name="flight_data" value="ready"> <input
@@ -145,7 +142,6 @@ Error is not null
 					<c:out value="${flight_update_fail}" />
 				</c:when>
 			</c:choose>
-		</c:otherwise>
-	</c:choose>
+		
 </body>
 </html>

@@ -19,10 +19,8 @@ import by.epamtr.airline.controller.command.impl.DeleteFlightCommand;
 import by.epamtr.airline.controller.command.impl.DeliteUserCommand;
 import by.epamtr.airline.controller.command.impl.GetFlightsByStatusCommand;
 import by.epamtr.airline.controller.command.impl.GetFlightsByUser;
-import by.epamtr.airline.controller.command.impl.GetUserCommand;
 import by.epamtr.airline.controller.command.impl.GetUsersByFlightIdCommand;
 import by.epamtr.airline.controller.command.impl.GetUsersByRoleCommand;
-import by.epamtr.airline.controller.command.impl.GetUsersCommand;
 import by.epamtr.airline.controller.command.impl.GoToMainPage;
 import by.epamtr.airline.controller.command.impl.GoToLoginPage;
 import by.epamtr.airline.controller.command.impl.SignIn;
@@ -47,8 +45,7 @@ public class CommandProvider {
 		commands.put(CommandName.ADD_USER, new AddUserCommand());
 		commands.put(CommandName.DELITE_USER, new DeliteUserCommand());
 		commands.put(CommandName.UPDATE_USER, new UpdateUserCommand());
-		commands.put(CommandName.GET_USER, new GetUserCommand());
-		commands.put(CommandName.GET_USERS, new GetUsersCommand());
+
 
 		commands.put(CommandName.GET_USERS_BY_ROLE, new GetUsersByRoleCommand());
 		commands.put(CommandName.GET_USERS_BY_FLIGHT_ID, new GetUsersByFlightIdCommand());

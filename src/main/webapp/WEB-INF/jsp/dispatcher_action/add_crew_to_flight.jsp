@@ -8,11 +8,9 @@
 <title>Users by role</title>
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-		</c:when>
-		<c:otherwise>
+	<br>
+	<c:out value="${error}" />
+	<br>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">
 				<input type="hidden" name="form" value="filled"> <label>
@@ -61,7 +59,6 @@
 					</select> <br>
 				</form>
 			</div>
-		</c:otherwise>
-	</c:choose>
+		
 </body>
 </html>

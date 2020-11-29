@@ -1,4 +1,4 @@
-package by.epamtr.airline.service.validator;
+package by.epamtr.airline.controller.validation;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;

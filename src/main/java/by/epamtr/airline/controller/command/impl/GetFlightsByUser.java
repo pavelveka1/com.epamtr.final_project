@@ -21,7 +21,7 @@ import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class GetFlightsByUser implements Command {
-	private static final Logger LOGGER = Logger.getLogger(GetFlightsByUser.class);
+	private static final Logger logger = Logger.getLogger(GetFlightsByUser.class);
 	ServiceFactory serviceFactory = ServiceFactory.getInstance();
 
 	@Override
@@ -31,7 +31,7 @@ public class GetFlightsByUser implements Command {
 
 		if (userRole != null) {
 
-			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_USERS_BY_ROLE);
+			logger.info(LoggerMessageConstant.GO_TO_PAGE_USERS_BY_ROLE);
 			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_USERS_BY_ROLE);
 			request.setAttribute(ConstantController.Attribute.SELECTED_ROLE, userRole);
@@ -39,13 +39,13 @@ public class GetFlightsByUser implements Command {
 				List<User> users = serviceFactory.getUserService().getUsers(UserRole.valueOf(userRole));
 				request.setAttribute(ConstantController.Attribute.USERS_BY_ROLE, users);
 			} catch (ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GET_USERS_BY_ROLE, e);
-				request.setAttribute(ConstantController.Attribute.ERROR, e);
+				logger.error(LoggerMessageConstant.ERROR_GET_USERS_BY_ROLE, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 
 		} else {
 			if (selectedUserId != null) {
-				LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_FLIGHTS_BY_USER);
+				logger.info(LoggerMessageConstant.GO_TO_PAGE_FLIGHTS_BY_USER);
 				request.setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 						ConstantController.PathToPage.PATH_TO_FLIGHTS_BY_USER);
 				UserService userService = serviceFactory.getUserService();
@@ -57,11 +57,11 @@ public class GetFlightsByUser implements Command {
 					request.getSession().setAttribute(ConstantController.Attribute.SELECTED_USER, user);
 					request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
 				} catch (ServiceException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS_BY_USER_ID, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, e);
+					logger.error(LoggerMessageConstant.ERROR_GET_FLIGHTS_BY_USER_ID, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 			} else {
-				LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_USERS_ROLE);
+				logger.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_USERS_ROLE);
 				request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 						ConstantController.PathToPage.PATH_TO_USERS_BY_ROLE);
 			}
@@ -70,7 +70,7 @@ public class GetFlightsByUser implements Command {
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 	}
 }

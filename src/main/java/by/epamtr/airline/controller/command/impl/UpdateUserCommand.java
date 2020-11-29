@@ -11,16 +11,16 @@ import org.apache.log4j.Logger;
 import by.epamtr.airline.controller.ConstantController;
 import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
+import by.epamtr.airline.controller.validation.UserValidation;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.entity.UserInfo;
 import by.epamtr.airline.entity.UserRole;
 import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
-import by.epamtr.airline.service.validator.UserValidation;
 
 public class UpdateUserCommand implements Command {
-	private static final Logger LOGGER = Logger.getLogger(UpdateUserCommand.class);
+	private static final Logger logger = Logger.getLogger(UpdateUserCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -47,8 +47,8 @@ public class UpdateUserCommand implements Command {
 					user = userService.getUser(idUser);
 					userInfo = userService.getUserInfo(idUser);
 				} catch (ServiceException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GET_USER_DATA, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, e);
+					logger.error(LoggerMessageConstant.ERROR_GET_USER_DATA, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 
 				request.getSession().setAttribute(ConstantController.Attribute.SELECTED_USER, user);
@@ -90,28 +90,28 @@ public class UpdateUserCommand implements Command {
 				try {
 					result = userService.updateUser(user, userInfo);
 				} catch (ServiceException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_UPDATE_USER, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, e);
+					logger.error(LoggerMessageConstant.ERROR_UPDATE_USER, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 				if (result) {
-					LOGGER.info(LoggerMessageConstant.USER_IS_UPDATED);
+					logger.info(LoggerMessageConstant.USER_IS_UPDATED);
 					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
 							ConstantController.Attribute.SUCCESSFUL_OPERATION);
 				} else {
-					LOGGER.info(LoggerMessageConstant.USER_IS_NOT_UPDATED);
+					logger.info(LoggerMessageConstant.USER_IS_NOT_UPDATED);
 					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
 							ConstantController.Attribute.FAILED_OPERATION);
 				}
 			} else {
-				LOGGER.info(LoggerMessageConstant.USER_UPDATE_DATA_NOT_VALID);
+				logger.info(LoggerMessageConstant.USER_UPDATE_DATA_NOT_VALID);
 			}
 
 			try {
 				user = userService.getUser(idUser);
 				userInfo = userService.getUserInfo(idUser);
 			} catch (ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GET_USER_DATA, e);
-				request.setAttribute(ConstantController.Attribute.ERROR, e);
+				logger.error(LoggerMessageConstant.ERROR_GET_USER_DATA, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 
 			request.getSession().setAttribute(ConstantController.Attribute.SELECTED_USER, user);
@@ -120,7 +120,7 @@ public class UpdateUserCommand implements Command {
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 	}
 

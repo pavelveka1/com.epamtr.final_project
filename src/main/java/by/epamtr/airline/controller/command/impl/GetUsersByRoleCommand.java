@@ -19,7 +19,7 @@ import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class GetUsersByRoleCommand implements Command {
-	private static final Logger LOGGER = Logger.getLogger(GetUsersByFlightIdCommand.class);
+	private static final Logger logger = Logger.getLogger(GetUsersByFlightIdCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -35,7 +35,7 @@ public class GetUsersByRoleCommand implements Command {
 		}
 
 		if (role != null) {
-			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_USERS_BY_ROLE);
+			logger.info(LoggerMessageConstant.GO_TO_PAGE_USERS_BY_ROLE);
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			UserService userService = serviceFactory.getUserService();
 			UserRole userRole = UserRole.valueOf(request.getParameter(ConstantController.Parameter.ROLE));
@@ -44,16 +44,16 @@ public class GetUsersByRoleCommand implements Command {
 				request.getSession().setAttribute(ConstantController.Attribute.USER_BY_ROLE, users);
 				request.getSession().setAttribute(ConstantController.Attribute.CURRENT_ROLE, userRole);
 			} catch (ServiceException e2) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GET_USERS_BY_ROLE, e2);
-				request.setAttribute(ConstantController.Attribute.ERROR, e2);
+				logger.error(LoggerMessageConstant.ERROR_GET_USERS_BY_ROLE, e2);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 		} else {
-			LOGGER.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_USERS_ROLE);
+			logger.info(LoggerMessageConstant.GO_TO_PAGE_CHOOSE_USERS_ROLE);
 		}
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 	}
 }

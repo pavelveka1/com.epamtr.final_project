@@ -22,7 +22,7 @@ import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class AddCrewToFlightCommand implements Command {
-	private static final Logger LOGGER = Logger.getLogger(AddCrewToFlightCommand.class);
+	private static final Logger logger = Logger.getLogger(AddCrewToFlightCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -45,9 +45,9 @@ public class AddCrewToFlightCommand implements Command {
 			try {
 				freeCrewPositions = flightService.getFreeCrewPositions(idFlight);
 			} catch (ServiceException e1) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GET_FREE_CREW_POSITIONS, e1);
-				request.setAttribute(ConstantController.Attribute.ERROR, e1);
-
+				logger.error(LoggerMessageConstant.ERROR_GET_FREE_CREW_POSITIONS, e1);
+				request.setAttribute(ConstantController.Attribute.ERROR,
+						ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			request.getSession().setAttribute(ConstantController.Attribute.FREE_POSITIONS_BY_FLIGHT, freeCrewPositions);
 		} else {
@@ -70,8 +70,9 @@ public class AddCrewToFlightCommand implements Command {
 				try {
 					freeUsers = userService.getFreeUsers(idFlight, selectedPosition);
 				} catch (ServiceException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GET_FREE_USERS, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, e);
+					logger.error(LoggerMessageConstant.ERROR_GET_FREE_USERS, e);
+					request.setAttribute(ConstantController.Attribute.ERROR,
+							ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 				request.setAttribute(ConstantController.Attribute.FREE_USERS_BY_POSITION, freeUsers);
 				request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
@@ -85,13 +86,13 @@ public class AddCrewToFlightCommand implements Command {
 				try {
 					result = userService.addCrewToFlight(idCrewPosition, idFlight, Integer.parseInt(selectedUserId));
 				} catch (ServiceException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_ADD_CREW_TO_FLIGHT, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, e);
+					logger.error(LoggerMessageConstant.ERROR_ADD_CREW_TO_FLIGHT, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 				if (result) {
-					LOGGER.info(LoggerMessageConstant.USER_ADDED_TO_FLIGHT);
+					logger.info(LoggerMessageConstant.USER_ADDED_TO_FLIGHT);
 				} else {
-					LOGGER.info(LoggerMessageConstant.USER_NOT_ADDED_TO_FLIGHT);
+					logger.info(LoggerMessageConstant.USER_NOT_ADDED_TO_FLIGHT);
 				}
 
 				request.getSession().removeAttribute(ConstantController.Attribute.SELECTED_POSITION);
@@ -101,25 +102,23 @@ public class AddCrewToFlightCommand implements Command {
 					flight = flightService.getFlight(idFlight);
 					team = userService.getUsers(idFlight);
 				} catch (ServiceException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GET_DATA_FROM_DB, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, e);
+					logger.error(LoggerMessageConstant.ERROR_GET_DATA_FROM_DB, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 				request.getSession().setAttribute(ConstantController.Attribute.SELECTED_FLIGHT, flight);
 				request.setAttribute(ConstantController.Attribute.TEAM_BY_FLIGHT, team);
-
 			}
-
 		}
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
-			request.setAttribute(ConstantController.Attribute.ERROR, e);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			try {
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
 						response);
 			} catch (ServletException | IOException e1) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e1);
+				logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e1);
 			}
 		}
 	}

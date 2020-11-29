@@ -22,11 +22,9 @@
 <fmt:message bundle="${loc}" key="flight.show_crew" var="show_crew" />
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-</c:when>
-		<c:otherwise>
+	<br>
+	<c:out value="${error}" />
+	<br>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="GET_USERS_BY_FLIGHT_ID">
 				<label> <c:out value="${choose_flight_status}"/></label> <select name="flight_status"
@@ -78,8 +76,6 @@
 					</table>
 				</c:when>
 			</c:choose>
-		</c:otherwise>
-	</c:choose>
-
+		
 </body>
 </html>

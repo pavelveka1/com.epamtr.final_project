@@ -179,7 +179,6 @@ strong {
 			<input type="submit" value="${button_login}">
 		</div>
 	</form>
-
 			<div>
 				<strong> <c:choose>
 						<c:when test="${sign_in_fail_attr=='sign_in_fail'}">
@@ -190,8 +189,5 @@ strong {
 
 			</div>
 
-		</div>
-	</div>
-	</div>
 </body>
 </html>

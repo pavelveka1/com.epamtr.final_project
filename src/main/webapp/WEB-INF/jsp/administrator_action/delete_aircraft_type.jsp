@@ -11,41 +11,39 @@
 	var="aircraft_type_deleted" />
 <fmt:message bundle="${loc}" key="aircraft_type.delete.fail"
 	var="aircraft_type_not_deleted" />
-<fmt:message bundle="${loc}" key="aircraft_type.delete" var="delete_type" />
+<fmt:message bundle="${loc}" key="aircraft_type.delete"
+	var="delete_type" />
 <fmt:message bundle="${loc}" key="aircraft_type.choose_type"
 	var="choose_type" />
 <meta charset="UTF-8">
 <title>Add flight</title>
 </head>
 <body>
+	<br>
+	<c:out value="${error}" />
+	<br>
+	<form action="Controller" method="POST">
+		<input type="hidden" name="command" value="DELETE_AIRCRAFT_TYPE">
+		<input type="hidden" name="delete" value="delete"> <label><c:out
+				value="${choose_type}" /></label><br> <select name="aircraft_types">
+			<c:forEach var="type_item" items="${aircraftTypes}">
+				<option>
+					<c:out value="${type_item.aircraftType}" />
+					<c:set var="id_iarcraft_type" scope="session"
+						value="${type_item.idAircraftType }" />
+				</option>
+			</c:forEach>
+		</select> <input type="submit" value="${delete_type}" />
+	</form>
+	<br>
 	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
+		<c:when test="${result_attr=='success'}">
+			<c:out value="${aircraft_type_deleted}" />
 		</c:when>
-		<c:otherwise>
-			<form action="Controller" method="POST">
-				<input type="hidden" name="command" value="DELETE_AIRCRAFT_TYPE">
-				<input type="hidden" name="delete" value="delete"> <label><c:out
-						value="${choose_type}" /></label><br> <select name="aircraft_types">
-					<c:forEach var="type_item" items="${aircraftTypes}">
-						<option>
-							<c:out value="${type_item.aircraftType}" />
-							<c:set var="id_iarcraft_type" scope="session"
-								value="${type_item.idAircraftType }" />
-						</option>
-					</c:forEach>
-				</select> <input type="submit" value="${delete_type}" />
-			</form>
-			<br>
-			<c:choose>
-				<c:when test="${result_attr=='success'}">
-					<c:out value="${aircraft_type_deleted}" />
-				</c:when>
-				<c:when test="${result_attr=='fail'}">
-					<c:out value="${aircraft_type_not_deleted}" />
-				</c:when>
-			</c:choose>
-		</c:otherwise>
+		<c:when test="${result_attr=='fail'}">
+			<c:out value="${aircraft_type_not_deleted}" />
+		</c:when>
 	</c:choose>
+
 </body>
 </html>

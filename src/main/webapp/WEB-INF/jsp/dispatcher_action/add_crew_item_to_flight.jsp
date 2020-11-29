@@ -21,11 +21,9 @@
 <fmt:message bundle="${loc}" key="airline.add" var="add_crew" />
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-		</c:when>
-		<c:otherwise>
+	<br>
+	<c:out value="${error}" />
+	<br>
 			<strong> Flight: </strong>
 			<table>
 				<tr>
@@ -87,8 +85,6 @@
 
 				</c:when>
 			</c:choose>
-		</c:otherwise>
-	</c:choose>
-
+	
 </body>
 </html>

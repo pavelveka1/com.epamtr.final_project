@@ -11,14 +11,14 @@ import org.apache.log4j.Logger;
 import by.epamtr.airline.controller.ConstantController;
 import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
+import by.epamtr.airline.controller.validation.AircraftValidation;
 import by.epamtr.airline.entity.AircraftType;
 import by.epamtr.airline.service.AircraftService;
 import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
-import by.epamtr.airline.service.validator.AircraftValidation;
 
 public class AddAircraftTypeCommand implements Command {
-	private static final Logger LOGGER = Logger.getLogger(AddAircraftTypeCommand.class);
+	private static final Logger logger = Logger.getLogger(AddAircraftTypeCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -54,35 +54,35 @@ public class AddAircraftTypeCommand implements Command {
 					typeAircraft.setNumberPassenger(Integer.parseInt(numberPassengerParam));
 					result = aircraftService.addAircraftType(typeAircraft);
 				} catch (ServiceException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_ADD_AIRCRAFT_TYPE, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, e);
+					logger.error(LoggerMessageConstant.ERROR_ADD_AIRCRAFT_TYPE, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 
 				}
 
 				if (result) {
-					LOGGER.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_ADDED);
+					logger.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_ADDED);
 					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
 							ConstantController.Attribute.SUCCESSFUL_OPERATION);
 				} else {
-					LOGGER.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_NOT_ADDED);
+					logger.info(LoggerMessageConstant.AIRCRAFT_TYPE_IS_NOT_ADDED);
 					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
 							ConstantController.Attribute.FAILED_OPERATION);
 				}
 			}
 
 		} else {
-			LOGGER.info(LoggerMessageConstant.GO_TO_ADD_AIRCRAFT_TYPE);
+			logger.info(LoggerMessageConstant.GO_TO_ADD_AIRCRAFT_TYPE);
 		}
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e2) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e2);
-			request.setAttribute(ConstantController.Attribute.ERROR, e2);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e2);
+			request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			try {
 				request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request,
 						response);
 			} catch (ServletException | IOException e1) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e1);
+				logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e1);
 			}
 		}
 	}

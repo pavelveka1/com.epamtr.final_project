@@ -89,7 +89,7 @@ body {
 					<jsp:include page="fragment/dispatcher_menu.jsp"></jsp:include>
 				</c:when>
 				<c:when test="${menu=='manager_menu'}">
-					<jsp:include page="fragment/manager_menu.jsp"></jsp:include>
+					<jsp:include page="fragment/crew_menu.jsp"></jsp:include>
 				</c:when>
 				<c:when test="${menu=='crew_menu'}">
 					<jsp:include page="fragment/crew_menu.jsp"></jsp:include>

@@ -1,4 +1,4 @@
-package by.epamtr.airline.context.listener;
+package by.epamtr.airline.controller.listener;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

@@ -20,7 +20,7 @@ import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.exception.ServiceException;
 
 public class DeleteFlightCommand implements Command {
-	private static final Logger LOGGER = Logger.getLogger(DeleteFlightCommand.class);
+	private static final Logger logger = Logger.getLogger(DeleteFlightCommand.class);
 	private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
 	private final FlightService flightService = serviceFactory.getFlightService();
 
@@ -48,8 +48,8 @@ public class DeleteFlightCommand implements Command {
 					flights = flightService.getFlights(
 							FlightStatus.valueOf(request.getParameter(ConstantController.Parameter.STATUS)));
 				} catch (ServiceException e2) {
-					LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e2);
-					request.setAttribute(ConstantController.Attribute.ERROR, e2);
+					logger.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e2);
+					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 				request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
 				request.getSession().setAttribute(ConstantController.Attribute.FLIGHT_STATUS, flightStatus);
@@ -62,20 +62,20 @@ public class DeleteFlightCommand implements Command {
 			try {
 				result = flightService.deliteFlight(idFlight);
 			} catch (ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_DELETE_FLIGHT, e);
-				request.setAttribute(ConstantController.Attribute.ERROR, e);
+				logger.error(LoggerMessageConstant.ERROR_DELETE_FLIGHT, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			if (result) {
-				LOGGER.info(LoggerMessageConstant.FLIGHT_IS_DELETED);
+				logger.info(LoggerMessageConstant.FLIGHT_IS_DELETED);
 			} else {
-				LOGGER.info(LoggerMessageConstant.FLIGHT_IS_NOT_DELETED);
+				logger.info(LoggerMessageConstant.FLIGHT_IS_NOT_DELETED);
 			}
 			try {
 				flights = flightService.getFlights(FlightStatus.valueOf((String) request.getSession()
 						.getAttribute(ConstantController.Attribute.SELECTED_FLIGHT_STATUS_FOR_FLIGHTS)));
 			} catch (ServiceException e) {
-				LOGGER.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e);
-				request.setAttribute(ConstantController.Attribute.ERROR, e);
+				logger.error(LoggerMessageConstant.ERROR_GET_FLIGHTS, e);
+				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			request.getSession().setAttribute(ConstantController.Attribute.FLIGHTS, flights);
 
@@ -83,7 +83,7 @@ public class DeleteFlightCommand implements Command {
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 	}
 }

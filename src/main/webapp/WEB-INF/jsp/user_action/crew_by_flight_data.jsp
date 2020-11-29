@@ -16,12 +16,9 @@
 <fmt:message bundle="${loc}" key="flight.crew_position" var="crew_position_for_user" />
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-Error is not null
-</c:when>
-		<c:otherwise>
+	<br>
+	<c:out value="${error}" />
+	<br>
 			<strong> Flight: </strong>
 			<table>
 				<tr>
@@ -55,7 +52,5 @@ Error is not null
 				</c:forEach>
 			</table>
 
-		</c:otherwise>
-	</c:choose>
 </body>
 </html>

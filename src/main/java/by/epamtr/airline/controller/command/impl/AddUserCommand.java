@@ -11,16 +11,16 @@ import org.apache.log4j.Logger;
 import by.epamtr.airline.controller.ConstantController;
 import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
+import by.epamtr.airline.controller.validation.UserValidation;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.entity.UserInfo;
 import by.epamtr.airline.entity.UserRole;
 import by.epamtr.airline.service.ServiceFactory;
 import by.epamtr.airline.service.UserService;
 import by.epamtr.airline.service.exception.ServiceException;
-import by.epamtr.airline.service.validator.UserValidation;
 
 public class AddUserCommand implements Command {
-	private static final Logger LOGGER = Logger.getLogger(AddUserCommand.class);
+	private static final Logger logger = Logger.getLogger(AddUserCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -71,29 +71,29 @@ public class AddUserCommand implements Command {
 				try {
 					result = userService.addUser(user, userInfo);
 				} catch (ServiceException e) {
-					LOGGER.error(LoggerMessageConstant.ERROR_ADD_USER, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, e);
+					logger.error(LoggerMessageConstant.ERROR_ADD_USER, e);
+					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 				if (result) {
-					LOGGER.info(LoggerMessageConstant.USER_ADDED);
+					logger.info(LoggerMessageConstant.USER_ADDED);
 					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
 							ConstantController.Attribute.SUCCESSFUL_OPERATION);
 				} else {
-					LOGGER.info(LoggerMessageConstant.USER_NOT_ADDED);
+					logger.info(LoggerMessageConstant.USER_NOT_ADDED);
 					request.setAttribute(ConstantController.Attribute.RESULT_ATTR,
 							ConstantController.Attribute.FAILED_OPERATION);
 				}
 			} else {
-				LOGGER.info(LoggerMessageConstant.USER_NOT_VALID);
+				logger.info(LoggerMessageConstant.USER_NOT_VALID);
 			}
 
 		} else {
-			LOGGER.info(LoggerMessageConstant.GO_TO_ADD_USER_PAGE);
+			logger.info(LoggerMessageConstant.GO_TO_ADD_USER_PAGE);
 		}
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
 		} catch (ServletException | IOException e) {
-			LOGGER.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
+			logger.error(LoggerMessageConstant.ERROR_GO_TO_MAIN_PAGE, e);
 		}
 	}
 }

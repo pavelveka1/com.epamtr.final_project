@@ -20,11 +20,9 @@
 	var="update_aircraft" />
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-</c:when>
-		<c:otherwise>
+	<br>
+	<c:out value="${error}" />
+	<br>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="UPDATE_AIRCRAFT">
 				<label><c:out value="${choose_aircraft}"></c:out></label> <select name="aircraft_numbers">
@@ -52,7 +50,6 @@
 					<c:out value="${aircraft_update_fail}" />
 				</c:when>
 			</c:choose>
-		</c:otherwise>
-	</c:choose>
+		
 </body>
 </html>

@@ -24,11 +24,9 @@
 <fmt:message bundle="${loc}" key="airline.find" var="find_flights" />
 </head>
 <body>
-	<c:choose>
-		<c:when test="${error!=null}">
-			<java-classes:printErrorInformation errorType="${error}" />
-</c:when>
-		<c:otherwise>
+	<br>
+	<c:out value="${error}" />
+	<br>
 			<form action="Controller" method="POST">
 				<input type="hidden" name="command" value="DELETE_FLIGHT"> <label>
 					<c:out value="${chose_status}"/></label> <select name="flight_status">
@@ -86,7 +84,6 @@
 					<br>
 				</c:when>
 			</c:choose>
-		</c:otherwise>
-	</c:choose>
+		
 </body>
 </html>
