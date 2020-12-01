@@ -24,6 +24,15 @@
 	var="login_not_valid" />
 <fmt:message bundle="${loc}" key="user.password.not_valid"
 	var="password_not_valid" />
+<fmt:message bundle="${loc}" key="user.name" var="name" />
+<fmt:message bundle="${loc}" key="user.surname" var="surname" />
+<fmt:message bundle="${loc}" key="user.patronimic" var="patronimic" />
+<fmt:message bundle="${loc}" key="user.email" var="email" />
+<fmt:message bundle="${loc}" key="user.role" var="role" />
+<fmt:message bundle="${loc}" key="user.login" var="login" />
+<fmt:message bundle="${loc}" key="user.password" var="new_password" />
+<fmt:message bundle="${loc}" key="user.choose_role" var="choose_role"/>
+<fmt:message bundle="${loc}" key="airline.apply" var="apply" />
 </head>
 <body>
 	<br>
@@ -34,7 +43,7 @@
 					type="hidden" name="changes" value="made">
 				<table>
 					<tr>
-						<td><label>Name </label></td>
+						<td><label><c:out value="${name}" /></label></td>
 						<td><input type="text" name="name"
 							value="${selected_user.name}">
 						<c:choose>
@@ -44,7 +53,7 @@
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Surname </label></td>
+						<td><label><c:out value="${surname}" /></label></td>
 						<td><input type="text" name="surname"
 							value="${selected_user.surname}"> <c:choose>
 								<c:when test="${surname_valid==false}">
@@ -53,7 +62,7 @@
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Patronimic </label></td>
+						<td><label><c:out value="${patronimic}" /> </label></td>
 						<td><input type="text" name="patronimic"
 							value="${selected_user.patronimic}"> <c:choose>
 								<c:when test="${patronimic_valid==false}">
@@ -62,7 +71,7 @@
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Email </label></td>
+						<td><label><c:out value="${email}" /> </label></td>
 						<td><input type="text" name="e_mail"
 							value="${selected_user.email}"> <c:choose>
 								<c:when test="${email_valid==false}">
@@ -71,11 +80,11 @@
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Current user role </label></td>
+						<td><label><c:out value="${role}" /> </label></td>
 						<td><c:out value="${selected_user.role}" /></td>
 					</tr>
 					<tr>
-						<td><label>Choose role<label></td>
+						<td><label><c:out value="${choose_role}" /><label></td>
 						<td><select name="role">
 								<option>ADMINISTRATOR</option>
 								<option>DISPATCHER</option>
@@ -86,7 +95,7 @@
 						</select></td>
 					</tr>
 					<tr>
-						<td><label>Login </label></td>
+						<td><label><c:out value="${login}" /> </label></td>
 						<td><input type="text" name="login"
 							value="${user_info.login}"> <c:choose>
 								<c:when test="${login_valid==false}">
@@ -95,16 +104,15 @@
 							</c:choose></td>
 					</tr>
 					<tr>
-						<td><label>Enter new password </label></td>
-						<td><input type="password" name="password"
-							value="${user_info.password}"> <c:choose>
+						<td><label><c:out value="${new_password}" /> </label></td>
+						<td><input type="password" name="password"> <c:choose>
 								<c:when test="${password_valid==false}">
 									<c:out value="${password_not_valid}" />
 								</c:when>
 							</c:choose></td>
 					</tr>
 				</table>
-				<input type="submit" value="Apply" />
+				<input type="submit" value="${apply}" />
 			</form>
 			<br>
 			<c:choose>

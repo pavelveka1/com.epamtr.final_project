@@ -30,10 +30,9 @@ public class AddCrewToFlightCommand implements Command {
 		FlightService flightService = serviceFactory.getFlightService();
 		String selectedUserId = request.getParameter(ConstantController.Parameter.SELECTED_USER);
 
-		String selectedPosition = (String) request.getSession()
-				.getAttribute(ConstantController.Attribute.SELECTED_POSITION);
-		if (selectedPosition == null) {
-			selectedPosition = request.getParameter(ConstantController.Parameter.SELECTED_POSITION);
+		String selectedPosition = (String) request.getParameter(ConstantController.Parameter.SELECTED_POSITION);
+		if (selectedPosition != null) {
+			request.setAttribute(ConstantController.Attribute.SELECTED_POSITION, selectedPosition);
 		}
 		String flightIdParam = request.getParameter(ConstantController.Parameter.FLIGHT_ID);
 		List<User> freeUsers = null;
@@ -59,11 +58,13 @@ public class AddCrewToFlightCommand implements Command {
 			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 					ConstantController.PathToPage.PATH_TO_ADD_CREW_TO_FLIGHT);
 		} else {
+			/*
 			String selectedPositionAttr = (String) request.getSession()
 					.getAttribute(ConstantController.Attribute.SELECTED_POSITION);
 			if (selectedPositionAttr == null) {
 				request.getSession().setAttribute(ConstantController.Attribute.SELECTED_POSITION, selectedPosition);
 			}
+			*/
 			int idCrewPosition = getIdSelectedPosition(request);
 			UserService userService = serviceFactory.getUserService();
 			if (selectedUserId == null) {
@@ -87,7 +88,8 @@ public class AddCrewToFlightCommand implements Command {
 					result = userService.addCrewToFlight(idCrewPosition, idFlight, Integer.parseInt(selectedUserId));
 				} catch (ServiceException e) {
 					logger.error(LoggerMessageConstant.ERROR_ADD_CREW_TO_FLIGHT, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
+					request.setAttribute(ConstantController.Attribute.ERROR,
+							ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 				if (result) {
 					logger.info(LoggerMessageConstant.USER_ADDED_TO_FLIGHT);
@@ -103,7 +105,8 @@ public class AddCrewToFlightCommand implements Command {
 					team = userService.getUsers(idFlight);
 				} catch (ServiceException e) {
 					logger.error(LoggerMessageConstant.ERROR_GET_DATA_FROM_DB, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
+					request.setAttribute(ConstantController.Attribute.ERROR,
+							ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 				request.getSession().setAttribute(ConstantController.Attribute.SELECTED_FLIGHT, flight);
 				request.setAttribute(ConstantController.Attribute.TEAM_BY_FLIGHT, team);
@@ -124,8 +127,7 @@ public class AddCrewToFlightCommand implements Command {
 	}
 
 	private int getIdSelectedPosition(HttpServletRequest request) {
-		String selectedPosition = (String) request.getSession()
-				.getAttribute(ConstantController.Attribute.SELECTED_POSITION);
+		String selectedPosition = (String) request.getAttribute(ConstantController.Attribute.SELECTED_POSITION);
 		List<CrewPosition> freeCrewPositions = (List<CrewPosition>) request.getSession()
 				.getAttribute(ConstantController.Attribute.FREE_POSITIONS_BY_FLIGHT);
 		for (CrewPosition crewPosition : freeCrewPositions) {
