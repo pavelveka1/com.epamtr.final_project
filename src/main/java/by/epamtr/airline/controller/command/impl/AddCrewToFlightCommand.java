@@ -29,10 +29,19 @@ public class AddCrewToFlightCommand implements Command {
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		FlightService flightService = serviceFactory.getFlightService();
 		String selectedUserId = request.getParameter(ConstantController.Parameter.SELECTED_USER);
+		UserService userService = serviceFactory.getUserService();
+		int idCrewPosition = 0;
+		String idCrewPositionAttribute = (String) request.getSession()
+				.getAttribute(ConstantController.Attribute.ID_CREW_POSITION);
+		if (idCrewPositionAttribute != null) {
+			idCrewPosition = Integer.parseInt(idCrewPositionAttribute);
+		}
 
 		String selectedPosition = (String) request.getParameter(ConstantController.Parameter.SELECTED_POSITION);
 		if (selectedPosition != null) {
 			request.setAttribute(ConstantController.Attribute.SELECTED_POSITION, selectedPosition);
+			idCrewPosition = getIdSelectedPosition(request);
+
 		}
 		String flightIdParam = request.getParameter(ConstantController.Parameter.FLIGHT_ID);
 		List<User> freeUsers = null;
@@ -55,32 +64,10 @@ public class AddCrewToFlightCommand implements Command {
 		}
 
 		if (selectedPosition == null) {
-			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
-					ConstantController.PathToPage.PATH_TO_ADD_CREW_TO_FLIGHT);
-		} else {
-			/*
-			String selectedPositionAttr = (String) request.getSession()
-					.getAttribute(ConstantController.Attribute.SELECTED_POSITION);
-			if (selectedPositionAttr == null) {
-				request.getSession().setAttribute(ConstantController.Attribute.SELECTED_POSITION, selectedPosition);
-			}
-			*/
-			int idCrewPosition = getIdSelectedPosition(request);
-			UserService userService = serviceFactory.getUserService();
 			if (selectedUserId == null) {
-				try {
-					freeUsers = userService.getFreeUsers(idFlight, selectedPosition);
-				} catch (ServiceException e) {
-					logger.error(LoggerMessageConstant.ERROR_GET_FREE_USERS, e);
-					request.setAttribute(ConstantController.Attribute.ERROR,
-							ConstantController.Attribute.SOMETHING_GOES_WRONG);
-				}
-				request.setAttribute(ConstantController.Attribute.FREE_USERS_BY_POSITION, freeUsers);
 				request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 						ConstantController.PathToPage.PATH_TO_ADD_CREW_TO_FLIGHT);
-
 			} else {
-
 				request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 						ConstantController.PathToPage.PATH_TO_CREW_BY_FLIGHT);
 				boolean result = false;
@@ -111,6 +98,18 @@ public class AddCrewToFlightCommand implements Command {
 				request.getSession().setAttribute(ConstantController.Attribute.SELECTED_FLIGHT, flight);
 				request.setAttribute(ConstantController.Attribute.TEAM_BY_FLIGHT, team);
 			}
+
+		} else {
+			try {
+				freeUsers = userService.getFreeUsers(idFlight, selectedPosition);
+			} catch (ServiceException e) {
+				logger.error(LoggerMessageConstant.ERROR_GET_FREE_USERS, e);
+				request.setAttribute(ConstantController.Attribute.ERROR,
+						ConstantController.Attribute.SOMETHING_GOES_WRONG);
+			}
+			request.setAttribute(ConstantController.Attribute.FREE_USERS_BY_POSITION, freeUsers);
+			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
+					ConstantController.PathToPage.PATH_TO_ADD_CREW_TO_FLIGHT);
 		}
 		try {
 			request.getRequestDispatcher(ConstantController.PathToPage.PATH_TO_MAIN_PAGE).forward(request, response);
@@ -130,12 +129,15 @@ public class AddCrewToFlightCommand implements Command {
 		String selectedPosition = (String) request.getAttribute(ConstantController.Attribute.SELECTED_POSITION);
 		List<CrewPosition> freeCrewPositions = (List<CrewPosition>) request.getSession()
 				.getAttribute(ConstantController.Attribute.FREE_POSITIONS_BY_FLIGHT);
-		for (CrewPosition crewPosition : freeCrewPositions) {
-			if (crewPosition.getCrewPosition().equals(selectedPosition)) {
-				return crewPosition.getIdCrewPosition();
+		if (freeCrewPositions != null) {
+			for (CrewPosition crewPosition : freeCrewPositions) {
+				if (crewPosition.getCrewPosition().equals(selectedPosition)) {
+					request.getSession().setAttribute(ConstantController.Attribute.ID_CREW_POSITION,
+							String.valueOf(crewPosition.getIdCrewPosition()));
+					return crewPosition.getIdCrewPosition();
+				}
 			}
 		}
 		return 0;
-
 	}
 }

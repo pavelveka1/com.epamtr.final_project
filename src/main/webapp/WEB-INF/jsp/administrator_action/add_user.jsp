@@ -81,7 +81,7 @@
 						<option>DISPATCHER</option>
 						<option>MANAGER</option>
 						<option>PILOT</option>
-						<option>FLIGHT ATTENDANT</option>
+						<option>ATTENDANT</option>
 						<option>ENGINEER</option>
 				</select></td>
 			</tr>

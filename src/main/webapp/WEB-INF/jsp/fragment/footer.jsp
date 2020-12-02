@@ -57,13 +57,13 @@ a:active {
 <body>
 <div class="layer">
  <div>
- <a href="https://www.iata.org"><c:out value=" IOSA"/></a>
+ <a href="https://www.iata.org"><c:out value=" IATA"/></a>
  </div>
  <div>
  <a href="https://www.icao.int/sustainability/compendium/Pages/0-default.aspx"><c:out value=" IKAO"/></a>
  </div>
  <div>
- <a href="hhttp://www.caa.gov.by"><c:out value="Belarussian aviation authorities"/></a>
+ <a href="http://www.caa.gov.by"><c:out value="Belarussian aviation authorities"/></a>
  </div>
 </div>
 </body>

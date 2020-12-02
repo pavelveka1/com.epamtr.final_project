@@ -1,11 +1,6 @@
 package by.epamtr.airline.service.impl;
 
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import by.epamtr.airline.dao.AircraftDAO;
 import by.epamtr.airline.dao.DAOFactory;
 import by.epamtr.airline.dao.FlightDAO;
 import by.epamtr.airline.dao.exception.DAOException;
@@ -13,7 +8,6 @@ import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.CrewPosition;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
-import by.epamtr.airline.entity.User;
 import by.epamtr.airline.service.FlightService;
 import by.epamtr.airline.service.exception.ServiceException;
 

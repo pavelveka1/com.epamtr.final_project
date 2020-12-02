@@ -2,17 +2,13 @@ package by.epamtr.airline.controller.command.impl;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-
 import by.epamtr.airline.controller.ConstantController;
 import by.epamtr.airline.controller.LoggerMessageConstant;
 import by.epamtr.airline.controller.command.Command;
-import by.epamtr.airline.controller.exception.ControllerException;
 import by.epamtr.airline.controller.validation.AircraftValidation;
 import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.AircraftType;
@@ -59,7 +55,6 @@ public class AddAircraftCommand implements Command {
 					result = aircraftService.addAircraft(aircraft, aircraftType);
 				} catch (ServiceException e) {
 					logger.error(LoggerMessageConstant.ERROR_ADD_AIRCRAFT, e);
-					//request.setAttribute(ConstantController.Attribute.ERROR, e);
 					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 				if (result) {

@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class UserValidation {
 	private static final String LOGIN_PATTERN = "([A-Za-z0-9-_]){5,20}";
 	private static final String PASSWORD_PATTERN = "([A-Za-z0-9_-]){5,15}";
-	private static final String NAME_PATTERN = "([A-ZА-Я])([a-zа-я]{1,15})";
+	private static final String NAME_PATTERN = "([A-ZА-Я])([a-zа-я]{2,15})";
 	private static final String EMAIL_PATTERN = "([a-z0-9_-]{1,15})@([a-z0-9_-]{1,10})(\\.([a-z]{2,6}))";
 	private static Pattern loginPattern = Pattern.compile(LOGIN_PATTERN);
 	private static Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);

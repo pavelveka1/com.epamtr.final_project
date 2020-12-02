@@ -29,7 +29,7 @@ import by.epamtr.airline.entity.UserRole;
  *
  */
 public class SQLUserDAO implements UserDAO {
-	private static final Logger LOGGER = Logger.getLogger(SQLUserDAO.class);
+	private static final Logger logger = Logger.getLogger(SQLUserDAO.class);
 	/**
 	 * Constant which is used for comparing with number which return qls commands
 	 * (sql command return number of added/deleted/updated rows)
@@ -76,7 +76,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return user;
@@ -153,7 +153,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				connectionPool.releaseResourses(statementUser, statementUserInfo, rs, null, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 
@@ -197,7 +197,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 	}
@@ -255,7 +255,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				connectionPool.releaseResourses(statementUser, statementUserInfo, null, null, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 	}
@@ -298,7 +298,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 
@@ -338,7 +338,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return team;
@@ -377,7 +377,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 
@@ -416,7 +416,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 
@@ -456,7 +456,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return result;
@@ -503,7 +503,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				connectionPool.releaseResourses(statement, null, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return result;
@@ -547,7 +547,7 @@ public class SQLUserDAO implements UserDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return users;

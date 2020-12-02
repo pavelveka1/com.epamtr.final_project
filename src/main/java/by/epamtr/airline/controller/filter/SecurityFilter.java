@@ -59,7 +59,7 @@ public class SecurityFilter implements Filter {
 				UserRole.DISPATCHER, UserRole.ATTENDANT, UserRole.ENGINEER, UserRole.MANAGER, UserRole.PILOT });
 
 		permissionMap.put(CommandName.ADD_FLIGHT, new UserRole[] { UserRole.ADMINISTRATOR });
-		permissionMap.put(CommandName.DELETE_FLIGHT, new UserRole[] { UserRole.ADMINISTRATOR });
+		permissionMap.put(CommandName.DELETE_FLIGHT, new UserRole[] { UserRole.ADMINISTRATOR, UserRole.DISPATCHER });
 		permissionMap.put(CommandName.UPDATE_FLIGHT, new UserRole[] { UserRole.ADMINISTRATOR });
 		permissionMap.put(CommandName.CHANGE_FLIGHT_STATUS,
 				new UserRole[] { UserRole.ADMINISTRATOR, UserRole.DISPATCHER });
@@ -132,11 +132,8 @@ public class SecurityFilter implements Filter {
 			logger.warn("Authorization fail: attempt to open private page not authored user");
 			return false;
 		}
-
 		boolean hasAllowedRole = false;
-
 		UserRole[] allowedRoles = permissionMap.get(command);
-
 		for (UserRole allowedRole : allowedRoles) {
 			if (allowedRole == user.getRole()) {
 				hasAllowedRole = true;

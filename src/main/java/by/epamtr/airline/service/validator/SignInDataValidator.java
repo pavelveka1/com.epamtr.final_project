@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignInDataValidator {
-	private static final String LOGIN_PATTERN = "[^$#№%,?&!\\s]{3,20}";
+	private static final String LOGIN_PATTERN = "[^$#№%,?&!\\s]{5,20}";
 	private static final String PASSWORD_PATTERN = "([^$#№%,?&!\\.\\s]{5,15})";
 	private static Pattern loginPattern = Pattern.compile(LOGIN_PATTERN);
 	private static Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);

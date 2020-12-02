@@ -1,11 +1,6 @@
 package by.epamtr.airline.service;
 
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import by.epamtr.airline.dao.exception.DAOException;
 import by.epamtr.airline.entity.Crew;
 import by.epamtr.airline.entity.User;
 import by.epamtr.airline.entity.UserInfo;

@@ -19,7 +19,6 @@ import by.epamtr.airline.entity.Aircraft;
 import by.epamtr.airline.entity.CrewPosition;
 import by.epamtr.airline.entity.Flight;
 import by.epamtr.airline.entity.FlightStatus;
-import by.epamtr.airline.entity.User;
 
 /**
  * Class actions with flights
@@ -28,7 +27,7 @@ import by.epamtr.airline.entity.User;
  *
  */
 public class SQLFlightDAO implements FlightDAO {
-	private static final Logger LOGGER = Logger.getLogger(SQLFlightDAO.class);
+	private static final Logger logger = Logger.getLogger(SQLFlightDAO.class);
 	/**
 	 * Instance of connection pool for database
 	 */
@@ -84,7 +83,7 @@ public class SQLFlightDAO implements FlightDAO {
 				try {
 					connectionPool.releaseResourses(statement, rs, connection);
 				} catch (ConnectionPoolException e) {
-					LOGGER.error(e);
+					logger.error(e);
 				}
 			}
 		}
@@ -126,7 +125,7 @@ public class SQLFlightDAO implements FlightDAO {
 			try {
 				connectionPool.releaseResourses(statementDeleteFlight, statementDeleteCrews, null, null, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return result;
@@ -178,7 +177,7 @@ public class SQLFlightDAO implements FlightDAO {
 				try {
 					connectionPool.releaseResourses(updatedFlightStatement, rs, connection);
 				} catch (ConnectionPoolException e) {
-					LOGGER.error(e);
+					logger.error(e);
 				}
 			}
 		} else {
@@ -220,7 +219,7 @@ public class SQLFlightDAO implements FlightDAO {
 			try {
 				connectionPool.releaseResourses(statement, null, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return result;
@@ -258,7 +257,7 @@ public class SQLFlightDAO implements FlightDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return flight;
@@ -298,7 +297,7 @@ public class SQLFlightDAO implements FlightDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return flights;
@@ -326,7 +325,6 @@ public class SQLFlightDAO implements FlightDAO {
 					if (flightStatus == FlightStatus.valueOf(rs.getString(SQLTableConstant.Flight.FLIGHT_STATUS))) {
 						flights.add(createFlight(rs));
 					}
-
 				}
 
 			} catch (SQLException e) {
@@ -339,7 +337,7 @@ public class SQLFlightDAO implements FlightDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return flights;
@@ -378,7 +376,7 @@ public class SQLFlightDAO implements FlightDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return freeCrewPositions;

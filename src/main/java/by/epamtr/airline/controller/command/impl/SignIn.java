@@ -34,6 +34,8 @@ public class SignIn implements Command {
 		} catch (ServiceException e2) {
 			logger.error(LoggerMessageConstant.ERROR_SIGN_IN, e2);
 			request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
+		}finally {
+			password=null;
 		}
 		if (user == null) {
 			request.setAttribute(ConstantController.Attribute.SIGN_IN_FAIL_ATTR,
@@ -47,7 +49,7 @@ public class SignIn implements Command {
 		} else {
 			request.getSession().setAttribute(ConstantController.Attribute.SIGNED_IN_USER, user);
 			request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
-					ConstantController.PathToPage.FLIGHTS_BY_STATUS_PAGE);
+					ConstantController.PathToPage.PATH_TO_GET_USERS_BY_FLIGHT);
 			sendCommandToController(user.getRole(), request, response);
 		}
 

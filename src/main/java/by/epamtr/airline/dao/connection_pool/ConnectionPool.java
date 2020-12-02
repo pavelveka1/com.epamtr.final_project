@@ -15,6 +15,12 @@ import by.epamtr.airline.dao.connection_pool.exception.ConnectionPoolException;
  * @throws ConnectionPoolException if error while processing
  */
 public interface ConnectionPool {
+	
+	/**
+	 * 
+	 * @return Connection object
+	 * @throws ConnectionPoolException
+	 */
 	Connection getConnection() throws ConnectionPoolException;
 
 	/**

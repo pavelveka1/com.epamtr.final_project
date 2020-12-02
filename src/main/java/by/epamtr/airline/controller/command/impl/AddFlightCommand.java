@@ -23,14 +23,14 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class AddFlightCommand implements Command {
 
-	private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
-	private final AircraftService aircraftService = serviceFactory.getAircraftService();
-	private final FlightService flightService = serviceFactory.getFlightService();
-	private List<Aircraft> aircrafts = new ArrayList<Aircraft>();
 	private static final Logger logger = Logger.getLogger(AddFlightCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
+		 ServiceFactory serviceFactory = ServiceFactory.getInstance();
+		 AircraftService aircraftService = serviceFactory.getAircraftService();
+		 FlightService flightService = serviceFactory.getFlightService();
+		 List<Aircraft> aircrafts = new ArrayList<Aircraft>();
 		String currentCity = request.getParameter(ConstantController.Parameter.CURRENT_CITY);
 		request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 				ConstantController.PathToPage.PATH_TO_ADD_FLIGHT);

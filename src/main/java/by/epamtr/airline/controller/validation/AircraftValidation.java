@@ -7,7 +7,7 @@ public class AircraftValidation {
 	private static final String REGISTRATION_NUMBER_PATTERN = "([A-Z]{1,5})-([A-Z0-9]{1,7})";
 	private static final String AIRCRAFT_TYPE_PATTERN = "([A-Za-z]{1,10})([-\\s])([0-9]{1,5})";
 	private static final String NUMBER_PASSENGER_PATTERN = "([1-9])([0-9]{1,2})";
-	private static final String FLIGHT_RANGE_PATTERN = "([1-9])([0-9]{3})";
+	private static final String FLIGHT_RANGE_PATTERN = "([1-9])([0-9]{2,3})";
 
 	private static Pattern registrationNumberPattern = Pattern.compile(REGISTRATION_NUMBER_PATTERN);
 	private static Pattern aircraftTypePattern = Pattern.compile(AIRCRAFT_TYPE_PATTERN);

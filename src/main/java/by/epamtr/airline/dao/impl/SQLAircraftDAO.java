@@ -27,7 +27,7 @@ import by.epamtr.airline.entity.AircraftType;
  *
  */
 public class SQLAircraftDAO implements AircraftDAO {
-	private static final Logger LOGGER = Logger.getLogger(SQLAircraftDAO.class);
+	private static final Logger logger = Logger.getLogger(SQLAircraftDAO.class);
 	/**
 	 * Instance of connection pool for database
 	 */
@@ -75,7 +75,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 	}
@@ -114,7 +114,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return result;
@@ -138,11 +138,9 @@ public class SQLAircraftDAO implements AircraftDAO {
 		try {
 			connection = connectionPool.getConnection();
 			try {
-				// connection.prepareStatement(SQLQueryConstant.CONSTRAINT_DISABLE).executeQuery();
 				statement = connection.prepareStatement(String.format(SQLQueryConstant.AircraftConstant.UPDATE_AIRCRAFT,
 						newRegistrationNumber, registrationNumber));
 				int row = statement.executeUpdate();
-				// connection.prepareStatement(SQLQueryConstant.CONSTRAINT_ENABLE).executeQuery();
 				if (row == 1) {
 					return true;
 				} else {
@@ -157,7 +155,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			try {
 				connectionPool.releaseResourses(statement, null, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 	}
@@ -197,7 +195,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			try {
 				connectionPool.releaseResourses(statement, null, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return result;
@@ -245,7 +243,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 	}
@@ -281,7 +279,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return result;
@@ -317,7 +315,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return aircrafts;
@@ -353,7 +351,7 @@ public class SQLAircraftDAO implements AircraftDAO {
 			try {
 				connectionPool.releaseResourses(statement, rs, connection);
 			} catch (ConnectionPoolException e) {
-				LOGGER.error(e);
+				logger.error(e);
 			}
 		}
 		return aircraftTypes;

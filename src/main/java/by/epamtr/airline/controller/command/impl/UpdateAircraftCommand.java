@@ -21,14 +21,13 @@ import by.epamtr.airline.service.exception.ServiceException;
 
 public class UpdateAircraftCommand implements Command {
 	private static final Logger logger = Logger.getLogger(SignIn.class);
-	ServiceFactory serviceFactory = ServiceFactory.getInstance();
-	AircraftService aircraftService = serviceFactory.getAircraftService();
-	List<Aircraft> aircrafts = new ArrayList<Aircraft>();
-	List<AircraftType> aircraftTypes = new ArrayList<AircraftType>();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-
+		ServiceFactory serviceFactory = ServiceFactory.getInstance();
+		AircraftService aircraftService = serviceFactory.getAircraftService();
+		List<Aircraft> aircrafts = new ArrayList<Aircraft>();
+		List<AircraftType> aircraftTypes = new ArrayList<AircraftType>();
 		String aircraftsParameter = request.getParameter(ConstantController.Parameter.AIRCRAFT_NUMBER);
 		request.getSession().setAttribute(ConstantController.Attribute.CURRENT_PAGE,
 				ConstantController.PathToPage.PATH_TO_UPDATE_AIRCRAFT);
@@ -38,7 +37,8 @@ public class UpdateAircraftCommand implements Command {
 				aircrafts = aircraftService.getAircraftrs();
 			} catch (ServiceException e) {
 				logger.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
-				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
+				request.setAttribute(ConstantController.Attribute.ERROR,
+						ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
 		} else {
@@ -51,7 +51,8 @@ public class UpdateAircraftCommand implements Command {
 					result = aircraftService.updateAircraft(registrationNumber, newRegistrationNumber);
 				} catch (ServiceException e) {
 					logger.error(LoggerMessageConstant.ERROR_UPDATE_AIRCRAFT, e);
-					request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
+					request.setAttribute(ConstantController.Attribute.ERROR,
+							ConstantController.Attribute.SOMETHING_GOES_WRONG);
 				}
 				if (result) {
 					logger.info(LoggerMessageConstant.AIRCRAFT_IS_UPDATED);
@@ -69,7 +70,8 @@ public class UpdateAircraftCommand implements Command {
 				aircrafts = aircraftService.getAircraftrs();
 			} catch (ServiceException e) {
 				logger.error(LoggerMessageConstant.ERROR_GET_AIRCRAFTS, e);
-				request.setAttribute(ConstantController.Attribute.ERROR, ConstantController.Attribute.SOMETHING_GOES_WRONG);
+				request.setAttribute(ConstantController.Attribute.ERROR,
+						ConstantController.Attribute.SOMETHING_GOES_WRONG);
 			}
 			request.getSession().setAttribute(ConstantController.Attribute.AIRCRAFTS, aircrafts);
 
